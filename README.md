@@ -113,4 +113,5 @@ supabase/esquema.sql  Tablas y reglas de seguridad
 - *Estación del Ferrocarril de Montenegro*: Jhon James Gutiérrez Gil, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), Wikimedia Commons.
 - *Teleférico del Parque del Café*: ACHETORRES, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), Wikimedia Commons.
 - *Atardecer en Montenegro*: Juan Pablo Galvis Franco, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), Wikimedia Commons.
+- Logos de los partidos políticos: aportados por el autor del proyecto; pertenecen a cada partido y se usan solo para identificar la bancada de cada concejal.
 - Parroquia San José y letrero «Yo ❤ Montenegro»: fotos aportadas por el autor del proyecto.

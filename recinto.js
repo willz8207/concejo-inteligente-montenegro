@@ -23,7 +23,7 @@ const COM_COLORS = {plan:"#2f7fd1", gobierno:"#c4521a", hacienda:"#8a4fd1", "":"
 function buildLegend(){
   const pc={}, cc={plan:0,gobierno:0,hacienda:0,"":0};
   CONCEJALES.forEach(c=>{pc[c.partido]=(pc[c.partido]||0)+1; cc[CI.comisionKey(c.id)]++;});
-  const chip=(t,v,label,color,n)=>`<button class="chip" type="button" data-t="${t}" data-v="${v}" aria-pressed="${filter?filter.t===t&&filter.v===v:t===""}">${color?`<span class="dot" style="background:${color}"></span>`:""}${label} <b>${n}</b></button>`;
+  const chip=(t,v,label,color,n)=>`<button class="chip" type="button" data-t="${t}" data-v="${v}" aria-pressed="${filter?filter.t===t&&filter.v===v:t===""}">${t==="p"?CI.marcaPartido(v):color?`<span class="dot" style="background:${color}"></span>`:""}${label} <b>${n}</b></button>`;
   legend.innerHTML = `<div class="lg-row"><span class="lg-lbl">Partidos</span>${chip("","","Todos",null,13)}${Object.keys(PARTIDOS).map(p=>chip("p",p,p,PARTIDOS[p].color,pc[p]||0)).join("")}</div>
     <div class="lg-row"><span class="lg-lbl">Comisiones</span>${Object.entries(CI.COMISIONES).map(([k,x])=>chip("c",k,x.corto,COM_COLORS[k],cc[k])).join("")}${cc[""]?chip("c","","Sin asignar",COM_COLORS[""],cc[""]):""}</div>`;
 }
@@ -204,6 +204,7 @@ function arc(n,r,y){for(let i=0;i<n;i++){const a=Math.PI*(1.12+0.76*i/(n-1)); sl
 arc(6,5,0); arc(7,7.4,.35);
 slots.sort((p,q)=>p.a-q.a);
 
+const LOGOS={}; // imágenes de logos de partido ya cargadas
 const seats=[]; // {c, group, card, chairMat, deskMat, pos}
 CONCEJALES.forEach((c,i)=>{
   const s=slots[i], color=PARTIDOS[c.partido].color;
@@ -231,7 +232,7 @@ CONCEJALES.forEach((c,i)=>{
 });
 
 function cardTexture(c, img){
-  const color=PARTIDOS[c.partido].color;
+  const color=PARTIDOS[c.partido].color, logo=LOGOS[c.partido];
   return textTexture((g,w,h)=>{
     roundRect(g,6,6,w-12,h-12,34); g.fillStyle="#ffffff"; g.fill();
     g.lineWidth=10; g.strokeStyle=color; g.stroke();
@@ -240,6 +241,11 @@ function cardTexture(c, img){
     if(img){const s=Math.max((w-92)/img.width,250/img.height); const iw=img.width*s, ih=img.height*s; g.drawImage(img,46+((w-92)-iw)/2,40+(250-ih)/2,iw,ih);}
     else{g.fillStyle=color; g.fillRect(46,40,w-92,250); g.fillStyle="#fff"; g.textAlign="center"; g.textBaseline="middle"; g.font="700 120px 'Bricolage Grotesque', sans-serif"; g.fillText(initials(c.nombre),w/2,168);}
     g.restore();
+    if(logo){ // insignia del partido en la esquina de la foto
+      const L=104, lx=w-46-L+12, ly=40+250-L+12;
+      roundRect(g,lx-6,ly-6,L+12,L+12,20); g.fillStyle="#ffffff"; g.fill(); g.lineWidth=4; g.strokeStyle=color; g.stroke();
+      g.save(); roundRect(g,lx,ly,L,L,15); g.clip(); g.drawImage(logo,lx,ly,L,L); g.restore();
+    }
     g.fillStyle="#1d2a22"; g.textAlign="center"; g.textBaseline="alphabetic";
     g.font="700 40px 'Bricolage Grotesque', sans-serif"; g.fillText(c.corto||shortName(c.nombre),w/2,342);
     g.fillStyle=color; g.font="700 26px 'Atkinson Hyperlegible', sans-serif"; g.fillText(c.partido.toUpperCase(),w/2,382);
@@ -250,10 +256,14 @@ function cardTexture(c, img){
   },360,460);
 }
 function loadPhoto(c,seat){
-  const img=new Image(); img.onload=()=>{seat.card.material.map=cardTexture(c,img); seat.card.material.needsUpdate=true;}; img.src=c.foto;
+  const img=new Image(); img.onload=()=>{seat.photo=img; seat.card.material.map=cardTexture(c,img); seat.card.material.needsUpdate=true;}; img.src=c.foto;
 }
+// Cargar logos de partidos y repintar las tarjetas de su bancada
+Object.entries(PARTIDOS).forEach(([p,x])=>{ if(!x.logo) return; const im=new Image();
+  im.onload=()=>{ LOGOS[p]=im; seats.filter(s=>s.c.partido===p).forEach(s=>{ s.card.material.map=cardTexture(s.c,s.photo); s.card.material.needsUpdate=true; }); };
+  im.src=x.logo; });
 // Repintar tarjetas cuando carguen las fuentes
-document.fonts?.ready.then(()=>seats.forEach(s=>{if(!s.c.foto){s.card.material.map=cardTexture(s.c);s.card.material.needsUpdate=true;}}));
+document.fonts?.ready.then(()=>seats.forEach(s=>{if(!s.c.foto||s.photo){s.card.material.map=cardTexture(s.c,s.photo);s.card.material.needsUpdate=true;}}));
 
 /* ---------- Filtro por bancada ---------- */
 function applyFilter(){
@@ -373,7 +383,7 @@ function openConcejal(id,fly=true){
   if(c.foto){ph.style.backgroundImage=`url("${c.foto}")`; ph.textContent="";}
   else{ph.style.backgroundImage="none"; ph.style.background=color; ph.textContent=initials(c.nombre);}
   $("#pName").textContent=c.nombre;
-  $("#pParty").innerHTML=`<span class="dot" style="background:${color}"></span>${c.partido}`;
+  $("#pParty").innerHTML=`${CI.marcaPartido(c.partido)}${c.partido}`;
   $("#pRole").textContent=(CI.cargoDe(c.id)||"Concejal")+" · 2024–2027";
   $("#pPrev").hidden=$("#pNext").hidden=false;
   renderTabs(); renderTab();
@@ -449,7 +459,7 @@ function renderTab(){
     const hv=c.hojaDeVida;
     pBody.innerHTML=`
       <dl class="facts">
-        <dt>Partido / bancada</dt><dd>${c.partido}</dd>
+        <dt>Partido / bancada</dt><dd style="display:flex;align-items:center;gap:8px">${CI.marcaPartido(c.partido)}${c.partido}</dd>
         <dt>Comisión permanente</dt><dd>${pend(CI.comisionDe(c.id))}</dd>
         <dt>Cargo</dt><dd>${CI.cargoDe(c.id)||"Concejal"}</dd>
         <dt>Período</dt><dd>2024 – 2027</dd>
@@ -505,7 +515,7 @@ function showList(){
   $("#pRole").textContent="Toca un nombre para ir a su curul";
   tabsEl.innerHTML=""; $("#pPrev").hidden=$("#pNext").hidden=true;
   pBody.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px">${CONCEJALES.map(c=>
-    `<button class="chip" type="button" data-id="${c.id}" style="justify-content:flex-start;border-radius:10px;padding:9px 12px"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><span style="text-align:left"><b style="font-weight:700">${c.nombre}</b><br><span style="color:var(--muted);font-size:12.5px">${c.partido}</span></span></button>`).join("")}</div>`;
+    `<button class="chip" type="button" data-id="${c.id}" style="justify-content:flex-start;border-radius:10px;padding:9px 12px">${CI.marcaPartido(c.partido)}<span style="text-align:left"><b style="font-weight:700">${c.nombre}</b><br><span style="color:var(--muted);font-size:12.5px">${c.partido}</span></span></button>`).join("")}</div>`;
   panel.hidden=false;
 }
 pBody.addEventListener("click",e=>{const b=e.target.closest("[data-id]"); if(b){currentTab="perfil"; openConcejal(b.dataset.id);}});

@@ -111,6 +111,9 @@ textarea{resize:vertical;min-height:90px}
 .att-row .who b{display:block;font-size:14px;overflow-wrap:anywhere}
 .att-row .who span{font-size:12px;color:var(--muted)}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.plogo{width:22px;height:22px;border-radius:6px;object-fit:cover;flex:none;display:inline-block;vertical-align:middle;border:1px solid var(--line);background:#fff}
+.chip .plogo{width:18px;height:18px;border-radius:4px}
+.party-pill .plogo{width:26px;height:26px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
 .seg button{font:inherit;font-size:12.5px;font-weight:700;border:0;background:var(--surface);color:var(--muted);padding:5px 9px;cursor:pointer}
 .seg button+button{border-left:1px solid var(--line)}
@@ -316,11 +319,13 @@ dl.facts dd{margin:0;font-weight:700;min-width:0}
    Acuerdo 018 de 2012 reformado por el Acuerdo 001 de 2013)
    ============================================================ */
 const PARTIDOS = {
-  "AICO":{color:"#a0672c"}, "Alianza Verde":{color:"#5aa832"}, "Cambio Radical":{color:"#8e1b3a"},
-  "Colombia Renaciente":{color:"#7a4fb5"}, "Dignidad y Compromiso":{color:"#d9a400"}, "Liberal Colombiano":{color:"#d52b1e"},
-  "MAIS":{color:"#178f86"}, "MIRA":{color:"#2b6fd6"}, "Nueva Fuerza Democrática":{color:"#243f8f"}, "Partido de la U":{color:"#f08a1c"},
+  "AICO":{color:"#a0672c",logo:"img/partido-aico.png"}, "Alianza Verde":{color:"#5aa832",logo:"img/partido-alianza-verde.png"}, "Cambio Radical":{color:"#8e1b3a",logo:"img/partido-cambio-radical.png"},
+  "Colombia Renaciente":{color:"#7a4fb5",logo:"img/partido-colombia-renaciente.png"}, "Dignidad y Compromiso":{color:"#d9a400",logo:"img/partido-dignidad-compromiso.png"}, "Liberal Colombiano":{color:"#d52b1e",logo:"img/partido-liberal.png"},
+  "MAIS":{color:"#178f86",logo:"img/partido-mais.png"}, "MIRA":{color:"#2b6fd6",logo:"img/partido-mira.png"}, "Nueva Fuerza Democrática":{color:"#243f8f",logo:"img/partido-nueva-fuerza-democratica.png"}, "Partido de la U":{color:"#f08a1c",logo:"img/partido-partido-de-la-u.png"},
 };
 // foto: ruta de imagen (vacío = iniciales). hojaDeVida: {Formación:"…", Experiencia:"…"}
+// Logo del partido (con respaldo del punto de color si la imagen no carga)
+function marcaPartido(p, cls="plogo"){ const x=PARTIDOS[p]; if(!x) return ""; return x.logo?`<img class="${cls}" src="${x.logo}" alt="" title="${esc(p)}" loading="lazy" onerror="this.removeAttribute('src');this.style.background='${x.color}'">`:`<span class="dot" style="background:${x.color}"></span>`; }
 const CONCEJALES = [
   {id:"arce",corto:"Líder Arce",nombre:"Líder Antonio Arce Ramírez",partido:"AICO"},
   {id:"tabares",corto:"Cristian Tabares",nombre:"Cristian Camilo Tabares Llanos",partido:"Alianza Verde"},
@@ -544,7 +549,7 @@ const tituloSesion = s=>`${INSTANCIAS[s.instancia]||"Sesión"} · ${s.tipo||""}`
 
 /* ---------- API para el recinto 3D ---------- */
 const CI = window.CI = {
-  PARTIDOS, CONCEJALES, COMISIONES,
+  PARTIDOS, CONCEJALES, COMISIONES, marcaPartido,
   comisionKey: id=>COMISIONES[comisionDe(id)]?comisionDe(id):"",
   comisionDe: id=>{const k=comisionDe(id); return k?esc(COMISIONES[k].corto):"";},
   cargoDe: id=>{const m=S.config?.mesa||{}; return m.presidente===id?"Presidente del Concejo":m.vp1===id?"Primer vicepresidente":m.vp2===id?"Segundo vicepresidente":"";},
@@ -703,7 +708,7 @@ function tabAsistencia(s,w,mem,q,pres){
     ${w?`<div class="row-actions" style="margin-top:10px"><button class="btn sm" data-act="asis-todos">Marcar todos presentes</button><button class="btn sm" data-act="asis-limpiar">Limpiar</button></div>`:""}
   </div>
   <div class="att">${mem.map(id=>{const c=byId[id], a=s.asistencia?.[id]||"";
-    return `<div class="att-row"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
+    return `<div class="att-row">${marcaPartido(c.partido)}<div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
       ${w?`<div class="seg" role="group" aria-label="Asistencia de ${esc(c.nombre)}">${[["P","Presente"],["E","Excusa"],["A","Ausente"]].map(([k,l])=>`<button class="${k}" aria-pressed="${a===k}" data-act="asis" data-id="${id}" data-v="${k}" title="${l}">${l==="Presente"?"Presente":l}</button>`).join("")}</div>`
         :`<span class="pill ${a==="P"?"ok":a==="E"?"warn":a==="A"?"bad":""}">${a==="P"?"Presente":a==="E"?"Excusa":a==="A"?"Ausente":"Sin registro"}</span>`}
     </div>`;}).join("")}</div>
@@ -735,7 +740,7 @@ function tabVotaciones(s,w){
       <div class="view-head" style="margin-bottom:8px"><div style="min-width:0"><h2 style="margin:0">${esc(v.asunto)}</h2><div class="small muted">${v.debate?esc(DEBATES[v.debate])+" · ":""}${MAYORIAS[v.mayoria||"simple"]}${v.proyectoId&&local("proyectos",v.proyectoId)?" · "+esc(local("proyectos",v.proyectoId).numero||""):""}</div></div>
         <div style="text-align:right"><div class="vote-res" style="color:var(--${r.cls==="ok"?"ok":r.cls==="bad"?"bad":"warn"})">${r.res}</div><div class="small muted">Sí ${r.si} · No ${r.no} · Impedidos ${r.imp} · Presentes ${r.pres}</div></div></div>
       ${open?`<div class="att">${pres.map(id=>{const c=byId[id], x=v.votos?.[id]||"";
-        return `<div class="att-row"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
+        return `<div class="att-row">${marcaPartido(c.partido)}<div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
           <div class="seg" role="group">${[["si","Sí"],["no","No"],["imp","Impedido"]].map(([k,l])=>`<button class="${k}" aria-pressed="${x===k}" data-act="voto" data-vi="${i}" data-id="${id}" data-v="${k}">${l}</button>`).join("")}</div></div>`;}).join("")||emptyBox("No hay concejales presentes","Registra primero la asistencia.")}</div>
         <div class="row-actions" style="margin-top:10px"><button class="btn primary" data-act="cerrar-vot" data-vi="${i}" ${r.faltan>0?"disabled":""}>Cerrar votación</button><button class="btn danger" data-act="del-vot" data-vi="${i}">Eliminar</button></div>`
       :`<div class="scroll-x"><table class="t"><thead><tr><th>Sentido</th><th>Concejales</th></tr></thead><tbody>
@@ -1446,7 +1451,7 @@ function tablaVotosProyecto(p){
   if(!vs.length) return `<div class="card" style="margin-top:14px"><h2>Cómo votó cada concejal</h2>${emptyBox("Aún no hay votaciones de este proyecto","Cuando la Secretaría registre una votación en una sesión y la ligue a este proyecto, aquí aparecerá el voto de cada concejal.")}</div>`;
   return `<div class="card" style="margin-top:14px"><h2>Cómo votó cada concejal</h2>
     <div class="scroll-x"><table class="t vot-t"><thead><tr><th>Concejal</th>${vs.map(({s,v,r})=>`<th data-ayuda="${esc(v.asunto+(v.observacion?" · Observación: "+v.observacion:""))}">${esc(DEBATES[v.debate]||"Votación")}<div class="small" style="text-transform:none;letter-spacing:0">${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</div><span class="pill ${r.cls}" style="margin-top:4px">${esc(r.res)} · ${r.si}–${r.no}</span></th>`).join("")}</tr></thead>
-    <tbody>${CONCEJALES.map(c=>`<tr><td><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span> ${esc(c.nombre)}<div class="small muted">${esc(c.partido)}</div></td>${vs.map(({s,v})=>`<td>${celdaVoto(s,v,c.id)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+    <tbody>${CONCEJALES.map(c=>`<tr><td>${marcaPartido(c.partido)} ${esc(c.nombre)}<div class="small muted">${esc(c.partido)}</div></td>${vs.map(({s,v})=>`<td>${celdaVoto(s,v,c.id)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
     ${vs.some(x=>x.v.observacion)?`<h3>Observaciones de la Secretaría</h3><div class="list">${vs.filter(x=>x.v.observacion).map(({s,v})=>`<div class="item"><div class="main"><div class="t" style="font-weight:400">${esc(v.observacion)}</div><div class="s">${esc(DEBATES[v.debate]||v.asunto)} · ${fmtCorta(s.fecha)}</div></div></div>`).join("")}</div>`:""}
     <p class="note" style="margin-top:8px">«—» significa que el concejal no integra la comisión que dio ese debate. Pasa el mouse sobre ⓘ para leer la aclaración de voto (art. 72).</p></div>`;
 }
