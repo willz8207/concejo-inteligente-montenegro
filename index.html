@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Plataforma del Concejo Municipal de Montenegro, Quindío: sesiones, votaciones, proyectos de acuerdo, control político, participación ciudadana y recinto 3D.">
+<meta name="author" content="William Andrés Muriel">
+<link rel="icon" href="img/logo-concejo.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}*{box-sizing:border-box}</style>
+<title>Concejo Inteligente Montenegro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: barra lateral de navegación (arriba en móvil) + área de trabajo. La vista "Recinto 3D" ocupa toda el área. */
+:root{
+  --bg:#eef1ec; --surface:#ffffff; --surface-2:#f6f8f5; --fg:#1d2a22; --muted:#5b6b60; --line:#d4dbd3;
+  --accent:#1f6b45; --accent-soft:#e1efe6; --wine:#7d1f2e;
+  --ok:#1f7a45; --ok-soft:#dff2e6; --warn:#9a6a00; --warn-soft:#fbf0d4; --bad:#b3261e; --bad-soft:#fbe1df;
+  --shadow:0 10px 30px rgba(20,40,28,.14);
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121914; --surface:#1b241e; --surface-2:#18201a; --fg:#e7eee8; --muted:#9fb0a4; --line:#2e3b32;
+  --accent:#5fc28d; --accent-soft:#1f3327; --wine:#e08a97;
+  --ok:#6fd39a; --ok-soft:#1d3426; --warn:#e7b94a; --warn-soft:#33291a; --bad:#f08a80; --bad-soft:#3a1f1d;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121914; --surface:#1b241e; --surface-2:#18201a; --fg:#e7eee8; --muted:#9fb0a4; --line:#2e3b32;
+  --accent:#5fc28d; --accent-soft:#1f3327; --wine:#e08a97;
+  --ok:#6fd39a; --ok-soft:#1d3426; --warn:#e7b94a; --warn-soft:#33291a; --bad:#f08a80; --bad-soft:#3a1f1d;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.45}
+.shell{height:100%;display:grid;grid-template-columns:232px 1fr;min-height:0}
+nav.side{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;padding-block:16px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:14px;overflow-y:auto}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.brand img{width:46px;height:46px;border-radius:10px;background:#fff;border:1px solid var(--line);object-fit:contain;flex:none}
+.brand b{font-family:var(--font-display);font-size:16px;line-height:1.1;display:block}
+.brand span{font-size:12px;color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--fg);text-decoration:none;font-weight:700;font-size:14.5px}
+.nav-link:hover{background:var(--surface-2)}
+.nav-link[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.nav-link svg{width:18px;height:18px;flex:none}
+.credits{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:10px;display:flex;flex-direction:column;gap:2px}
+.credits b{color:var(--fg)}
+.credits a,.foot-cred a{color:var(--accent)}
+.foot-cred{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:space-between}
+.mode{margin-top:auto;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.mode b{color:var(--fg)}
+main{min-width:0;min-height:0;overflow-y:auto;position:relative}
+.view{padding-block:22px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1180px;margin:0 auto}
+.view-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--font-display);font-size:clamp(22px,3vw,30px);line-height:1.1;margin:2px 0 0;text-wrap:balance}
+h2{font-family:var(--font-display);font-size:18px;margin:0 0 10px;text-wrap:balance}
+h3{font-family:var(--font-display);font-size:15.5px;margin:14px 0 6px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.kpi .num{font-family:var(--font-display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.kpi .lbl{font-size:13px;color:var(--muted);margin-top:6px}
+.btn{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 13px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn.danger{color:var(--bad)}
+.btn.sm{font-size:13px;padding:5px 10px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible,.nav-link:focus-visible,.chip:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row-actions{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.pill.info{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.pill.demo{background:var(--wine);color:var(--bg);border-color:transparent}
+.list{display:flex;flex-direction:column}
+.item{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:11px 2px;border-top:1px solid var(--line);min-width:0}
+.item:first-child{border-top:0}
+.item .main{min-width:0;flex:1}
+.item .t{font-weight:700;overflow-wrap:anywhere}
+.item .s{font-size:13px;color:var(--muted)}
+.item.click{cursor:pointer;border-radius:8px}
+.item.click:hover{background:var(--surface-2)}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);font-size:14px}
+.empty strong{color:var(--fg);display:block;margin-bottom:4px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;min-width:0}
+input,select,textarea{font:inherit;font-size:14.5px;font-weight:400;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:0;width:100%}
+textarea{resize:vertical;min-height:90px}
+.form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.form .full{grid-column:1/-1}
+.banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--warn-soft);color:var(--fg);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:14px}
+.tab{font:inherit;font-size:14px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:9px 12px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:700}
+.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.att-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);min-width:0}
+.att-row .who{flex:1;min-width:0}
+.att-row .who b{display:block;font-size:14px;overflow-wrap:anywhere}
+.att-row .who span{font-size:12px;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;border:0;background:var(--surface);color:var(--muted);padding:5px 9px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"].P,.seg button[aria-pressed="true"].si{background:var(--ok-soft);color:var(--ok)}
+.seg button[aria-pressed="true"].A,.seg button[aria-pressed="true"].no{background:var(--bad-soft);color:var(--bad)}
+.seg button[aria-pressed="true"].E,.seg button[aria-pressed="true"].imp{background:var(--warn-soft);color:var(--warn)}
+.quorum{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.meter{flex:1;min-width:200px;height:12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:999px}
+.meter u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg);opacity:.5}
+.ol{counter-reset:o;display:flex;flex-direction:column;gap:6px;padding:0;margin:0;list-style:none}
+.ol li{counter-increment:o;display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface)}
+.ol li::before{content:counter(o);font-family:var(--font-display);font-weight:700;color:var(--accent);min-width:20px;font-variant-numeric:tabular-nums}
+.ol li .tx{flex:1;min-width:0}
+.ol li textarea{min-height:44px;margin-top:6px;font-size:13.5px}
+.vote-res{font-family:var(--font-display);font-size:20px;font-weight:700}
+.steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.steps span{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.steps span.done{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:700}
+.steps span.now{background:var(--accent);color:var(--bg);border-color:transparent;font-weight:700}
+pre.acta{white-space:pre-wrap;font-family:var(--font-body);font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin:0;max-height:60vh;overflow:auto}
+.modal-bg{position:fixed;inset:0;background:rgba(10,20,14,.45);z-index:50;display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);width:min(640px,100%);max-height:calc(100% - 32px);overflow:auto;padding:20px;border:1px solid var(--line)}
+.modal .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px)}
+.note{font-size:12.5px;color:var(--muted)}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th,table.t td{text-align:left;padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}
+table.t th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-top:0}
+.scroll-x{overflow-x:auto}
+
+/* ===== Recinto 3D ===== */
+#recinto{position:absolute;inset:0;display:flex;flex-direction:column}
+#recinto[hidden]{display:none!important}
+.r-top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:flex-end;justify-content:space-between;padding-block:12px 10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--bg)}
+.legend{display:flex;flex-direction:column;gap:6px;max-width:100%;min-width:0}
+.lg-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lg-lbl{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);min-width:82px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:13px;padding:5px 10px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chip b{font-variant-numeric:tabular-nums}
+.stage{position:relative;flex:1;min-height:0}
+#scene{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none}
+.toolbar{position:absolute;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px;z-index:3;max-width:calc(100% - 32px)}
+.toolbar .btn{box-shadow:var(--shadow)}
+.hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}
+.tip{position:absolute;z-index:4;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;padding:4px 9px;border-radius:6px;transform:translate(-50%,-140%);white-space:nowrap}
+.panel{position:absolute;z-index:6;top:12px;right:max(12px,env(safe-area-inset-right,0px));bottom:12px;width:min(390px,calc(100% - 24px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;transition:transform .35s ease,opacity .35s ease}
+.panel[hidden]{display:flex!important;transform:translateX(110%);opacity:0;pointer-events:none}
+.p-head{display:flex;gap:14px;padding:18px 18px 14px;border-bottom:1px solid var(--line);position:relative}
+.p-photo{width:84px;height:104px;border-radius:10px;flex:none;background:var(--accent-soft);display:grid;place-items:center;font-family:var(--font-display);font-size:30px;font-weight:700;color:#fff;overflow:hidden;background-size:cover;background-position:center}
+.p-id{min-width:0;display:flex;flex-direction:column;gap:4px;padding-right:28px}
+.p-id h2{font-family:var(--font-display);font-size:20px;line-height:1.15;margin:0}
+.party-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--accent-soft)}
+.party-pill .dot{width:9px;height:9px}
+.p-role{font-size:13px;color:var(--muted)}
+.close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:18px;cursor:pointer;line-height:1}
+.panel .tabs{padding:8px 12px 0;margin:0}
+.p-body{padding:16px 18px 20px;overflow-y:auto;flex:1;min-height:0}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:0 0 16px}
+dl.facts dt{color:var(--muted);font-size:13px}
+dl.facts dd{margin:0;font-weight:700;min-width:0}
+.pending{color:var(--muted);font-weight:400!important;font-style:italic}
+.rows{display:flex;flex-direction:column;gap:8px}
+.rows .row{display:flex;flex-direction:column;gap:2px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.row-date{font-size:12px;color:var(--muted)}
+.p-nav{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.p-nav .btn{font-size:13px;padding:7px 12px}
+
+@media (max-width:820px){
+  .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  nav.side{flex-direction:row;align-items:center;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding-block:8px;padding-right:max(12px,env(safe-area-inset-right,0px));gap:2px}
+  .brand{margin:0 6px 0 0}.brand div{display:none}.brand img{width:36px;height:36px}
+  .nav-link{padding:7px 9px;font-size:13.5px;white-space:nowrap}
+  .nav-link svg{display:none}
+  .mode,.credits{display:none}
+  .panel{top:auto;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;height:62%}
+  .panel[hidden]{transform:translateY(110%)}
+  .hint{display:none}
+  .lg-row{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}
+  .lg-lbl{min-width:auto}
+}
+@media (prefers-reduced-motion: reduce){.panel{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="side" aria-label="Secciones">
+    <div class="brand"><img src="img/logo-concejo.png" alt="Logo del Concejo de Montenegro" width="46" height="46"><div><b>Concejo Inteligente</b><span>Montenegro, Quindío</span></div></div>
+    <a class="nav-link" href="#inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</a>
+    <a class="nav-link" href="#sesiones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Sesiones</a>
+    <a class="nav-link" href="#proyectos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>Proyectos de acuerdo</a>
+    <a class="nav-link" href="#control"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Control político</a>
+    <a class="nav-link" href="#participa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Participa</a>
+    <a class="nav-link" href="#honorarios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>Honorarios</a>
+    <a class="nav-link" href="#observatorio" id="nav-obs" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Observatorio</a>
+    <a class="nav-link" href="#recinto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20a9 9 0 0 1 18 0"/><path d="M7 20a5 5 0 0 1 10 0"/><path d="M12 3v4"/></svg>Conoce tu Concejo</a>
+    <a class="nav-link" href="#ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 20.4 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>Ajustes</a>
+    <div class="mode" id="mode"><span>Cargando…</span></div>
+    <div class="credits">Desarrollado por <b>William Andrés Muriel</b><span>Gobierno | Territorio | Tecnología</span><span><a href="https://www.linkedin.com/in/willi-muriel" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://elpoderdetrasdelpoder.lovable.app" target="_blank" rel="noopener">Blog</a></span></div>
+  </nav>
+
+  <main id="main">
+    <div class="view" id="view"></div>
+
+    <section id="recinto" hidden aria-label="Recinto 3D del Concejo">
+      <div class="r-top">
+        <div><div class="eyebrow">Período 2024–2027 · 13 curules</div><h1 style="font-size:clamp(18px,2.4vw,24px)">Recorre el recinto</h1></div>
+        <div class="legend" id="legend" aria-label="Bancadas"></div>
+      </div>
+      <div class="stage" id="stage">
+        <canvas id="scene" aria-label="Recinto del concejo en 3D. Haz clic en una curul para ver la ficha del concejal."></canvas>
+        <div class="hint" id="hint">Arrastra para girar · rueda o pellizco para acercar · clic en una curul</div>
+        <div class="tip" id="tip" hidden></div>
+        <div class="toolbar">
+          <button class="btn primary" id="btnTour" type="button">▶ Recorrido guiado</button>
+          <button class="btn" id="btnHome" type="button">Vista general</button>
+          <button class="btn" id="btnPres" type="button">Desde la presidencia</button>
+          <button class="btn" id="btnList" type="button">Lista de concejales</button>
+        </div>
+        <aside class="panel" id="panel" hidden aria-live="polite">
+          <div class="p-head">
+            <div class="p-photo" id="pPhoto"></div>
+            <div class="p-id"><h2 id="pName"></h2><span class="party-pill" id="pParty"></span><span class="p-role" id="pRole"></span></div>
+            <button class="close" id="pClose" type="button" aria-label="Cerrar ficha">×</button>
+          </div>
+          <div class="tabs" role="tablist" id="tabs"></div>
+          <div class="p-body" id="pBody"></div>
+          <div class="p-nav"><button class="btn" id="pPrev" type="button">← Anterior</button><button class="btn" id="pNext" type="button">Siguiente →</button></div>
+        </aside>
+      </div>
+      <div class="note" id="r-loading" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">Cargando el recinto…</div>
+    </section>
+  </main>
+</div>
+<div id="modal-root"></div>
+
+<script src="config.js"></script>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+/* ============================================================
+   DATOS FIJOS (fuente: directorio oficial y reglamento interno,
+   Acuerdo 018 de 2012 reformado por el Acuerdo 001 de 2013)
+   ============================================================ */
+const PARTIDOS = {
+  "AICO":{color:"#a0672c"}, "Alianza Verde":{color:"#5aa832"}, "Cambio Radical":{color:"#8e1b3a"},
+  "Colombia Renaciente":{color:"#7a4fb5"}, "Dignidad y Compromiso":{color:"#d9a400"}, "Liberal Colombiano":{color:"#d52b1e"},
+  "MAIS":{color:"#178f86"}, "MIRA":{color:"#2b6fd6"}, "Nueva Fuerza Democrática":{color:"#243f8f"}, "Partido de la U":{color:"#f08a1c"},
+};
+// foto: ruta de imagen (vacío = iniciales). hojaDeVida: {Formación:"…", Experiencia:"…"}
+const CONCEJALES = [
+  {id:"arce",corto:"Líder Arce",nombre:"Líder Antonio Arce Ramírez",partido:"AICO"},
+  {id:"tabares",corto:"Cristian Tabares",nombre:"Cristian Camilo Tabares Llanos",partido:"Alianza Verde"},
+  {id:"molina",corto:"Leonardo Molina",nombre:"Leonardo Molina Álvarez",partido:"Cambio Radical"},
+  {id:"zapata",corto:"Brahyan Zapata",nombre:"Brahyan Steven Zapata Barragán",partido:"Colombia Renaciente"},
+  {id:"vargas",corto:"Néstor Vargas",nombre:"Néstor Fabio Vargas Cárdenas",partido:"Dignidad y Compromiso"},
+  {id:"guerra",corto:"Rafael Guerra",nombre:"Rafael Antonio Guerra Gutiérrez",partido:"Liberal Colombiano"},
+  {id:"osorio",corto:"Andrés Osorio",nombre:"Andrés Fernando Osorio Buitrago",partido:"Liberal Colombiano"},
+  {id:"marulanda",corto:"José Marulanda",nombre:"José Arturo Marulanda Mejía",partido:"MAIS"},
+  {id:"guerrero",corto:"Duber Guerrero",nombre:"Duber Alberto Guerrero Osorio",partido:"MAIS"},
+  {id:"florez",corto:"Liliana Flórez",nombre:"Liliana Flórez Sánchez",partido:"MIRA"},
+  {id:"zuluaga",corto:"Yohan Zuluaga",nombre:"Yohan Andrés Zuluaga",partido:"Nueva Fuerza Democrática"},
+  {id:"coronado",corto:"Luz Miryam Coronado",nombre:"Luz Miryam Coronado González",partido:"Partido de la U"},
+  {id:"munoz",corto:"Jaiver Muñoz",nombre:"Jaiver Andrés Muñoz Martínez",partido:"Partido de la U"},
+].map(c=>({foto:"",hojaDeVida:null,...c}));
+const N = CONCEJALES.length;
+const byId = Object.fromEntries(CONCEJALES.map(c=>[c.id,c]));
+
+const COMISIONES = {
+  plan:{nombre:"Comisión del Plan de Desarrollo",corto:"Plan de Desarrollo",cupo:4},
+  gobierno:{nombre:"Comisión de Gobierno",corto:"Gobierno",cupo:4},
+  hacienda:{nombre:"Comisión de Presupuesto y Hacienda Pública",corto:"Presupuesto y Hacienda",cupo:5},
+};
+const INSTANCIAS = {plenaria:"Plenaria", plan:COMISIONES.plan.nombre, gobierno:COMISIONES.gobierno.nombre, hacienda:COMISIONES.hacienda.nombre, conjunta:"Sesión conjunta de comisiones"};
+const TIPOS_SESION = ["Ordinaria","Extraordinaria","Instalación","Elección"];
+const ORDEN_BASE = [ // Art. 57 (numeral 2 derogado por el Acuerdo 001 de 2013)
+  "Llamado a lista y verificación del quórum",
+  "Lectura, discusión y aprobación del orden del día",
+  "Lectura, discusión y aprobación del acta de la sesión anterior",
+  "Citaciones a debate",
+  "Intervención de funcionarios citados o invitados",
+  "Proyectos de acuerdo objetados por el Alcalde",
+  "Proyectos de acuerdo para debate",
+  "Informe de las comisiones permanentes",
+  "Informe de comisiones especiales y accidentales",
+  "Proposiciones y asuntos varios",
+];
+const ORDEN_ELECCION = [ // Art. 58
+  "Llamado a lista y verificación del quórum","Himno de la República de Colombia","Lectura, discusión y aprobación del orden del día",
+  "Aprobación de actas","Elecciones","Lectura de comunicaciones","Proposiciones y varios",
+];
+const ESTADOS_PA = [
+  ["radicado","Radicado"],["primer_debate","En primer debate (comisión)"],["aprobado_1","Aprobado en primer debate"],
+  ["aprobado_2","Aprobado en segundo debate (plenaria)"],["sancion","Enviado a sanción del Alcalde"],["sancionado","Sancionado"],
+];
+const ESTADOS_PA_FIN = [["objetado","Objetado por el Alcalde"],["archivado","Archivado"],["retirado","Retirado"]];
+const EST_LABEL = Object.fromEntries([...ESTADOS_PA,...ESTADOS_PA_FIN]);
+const MAYORIAS = {simple:"Mayoría simple de los asistentes", absoluta:"Mayoría absoluta (7 de 13)", dos_tercios:"Dos terceras partes (9 de 13)"};
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+const $ = s=>document.querySelector(s);
+const esc = v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = p=>p+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const fmtFecha = d=>{ if(!d) return ""; const [y,m,dd]=d.split("-").map(Number); return `${dd} de ${MESES[m-1]} de ${y}`; };
+const fmtCorta = d=>{ if(!d) return ""; const [y,m,dd]=d.split("-").map(Number); return `${dd} ${MESES[m-1].slice(0,3)} ${y}`; };
+const hoyISO = ()=>{const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);};
+const addDias = (iso,n)=>{const d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10);};
+const initials = n=>{const p=n.split(" ");return (p[0][0]+(p[2]?p[2][0]:p[1][0])).toUpperCase();};
+const nombreCorto = id=>byId[id]?.corto||"—";
+function toast(msg){const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.append(t); setTimeout(()=>t.remove(),2600);}
+
+/* ============================================================
+   ESTADO Y DATOS COMPARTIDOS
+   ============================================================ */
+const S = {sesiones:[], proyectos:[], compromisos:[], citaciones:[], inscripciones:[], buzon:[], config:{}, loaded:{s:false,p:false,c:false,k:false,t:false}, canWrite:false, dbOk:null, dl:null, myId:null, slow:false};
+/* ---------- Capa de datos: Claude (enlace del artefacto) o Supabase (GitHub Pages) ---------- */
+const CFG = window.CONCEJO_CONFIG || {};
+const B = {mode:null, set:null, del:null, sb:null, email:""};
+let db=null; // namespace de Claude, si aplica
+const queues={};
+function save(col,id,obj){ // una escritura a la vez por documento
+  if(!B.set||!S.canWrite) return Promise.resolve();
+  const path=`${col}/${id}`;
+  const prev=queues[path]||Promise.resolve();
+  const p=prev.then(()=>B.set(col,id,JSON.parse(JSON.stringify(obj)))).catch(e=>{
+    if(e?.code==="invalid_argument"||e?.code==="42501"){S.canWrite=false; renderMode(); render();}
+    toast(e?.code==="quota_exceeded"?"No hay espacio para más registros.":"No se pudo guardar. Intenta de nuevo.");
+  });
+  queues[path]=p; return p;
+}
+function remove(col,id){ if(!B.del||!S.canWrite) return Promise.resolve(); return B.del(col,id).catch(()=>toast("No se pudo borrar.")); }
+function local(col,id){ return S[col].find(x=>x.id===id); }
+function upsertLocal(col,obj){ const i=S[col].findIndex(x=>x.id===obj.id); if(i>=0) S[col][i]=obj; else S[col].push(obj); }
+function commit(col,obj){ upsertLocal(col,obj); render(); return save(col,obj.id,obj); }
+
+async function boot(){
+  render();
+  if(CFG.supabaseUrl&&CFG.supabaseAnonKey) return bootSupabase();
+  const use = window.claude?.use;
+  if(!use){ S.dbOk=false; renderMode(); render(); return; }
+  B.mode="claude";
+  const [dbNs,userNs,dl] = await Promise.all([use("db"),use("user"),use("downloads")]);
+  db=dbNs; S.dl=dl;
+  if(userNs){ const can=await userNs.can("data.write"); S.canWrite = can===null ? await userNs.canEdit() : !!can; S.myId=await userNs.id(); }
+  if(!db){ S.dbOk=false; renderMode(); render(); return; }
+  B.set=(c,id,o)=>db.doc(`${c}/${id}`).set(o); B.del=(c,id)=>db.doc(`${c}/${id}`).delete();
+  S.dbOk=true; renderMode();
+  const timer=setTimeout(()=>{S.slow=true; render();},10000);
+  const done=k=>{S.loaded[k]=true; if(Object.values(S.loaded).every(Boolean)){clearTimeout(timer); S.slow=false;} softRender(); CI.refreshRecinto?.();};
+  const docs=snap=>snap.docs.map(d=>({id:d.id,...d.data()}));
+  const err=()=>{clearTimeout(timer); S.slow=true; render();};
+  db.collection("sesiones").onSnapshot(s=>{S.sesiones=docs(s); if(!s.metadata.fromCache) done("s"); else softRender();},err);
+  db.collection("proyectos").onSnapshot(s=>{S.proyectos=docs(s); if(!s.metadata.fromCache) done("p"); else softRender();},err);
+  db.collection("compromisos").onSnapshot(s=>{S.compromisos=docs(s); if(!s.metadata.fromCache) done("c"); else softRender();},err);
+  db.doc("config/concejo").onSnapshot(s=>{S.config=s.exists?s.data():{}; if(!s.metadata.fromCache) done("k"); else softRender();},err);
+  db.collection("citaciones").onSnapshot(s=>{S.citaciones=docs(s); if(!s.metadata.fromCache) done("t"); else softRender();},err);
+  if(S.canWrite){ // la Secretaría ve lo que envía la comunidad
+    const flat=snap=>snap.docs.flatMap(d=>(d.data().items||[]).map(it=>({...it,owner:d.id})));
+    db.collection("inscripciones").onSnapshot(s=>{S.inscripciones=flat(s); softRender();},()=>{});
+    db.collection("buzon").onSnapshot(s=>{S.buzon=flat(s); softRender();},()=>{});
+  }
+}
+
+async function bootSupabase(){
+  B.mode="supabase";
+  let createClient;
+  try{ ({createClient} = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm")); }
+  catch{ S.dbOk=false; renderMode(); render(); return; }
+  const sb = B.sb = createClient(CFG.supabaseUrl, CFG.supabaseAnonKey);
+  const T="documentos";
+  B.set=async(c,id,o)=>{ const {error}=await sb.from(T).upsert({coleccion:c,id,data:o,updated_at:new Date().toISOString()}); if(error) throw error; };
+  B.del=async(c,id)=>{ const {error}=await sb.from(T).delete().eq("coleccion",c).eq("id",id); if(error) throw error; };
+  const timer=setTimeout(()=>{S.slow=true; render();},10000);
+  let busy=false, again=false;
+  async function fetchAll(){
+    if(busy){again=true; return;} busy=true;
+    const {data,error}=await sb.from(T).select("coleccion,id,data");
+    busy=false;
+    if(error){ S.slow=true; render(); return; }
+    clearTimeout(timer); S.slow=false;
+    const by={sesiones:[],proyectos:[],compromisos:[],citaciones:[]}; let cfg={};
+    (data||[]).forEach(r=>{ if(r.coleccion==="config"&&r.id==="concejo") cfg=r.data||{}; else if(by[r.coleccion]) by[r.coleccion].push({...r.data,id:r.id}); });
+    Object.assign(S,by); S.config=cfg; Object.keys(S.loaded).forEach(k=>S.loaded[k]=true);
+    if(S.canWrite){ const {data:pd}=await sb.from("participacion").select("id,tipo,data"); const rows=pd||[];
+      S.inscripciones=rows.filter(r=>r.tipo==="inscripciones").map(r=>({...r.data,rowId:r.id})); S.buzon=rows.filter(r=>r.tipo==="buzon").map(r=>({...r.data,rowId:r.id})); }
+    S.dbOk=true; softRender(); CI.refreshRecinto?.();
+    if(again){again=false; fetchAll();}
+  }
+  let t=null; const refetch=()=>{clearTimeout(t); t=setTimeout(fetchAll,250);};
+  sb.channel("documentos").on("postgres_changes",{event:"*",schema:"public",table:T},refetch).on("postgres_changes",{event:"*",schema:"public",table:"participacion"},refetch).subscribe();
+  B.fetchAll=()=>fetchAll();
+  setInterval(()=>{ if(document.visibilityState==="visible") fetchAll(); },60000);
+  async function checkUser(){
+    const {data:{session}}=await sb.auth.getSession();
+    B.email=session?.user?.email||"";
+    if(session){ const {data,error}=await sb.rpc("es_editor"); S.canWrite=!error&&data===true; } else S.canWrite=false;
+    renderMode(); render();
+  }
+  sb.auth.onAuthStateChange(()=>{ checkUser().then(()=>fetchAll()); });
+  await checkUser(); await fetchAll();
+}
+async function enviarParticipacion(tipo,item){
+  item={...item,id:uid("x"),fecha:new Date().toISOString()};
+  if(B.mode==="supabase"){ const {error}=await B.sb.from("participacion").insert({tipo,data:item}); if(error) throw error; return; }
+  if(B.mode==="claude"&&db&&S.myId){ const ref=db.doc(`${tipo}/${S.myId}`); const cur=await ref.get(); const items=cur.exists?[...(cur.data().items||[])]:[]; items.push(item); await ref.set({items:items.slice(-30)}); return; }
+  throw {code:"sin_identidad"};
+}
+async function archivarParticipacion(tipo,id){
+  const x=S[tipo].find(i=>i.id===id); if(!x) return;
+  S[tipo]=S[tipo].filter(i=>i.id!==id); render();
+  try{
+    if(B.mode==="supabase"){ const {error}=await B.sb.from("participacion").delete().eq("id",x.rowId); if(error) throw error; }
+    else { const ref=db.doc(`${tipo}/${x.owner}`); const cur=await ref.get(); const items=(cur.data()?.items||[]).filter(i=>i.id!==id); await ref.set({items}); }
+  }catch{ toast("No se pudo archivar."); }
+}
+function login(){
+  modal("Ingreso de la Secretaría", `<div class="form"><label class="f full">Correo<input id="lg-mail" type="email" autocomplete="username"></label>
+    <label class="f full">Contraseña<input id="lg-pass" type="password" autocomplete="current-password"></label></div>
+    <p class="note" style="margin-top:8px">Solo pueden registrar información los correos autorizados como editores del Concejo.</p>`, "Ingresar", async()=>{
+    const {error}=await B.sb.auth.signInWithPassword({email:$("#lg-mail").value.trim(),password:$("#lg-pass").value});
+    if(error){ toast("Correo o contraseña incorrectos."); return false; }
+    toast("Sesión iniciada");
+  });
+}
+function renderMode(){
+  const m=$("#mode");
+  if(S.dbOk===false) m.innerHTML = B.mode==="supabase"
+    ? `<b>Sin conexión a los datos</b><span>No se pudo conectar con la base de datos. Revisa tu internet.</span>`
+    : `<b>Sin conexión a los datos</b><span>Falta configurar la base de datos (archivo config.js).</span>`;
+  else if(B.mode==="supabase") m.innerHTML = B.email
+    ? `<b>${S.canWrite?"Modo Secretaría":"Modo consulta"}</b><span>${esc(B.email)}${S.canWrite?"":" · este correo no está autorizado para registrar"}</span><button class="btn sm" id="btn-logout" type="button">Salir</button>`
+    : `<b>Modo consulta</b><span>Ves la información pública del Concejo.</span><button class="btn sm" id="btn-login" type="button">Ingreso Secretaría</button>`;
+  else m.innerHTML = S.canWrite ? `<b>Modo Secretaría</b><span>Puedes registrar sesiones, votaciones y proyectos.</span>` : `<b>Modo consulta</b><span>Ves la información pública del Concejo.</span>`;
+  $("#btn-login")?.addEventListener("click",login);
+  $("#btn-logout")?.addEventListener("click",async()=>{await B.sb.auth.signOut(); toast("Sesión cerrada");});
+}
+
+/* ---------- Cálculos ---------- */
+const comisionDe = id=>S.config?.comisiones?.[id]||"";
+const miembros = inst=>{
+  if(inst==="plenaria"||inst==="conjunta"||!COMISIONES[inst]) return CONCEJALES.map(c=>c.id);
+  const m=CONCEJALES.filter(c=>comisionDe(c.id)===inst).map(c=>c.id);
+  return m.length?m:CONCEJALES.map(c=>c.id);
+};
+const quorum = n=>({delib:Math.ceil(n/4), decis:Math.floor(n/2)+1});
+const presentes = s=>miembros(s.instancia).filter(id=>s.asistencia?.[id]==="P");
+function resultado(s,v){
+  const mem=miembros(s.instancia), n=mem.length, q=quorum(n), pres=presentes(s);
+  const votos=v.votos||{}; let si=0,no=0,imp=0;
+  pres.forEach(id=>{const x=votos[id]; if(x==="si")si++; else if(x==="no")no++; else if(x==="imp")imp++;});
+  const faltan=pres.length-(si+no+imp);
+  let res, cls;
+  if(pres.length<q.decis){res="Sin quórum decisorio"; cls="bad";}
+  else if(faltan>0){res=`Faltan ${faltan} voto${faltan>1?"s":""} por registrar`; cls="warn";}
+  else if(v.mayoria==="absoluta"){ const need=Math.floor(n/2)+1; res= si>=need?"Aprobada":"Negada"; cls=si>=need?"ok":"bad"; }
+  else if(v.mayoria==="dos_tercios"){ const need=Math.ceil(n*2/3); res= si>=need?"Aprobada":"Negada"; cls=si>=need?"ok":"bad"; }
+  else if(si>no){res="Aprobada";cls="ok";} else if(no>si){res="Negada";cls="bad";} else {res="Empate: se repite la votación (art. 74)";cls="warn";}
+  return {si,no,imp,faltan,pres:pres.length,res,cls,n};
+}
+function periodoActual(){
+  const d=new Date(), m=d.getMonth(); const ord=[1,4,7,10];
+  if(ord.includes(m)) return {en:true, txt:`Período ordinario de ${MESES[m]} en curso`};
+  const next=ord.find(x=>x>m) ?? ord[0]; const y=d.getFullYear()+(next<=m?1:0);
+  return {en:false, txt:`Próximo período ordinario: ${MESES[next]} de ${y}`};
+}
+const sesionesOrden = ()=>[...S.sesiones].sort((a,b)=>(b.fecha+b.hora).localeCompare(a.fecha+a.hora));
+const tituloSesion = s=>`${INSTANCIAS[s.instancia]||"Sesión"} · ${s.tipo||""}`;
+
+/* ---------- API para el recinto 3D ---------- */
+const CI = window.CI = {
+  PARTIDOS, CONCEJALES, COMISIONES,
+  comisionKey: id=>COMISIONES[comisionDe(id)]?comisionDe(id):"",
+  comisionDe: id=>{const k=comisionDe(id); return k?esc(COMISIONES[k].corto):"";},
+  cargoDe: id=>{const m=S.config?.mesa||{}; return m.presidente===id?"Presidente del Concejo":m.vp1===id?"Primer vicepresidente":m.vp2===id?"Segundo vicepresidente":"";},
+  mesa: ()=>{const m=S.config?.mesa||{}; const nm=id=>id&&byId[id]?esc(byId[id].nombre):""; return {presidente:nm(m.presidente),vp1:nm(m.vp1),vp2:nm(m.vp2),secretario:esc(m.secretario||"")};},
+  ponenciasDe: id=>S.proyectos.filter(p=>(p.ponentes||[]).includes(id)).map(p=>({fecha:`${esc(p.numero||"")} · ${esc(EST_LABEL[p.estado]||"")}${p.demo?" · EJEMPLO":""}`,texto:esc(p.titulo)})),
+  votacionesDe: id=>{const out=[]; sesionesOrden().forEach(s=>(s.votaciones||[]).forEach(v=>{const x=v.votos?.[id]; if(!x) return;
+    out.push({fecha:`${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia]||"")}${s.demo?" · EJEMPLO":""}`,texto:`<b>${x==="si"?"Sí":x==="no"?"No":"Se declaró impedido"}</b> — ${esc(v.asunto)}`});})); return out;},
+  asistenciaDe: id=>{const ss=S.sesiones.filter(s=>s.estado==="cerrada"&&miembros(s.instancia).includes(id)); if(!ss.length) return null;
+    const p=ss.filter(s=>s.asistencia?.[id]==="P").length, e=ss.filter(s=>s.asistencia?.[id]==="E").length;
+    return {"Sesiones registradas":ss.length,"Asistió":p,"Con excusa":e,"Sin excusa":ss.length-p-e,"Porcentaje de asistencia":Math.round(p*100/ss.length)+"%",...(ss.some(s=>s.demo)?{"Nota":"Incluye datos de ejemplo"}:{})};},
+};
+
+/* ============================================================
+   ENRUTADOR
+   ============================================================ */
+const ROUTES=["inicio","sesiones","sala","proyectos","control","participa","honorarios","observatorio","recinto","ajustes"];
+let route="inicio", salaId=null, salaTab="asistencia", proyectoId=null, recintoLoaded=false;
+function go(r){ if(location.hash!=="#"+r) location.hash=r; else onRoute(); }
+function onRoute(){
+  route = (location.hash||"#inicio").slice(1); if(route==="compromisos"){route="control"; controlTab="compromisos";} if(!ROUTES.includes(route)) route="inicio";
+  if(route==="sala"&&!salaId) route="sesiones";
+  document.querySelectorAll(".nav-link").forEach(a=>a.setAttribute("aria-current", a.getAttribute("href")==="#"+(route==="sala"?"sesiones":route)?"page":"false"));
+  const isR = route==="recinto";
+  $("#recinto").hidden=!isR; $("#view").hidden=isR; $("#main").style.overflowY=isR?"hidden":"auto";
+  if(isR&&!recintoLoaded){ recintoLoaded=true; import("./recinto.js").then(()=>{$("#r-loading").remove(); CI.refreshRecinto?.();}).catch(()=>{$("#r-loading").textContent="No se pudo cargar el recinto 3D.";}); }
+  if(isR) window.dispatchEvent(new Event("resize"));
+  render(); $("#main").scrollTop=0;
+}
+window.addEventListener("hashchange",onRoute);
+
+/* ============================================================
+   VISTAS
+   ============================================================ */
+function render(){
+  if(route==="recinto") return;
+  const v=$("#view");
+  const loading = S.dbOk && !Object.values(S.loaded).every(Boolean);
+  let html="";
+  if(S.slow) html+=`<div class="banner">Los datos están tardando en llegar. Lo que ves puede no estar actualizado.</div>`;
+  const hasDemo = ["sesiones","proyectos","compromisos","citaciones"].some(k=>S[k].some(x=>x.demo));
+  if(hasDemo) html+=`<div class="banner"><span><span class="pill demo">EJEMPLO</span> Hay datos de ejemplo cargados para mostrar cómo funciona la plataforma. No son registros oficiales.</span>${S.canWrite?`<button class="btn sm" data-act="demo-clear">Borrar ejemplos</button>`:""}</div>`;
+  $("#nav-obs").hidden = !(S.canWrite||S.config?.observatorioPublico);
+  html += ({inicio:vInicio,sesiones:vSesiones,sala:vSala,proyectos:vProyectos,control:vControl,participa:vParticipa,honorarios:vHonorarios,observatorio:vObservatorio,ajustes:vAjustes}[route]||vInicio)(loading);
+  html+=`<footer class="foot-cred"><span>Concejo Inteligente Montenegro · Concejo Municipal de Montenegro, Quindío</span><span>© 2026 · Desarrollado por <b>William Andrés Muriel</b> · Gobierno | Territorio | Tecnología · <a href="https://www.linkedin.com/in/willi-muriel" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://elpoderdetrasdelpoder.lovable.app" target="_blank" rel="noopener">Blog</a></span></footer>`;
+  v.innerHTML=html;
+}
+const demoTag = x=>x.demo?` <span class="pill demo">EJEMPLO</span>`:"";
+const emptyBox = (t,s)=>`<div class="empty"><strong>${t}</strong>${s}</div>`;
+
+/* ---------- Inicio ---------- */
+function vInicio(loading){
+  const per=periodoActual(), year=String(new Date().getFullYear());
+  const cerradas=S.sesiones.filter(s=>s.estado==="cerrada"&&(s.fecha||"").startsWith(year));
+  let asis="—"; if(cerradas.length){ let tot=0,pr=0; cerradas.forEach(s=>{const m=miembros(s.instancia); tot+=m.length; pr+=m.filter(id=>s.asistencia?.[id]==="P").length;}); asis=Math.round(pr*100/tot)+"%"; }
+  const tramite=S.proyectos.filter(p=>!["sancionado","archivado","retirado"].includes(p.estado)).length;
+  const hoy=hoyISO();
+  const pend=S.compromisos.filter(c=>c.estado!=="cumplido"); const venc=pend.filter(c=>c.fechaLimite&&c.fechaLimite<hoy).length;
+  const prox=S.sesiones.filter(s=>s.estado!=="cerrada").sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)).slice(0,5);
+  const ult=sesionesOrden().filter(s=>s.estado==="cerrada").slice(0,4);
+  return `
+  <div class="view-head"><div><div class="eyebrow">Concejo Municipal de Montenegro · Quindío</div><h1>Panel del Concejo</h1></div>
+    <span class="pill ${per.en?"ok":"info"}">${per.txt}</span></div>
+  ${loading?"":cardProxima()}${loading?"":cardAlertas()}
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="card kpi"><div class="num">${loading?"…":cerradas.length}</div><div class="lbl">Sesiones realizadas en ${year}</div></div>
+    <div class="card kpi"><div class="num">${loading?"…":asis}</div><div class="lbl">Asistencia promedio en ${year}</div></div>
+    <div class="card kpi"><div class="num">${loading?"…":tramite}</div><div class="lbl">Proyectos de acuerdo en trámite</div></div>
+    <div class="card kpi"><div class="num">${loading?"…":pend.length}</div><div class="lbl">Compromisos pendientes${venc?` · <b style="color:var(--bad)">${venc} vencidos</b>`:""}</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h2>Próximas sesiones</h2>
+      ${prox.length?`<div class="list">${prox.map(itemSesion).join("")}</div>`:emptyBox("No hay sesiones programadas", S.canWrite?`Programa la primera desde <a href="#sesiones">Sesiones</a>.`:"Cuando la Secretaría programe una sesión, aparecerá aquí.")}
+    </div>
+    <div class="card"><h2>Últimas sesiones</h2>
+      ${ult.length?`<div class="list">${ult.map(itemSesion).join("")}</div>`:emptyBox("Aún no hay sesiones cerradas","Las sesiones cerradas, con su asistencia y votaciones, se listan aquí.")}
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px"><h2>Así funciona el Concejo</h2>
+    <div class="grid g4">
+      <div><b>13 concejales</b><p class="small muted">Elegidos para 2024–2027, organizados en bancadas por partido.</p></div>
+      <div><b>Quórum</b><p class="small muted">4 concejales para deliberar y 7 para decidir en plenaria (art. 9).</p></div>
+      <div><b>3 comisiones</b><p class="small muted">Plan de Desarrollo (4), Gobierno (4) y Presupuesto y Hacienda (5).</p></div>
+      <div><b>Dos debates</b><p class="small muted">Un acuerdo se aprueba en comisión, luego en plenaria, y lo sanciona el Alcalde (art. 78).</p></div>
+    </div>
+    <a class="btn" href="#recinto" style="margin-top:6px">Recorrer el recinto en 3D</a>
+  </div>`;
+}
+function itemSesion(s){
+  const st=s.estado==="cerrada"?`<span class="pill">Cerrada</span>`:s.estado==="en_curso"?`<span class="pill ok">En curso</span>`:`<span class="pill info">Programada</span>`;
+  return `<div class="item click" data-act="open-sesion" data-id="${esc(s.id)}" role="button" tabindex="0"><div class="main"><div class="t">${esc(tituloSesion(s))}${demoTag(s)}</div><div class="s">${fmtFecha(s.fecha)}${s.hora?" · "+esc(s.hora):""}${s.numeroActa?" · Acta "+esc(s.numeroActa):""}</div></div>${st}</div>`;
+}
+
+/* ---------- Sesiones ---------- */
+function vSesiones(loading){
+  const ss=sesionesOrden();
+  return `
+  <div class="view-head"><div><div class="eyebrow">Plenaria y comisiones</div><h1>Sesiones</h1></div>
+    ${S.canWrite?`<button class="btn primary" data-act="new-sesion">+ Programar sesión</button>`:""}</div>
+  <div class="card">${loading?`<p class="muted">Cargando sesiones…</p>`:ss.length?`<div class="list">${ss.map(itemSesion).join("")}</div>`:
+    emptyBox("Todavía no hay sesiones", S.canWrite?"Usa «Programar sesión» para crear la primera. El orden del día se llena con la estructura del reglamento (art. 57).":"Cuando la Secretaría programe sesiones, aparecerán aquí.")}</div>
+  <p class="note" style="margin-top:10px">Convocatoria con mínimo 24 horas de anticipación; 3 días cuando hay elecciones (art. 52). Las sesiones duran hasta 3 horas, prorrogables como sesión permanente (art. 51).</p>`;
+}
+function formSesion(s={}){
+  return `<div class="form">
+    <label class="f">Instancia<select id="fs-inst">${Object.entries(INSTANCIAS).map(([k,v])=>`<option value="${k}" ${s.instancia===k?"selected":""}>${v}</option>`).join("")}</select></label>
+    <label class="f">Tipo<select id="fs-tipo">${TIPOS_SESION.map(t=>`<option ${s.tipo===t?"selected":""}>${t}</option>`).join("")}</select></label>
+    <label class="f">Fecha<input id="fs-fecha" type="date" value="${esc(s.fecha||hoyISO())}"></label>
+    <label class="f">Hora<input id="fs-hora" type="time" value="${esc(s.hora||"18:00")}"></label>
+    <label class="f">Número de acta<input id="fs-acta" type="text" placeholder="Ej. 045" value="${esc(s.numeroActa||"")}"></label>
+  </div>`;
+}
+function readFormSesion(){ return {instancia:$("#fs-inst").value,tipo:$("#fs-tipo").value,fecha:$("#fs-fecha").value,hora:$("#fs-hora").value,numeroActa:$("#fs-acta").value.trim()}; }
+
+/* ---------- Sala de sesión ---------- */
+function vSala(){
+  const s=local("sesiones",salaId); if(!s) return emptyBox("Sesión no encontrada",`Vuelve a <a href="#sesiones">Sesiones</a>.`);
+  const w=S.canWrite && s.estado!=="cerrada";
+  const mem=miembros(s.instancia), q=quorum(mem.length), pres=presentes(s).length;
+  const tabs=[["asistencia","Asistencia y quórum"],["orden","Orden del día"],["votaciones",`Votaciones (${(s.votaciones||[]).length})`],["proposiciones","Proposiciones y compromisos"],["acta",`Acta${s.actaAprobada?" ✓":""}`]];
+  if(S.canWrite) tabs.splice(1,0,["inscritos",`Intervenciones (${S.inscripciones.filter(x=>x.sesionId===s.id).length})`]);
+  const estPill=s.estado==="cerrada"?`<span class="pill">Cerrada</span>`:s.estado==="en_curso"?`<span class="pill ok">En curso</span>`:`<span class="pill info">Programada</span>`;
+  let body="";
+  if(salaTab==="asistencia") body=tabAsistencia(s,w,mem,q,pres);
+  else if(salaTab==="orden") body=tabOrden(s,w);
+  else if(salaTab==="votaciones") body=tabVotaciones(s,w);
+  else if(salaTab==="proposiciones") body=tabProposiciones(s,w);
+  else if(salaTab==="inscritos") body=tabInscritos(s);
+  else body=tabActa(s);
+  return `
+  <p style="margin-bottom:8px"><a href="#sesiones" class="small">← Sesiones</a></p>
+  <div class="view-head"><div><div class="eyebrow">${fmtFecha(s.fecha)}${s.hora?" · "+esc(s.hora):""}${s.numeroActa?" · Acta "+esc(s.numeroActa):""}</div><h1>${esc(tituloSesion(s))}${demoTag(s)}</h1></div>
+    <div class="row-actions">${estPill}
+      ${S.canWrite&&s.estado==="programada"?`<button class="btn primary" data-act="sesion-estado" data-v="en_curso">Instalar sesión</button>`:""}
+      ${S.canWrite&&s.estado==="en_curso"?`<button class="btn primary" data-act="sesion-estado" data-v="cerrada">Cerrar sesión</button>`:""}
+      ${S.canWrite&&s.estado==="cerrada"?`<button class="btn" data-act="sesion-estado" data-v="en_curso">Reabrir</button>`:""}
+      <button class="btn" data-act="doc-conv">Convocatoria (Word)</button>
+      ${S.canWrite?`<button class="btn" data-act="edit-sesion">Editar datos</button><button class="btn danger" data-act="del-sesion">Eliminar</button>`:""}
+    </div></div>
+  <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-act="sala-tab" data-v="${k}" aria-selected="${k===salaTab}">${l}</button>`).join("")}</div>
+  ${body}`;
+}
+function tabAsistencia(s,w,mem,q,pres){
+  const n=mem.length, pct=Math.min(100,pres*100/n);
+  const estado = pres>=q.decis?`<span class="pill ok">Hay quórum para decidir</span>`:pres>=q.delib?`<span class="pill warn">Solo quórum para deliberar</span>`:`<span class="pill bad">Sin quórum</span>`;
+  const noConf = COMISIONES[s.instancia] && !CONCEJALES.some(c=>comisionDe(c.id)===s.instancia);
+  return `
+  <div class="card" style="margin-bottom:14px">
+    <div class="quorum"><div><div class="vote-res">${pres} de ${n} presentes</div><div class="small muted">Deliberar: ${q.delib} · Decidir: ${q.decis}</div></div>
+      <div class="meter" aria-hidden="true"><i style="width:${pct}%"></i><u style="left:${q.delib*100/n}%"></u><u style="left:${q.decis*100/n}%"></u></div>${estado}</div>
+    ${noConf?`<p class="note" style="margin-top:8px">Aún no se ha definido quién integra esta comisión en Ajustes; por ahora se lista a los 13 concejales.</p>`:""}
+    ${w?`<div class="row-actions" style="margin-top:10px"><button class="btn sm" data-act="asis-todos">Marcar todos presentes</button><button class="btn sm" data-act="asis-limpiar">Limpiar</button></div>`:""}
+  </div>
+  <div class="att">${mem.map(id=>{const c=byId[id], a=s.asistencia?.[id]||"";
+    return `<div class="att-row"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
+      ${w?`<div class="seg" role="group" aria-label="Asistencia de ${esc(c.nombre)}">${[["P","Presente"],["E","Excusa"],["A","Ausente"]].map(([k,l])=>`<button class="${k}" aria-pressed="${a===k}" data-act="asis" data-id="${id}" data-v="${k}" title="${l}">${l==="Presente"?"Presente":l}</button>`).join("")}</div>`
+        :`<span class="pill ${a==="P"?"ok":a==="E"?"warn":a==="A"?"bad":""}">${a==="P"?"Presente":a==="E"?"Excusa":a==="A"?"Ausente":"Sin registro"}</span>`}
+    </div>`;}).join("")}</div>
+  <p class="note" style="margin-top:10px">Si al llamar a lista no hay quórum para deliberar, el presidente decreta un receso de hasta 20 minutos; si sigue sin quórum, se cancela la sesión (art. 54).</p>`;
+}
+function tabOrden(s,w){
+  const o=s.orden||[];
+  return `<div class="card">
+    ${o.length?`<ol class="ol">${o.map((it,i)=>`<li><div class="tx"><b>${esc(it.t)}</b>
+      ${w?`<textarea data-act="orden-nota" data-i="${i}" id="on-${i}" placeholder="Notas de lo tratado en este punto (sirven para el acta)">${esc(it.nota||"")}</textarea>`:it.nota?`<p class="small" style="margin:4px 0 0">${esc(it.nota)}</p>`:""}</div>
+      ${w?`<div class="row-actions"><button class="btn sm" data-act="orden-up" data-i="${i}" aria-label="Subir">↑</button><button class="btn sm" data-act="orden-del" data-i="${i}" aria-label="Quitar">×</button></div>`:""}</li>`).join("")}</ol>`
+      :emptyBox("Sin orden del día","")}
+    ${w?`<div class="row-actions" style="margin-top:12px"><input id="orden-new" placeholder="Agregar un punto, ej. «Primer debate al Proyecto de Acuerdo 012 de 2026»" style="flex:1;min-width:220px"><button class="btn" data-act="orden-add">Agregar punto</button></div>`:""}
+    <p class="note" style="margin-top:10px">El orden del día lo elabora la mesa directiva y puede alterarse en la sesión por votación (art. 57).</p></div>`;
+}
+function tabVotaciones(s,w){
+  const vs=s.votaciones||[]; const mem=miembros(s.instancia), pres=presentes(s);
+  const proyOpts=S.proyectos.map(p=>`<option value="${esc(p.id)}">${esc(p.numero||"")} — ${esc(p.titulo).slice(0,70)}</option>`).join("");
+  return `
+  ${w?`<div class="card" style="margin-bottom:14px"><h2>Nueva votación</h2><div class="form">
+    <label class="f full">Asunto que se vota<input id="nv-asunto" placeholder="Ej. Aprobación en segundo debate del Proyecto de Acuerdo 012 de 2026"></label>
+    <label class="f">Proyecto relacionado (opcional)<select id="nv-proy"><option value="">— Ninguno —</option>${proyOpts}</select></label>
+    <label class="f">Mayoría requerida<select id="nv-may">${Object.entries(MAYORIAS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label>
+  </div><div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="new-vot">Abrir votación nominal</button></div>
+  <p class="note" style="margin-top:8px">La votación nominal llama a cada concejal por bancada y en orden alfabético; el resultado queda en el acta con los nombres de quienes votaron Sí y No (art. 72).</p></div>`:""}
+  ${vs.length?vs.map((v,i)=>{const r=resultado(s,v), open=w&&!v.cerrada;
+    return `<div class="card" style="margin-bottom:12px">
+      <div class="view-head" style="margin-bottom:8px"><div style="min-width:0"><h2 style="margin:0">${esc(v.asunto)}</h2><div class="small muted">${MAYORIAS[v.mayoria||"simple"]}${v.proyectoId&&local("proyectos",v.proyectoId)?" · "+esc(local("proyectos",v.proyectoId).numero||""):""}</div></div>
+        <div style="text-align:right"><div class="vote-res" style="color:var(--${r.cls==="ok"?"ok":r.cls==="bad"?"bad":"warn"})">${r.res}</div><div class="small muted">Sí ${r.si} · No ${r.no} · Impedidos ${r.imp} · Presentes ${r.pres}</div></div></div>
+      ${open?`<div class="att">${pres.map(id=>{const c=byId[id], x=v.votos?.[id]||"";
+        return `<div class="att-row"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
+          <div class="seg" role="group">${[["si","Sí"],["no","No"],["imp","Impedido"]].map(([k,l])=>`<button class="${k}" aria-pressed="${x===k}" data-act="voto" data-vi="${i}" data-id="${id}" data-v="${k}">${l}</button>`).join("")}</div></div>`;}).join("")||emptyBox("No hay concejales presentes","Registra primero la asistencia.")}</div>
+        <div class="row-actions" style="margin-top:10px"><button class="btn primary" data-act="cerrar-vot" data-vi="${i}" ${r.faltan>0?"disabled":""}>Cerrar votación</button><button class="btn danger" data-act="del-vot" data-vi="${i}">Eliminar</button></div>`
+      :`<div class="scroll-x"><table class="t"><thead><tr><th>Sentido</th><th>Concejales</th></tr></thead><tbody>
+        ${[["si","Sí"],["no","No"],["imp","Impedidos"]].map(([k,l])=>{const ids=mem.filter(id=>v.votos?.[id]===k); return ids.length?`<tr><td><b>${l}</b></td><td>${ids.map(id=>esc(byId[id].nombre)).join(", ")}</td></tr>`:"";}).join("")}
+        </tbody></table></div>${w?`<div class="row-actions" style="margin-top:8px"><button class="btn sm" data-act="reabrir-vot" data-vi="${i}">Corregir votación</button></div>`:""}`}
+    </div>`;}).join(""):emptyBox("Sin votaciones en esta sesión", w?"Abre una votación nominal arriba.":"")}`;
+}
+function tabProposiciones(s,w){
+  const ps=s.proposiciones||[]; const comps=S.compromisos.filter(c=>c.sesionId===s.id);
+  return `<div class="grid g2">
+  <div class="card"><h2>Proposiciones</h2>
+    ${ps.length?`<div class="list">${ps.map((p,i)=>`<div class="item"><div class="main"><div class="t">${esc(p.texto)}</div><div class="s">${p.autor&&byId[p.autor]?esc(byId[p.autor].nombre):"Sin autor"}${p.aprobada?" · Aprobada":""}</div></div>${w?`<button class="btn sm danger" data-act="del-prop" data-i="${i}">×</button>`:""}</div>`).join("")}</div>`:emptyBox("Sin proposiciones","")}
+    ${w?`<div class="form" style="margin-top:12px"><label class="f full">Texto de la proposición<textarea id="np-texto" style="min-height:60px"></textarea></label>
+      <label class="f">Presentada por<select id="np-autor"><option value="">—</option>${CONCEJALES.map(c=>`<option value="${c.id}">${esc(c.nombre)}</option>`).join("")}</select></label>
+      <label class="f">¿Aprobada?<select id="np-ap"><option value="">Sin decidir</option><option value="1">Sí</option></select></label></div>
+      <div class="row-actions" style="margin-top:10px"><button class="btn" data-act="add-prop">Agregar proposición</button></div>`:""}
+  </div>
+  <div class="card"><h2>Compromisos de la sesión</h2>
+    ${comps.length?`<div class="list">${comps.map(itemCompromiso).join("")}</div>`:emptyBox("Sin compromisos","Lo que se acuerde que alguien debe cumplir (un informe, una respuesta) se registra aquí y se sigue en Compromisos.")}
+    ${S.canWrite?`<div class="row-actions" style="margin-top:12px"><button class="btn" data-act="new-comp" data-sesion="${esc(s.id)}">+ Compromiso</button></div>`:""}
+  </div></div>`;
+}
+function actaTexto(s){
+  const mem=miembros(s.instancia), m=S.config?.mesa||{};
+  const est=k=>mem.filter(id=>s.asistencia?.[id]===k).map(id=>byId[id].nombre);
+  const pres=est("P"), exc=est("E"), aus=mem.filter(id=>!["P","E"].includes(s.asistencia?.[id])).map(id=>byId[id].nombre);
+  const q=quorum(mem.length);
+  let t=`CONCEJO MUNICIPAL DE MONTENEGRO, QUINDÍO\n${(INSTANCIAS[s.instancia]||"").toUpperCase()}\n\nACTA No. ${s.numeroActa||"____"}\nSesión ${String(s.tipo||"").toLowerCase()} del ${fmtFecha(s.fecha)}${s.hora?", hora de inicio "+s.hora:""}\n\n`;
+  t+=`1. ASISTENCIA Y QUÓRUM\nPresentes (${pres.length}): ${pres.join(", ")||"ninguno"}.\n`;
+  if(exc.length) t+=`Con excusa (${exc.length}): ${exc.join(", ")}.\n`;
+  if(aus.length) t+=`Ausentes (${aus.length}): ${aus.join(", ")}.\n`;
+  t+= pres.length>=q.decis?`Se verificó quórum decisorio (${pres.length} de ${mem.length}).\n\n`:pres.length>=q.delib?`Se verificó quórum para deliberar (${pres.length} de ${mem.length}).\n\n`:`No se conformó quórum (${pres.length} de ${mem.length}).\n\n`;
+  t+=`2. ORDEN DEL DÍA\n${(s.orden||[]).map((o,i)=>`${i+1}. ${o.t}`).join("\n")}\n\n3. DESARROLLO DE LA SESIÓN\n`;
+  (s.orden||[]).forEach((o,i)=>{ if(o.nota) t+=`Punto ${i+1}. ${o.t}: ${o.nota}\n`; });
+  if(!(s.orden||[]).some(o=>o.nota)) t+=`[Sin notas registradas por punto]\n`;
+  const vs=s.votaciones||[];
+  if(vs.length){ t+=`\n4. VOTACIONES\n`; vs.forEach((v,i)=>{const r=resultado(s,v); const nm=k=>mem.filter(id=>v.votos?.[id]===k).map(id=>byId[id].nombre);
+    t+=`${i+1}. ${v.asunto}. ${MAYORIAS[v.mayoria||"simple"]}. Resultado: ${r.res} (Sí ${r.si}, No ${r.no}${r.imp?`, impedidos ${r.imp}`:""}).\n   Votaron Sí: ${nm("si").join(", ")||"nadie"}.\n   Votaron No: ${nm("no").join(", ")||"nadie"}.\n${r.imp?`   Se declararon impedidos: ${nm("imp").join(", ")}.\n`:""}`;}); }
+  const ps=s.proposiciones||[];
+  if(ps.length){ t+=`\n5. PROPOSICIONES\n`; ps.forEach((p,i)=>{t+=`${i+1}. ${p.texto}${p.autor&&byId[p.autor]?` (presentada por ${byId[p.autor].nombre})`:""}${p.aprobada?". Aprobada":""}.\n`;}); }
+  const cs=S.compromisos.filter(c=>c.sesionId===s.id);
+  if(cs.length){ t+=`\n6. COMPROMISOS\n`; cs.forEach((c,i)=>{t+=`${i+1}. ${c.texto}. Responsable: ${c.responsable||"por definir"}${c.fechaLimite?`. Plazo: ${fmtFecha(c.fechaLimite)}`:""}.\n`;}); }
+  t+=`\nAgotado el orden del día, se levantó la sesión.\n\n\n______________________________          ______________________________\n${m.presidente&&byId[m.presidente]?byId[m.presidente].nombre:"Presidente"}                          ${m.secretario||"Secretario(a) General"}\nPresidente                                Secretario(a) General\n`;
+  return t;
+}
+function tabInscritos(s){
+  const ins=S.inscripciones.filter(x=>x.sesionId===s.id).sort((a,b)=>(a.fecha||"").localeCompare(b.fecha||""));
+  return `<div class="card"><h2>Ciudadanos inscritos para intervenir</h2>
+    ${ins.length?`<ol class="ol">${ins.map(x=>`<li><div class="tx"><b>${esc(x.nombre)}</b> · ${esc(x.calidad||"")}${x.organizacion?" · "+esc(x.organizacion):""}<div class="small muted">${esc(x.tema)}${x.contacto?" · "+esc(x.contacto):""}</div></div></li>`).join("")}</ol>`
+      :emptyBox("Nadie se ha inscrito","Las personas se inscriben desde «Participa». Aquí aparecen en el orden en que llegaron.")}
+    <p class="note" style="margin-top:10px">Cada intervención individual dura hasta 10 minutos y debe referirse al tema en discusión; quien no se inscribió puede intervenir hasta 5 minutos con la venia de un concejal (art. 19).</p></div>`;
+}
+function tabActa(s){
+  const auto=actaTexto(s);
+  return `<div class="card">
+    <div class="view-head" style="margin-bottom:10px"><div><h2 style="margin:0">Borrador del acta</h2><div class="small muted">Se arma solo con la asistencia, el orden del día, las votaciones y los compromisos registrados (art. 5).</div></div>
+    <div class="row-actions"><button class="btn" data-act="copy-acta">Copiar</button><button class="btn" data-act="dl-acta">Descargar Word</button>
+      ${S.canWrite&&s.estado==="cerrada"?`<button class="btn ${s.actaAprobada?"":"primary"}" data-act="acta-aprobar">${s.actaAprobada?"Marcar como no aprobada":"Marcar acta aprobada"}</button>`:""}</div></div>
+    ${s.actaAprobada?`<p class="small"><span class="pill ok">Acta aprobada</span>${s.actaAprobadaFecha?" el "+fmtFecha(s.actaAprobadaFecha):""}</p>`:""}
+    <pre class="acta" id="acta-text">${esc(auto)}</pre>
+    <p class="note" style="margin-top:10px">El acta se aprueba en la siguiente sesión, después de ponerla en conocimiento de los concejales (art. 5).</p></div>`;
+}
+
+/* ---------- Proyectos de acuerdo ---------- */
+function vProyectos(loading){
+  if(proyectoId&&local("proyectos",proyectoId)) return vProyecto(local("proyectos",proyectoId));
+  const ps=[...S.proyectos].sort((a,b)=>(b.fechaRadicacion||"").localeCompare(a.fechaRadicacion||""));
+  return `
+  <div class="view-head"><div><div class="eyebrow">Trámite normativo</div><h1>Proyectos de acuerdo</h1></div>
+    ${S.canWrite?`<button class="btn primary" data-act="new-proy">+ Radicar proyecto</button>`:""}</div>
+  <div class="card">${loading?`<p class="muted">Cargando…</p>`:ps.length?`<div class="list">${ps.map(p=>`
+    <div class="item click" data-act="open-proy" data-id="${esc(p.id)}" role="button" tabindex="0"><div class="main"><div class="t">${esc(p.numero||"")} — ${esc(p.titulo)}${demoTag(p)}</div>
+      <div class="s">${esc(p.iniciativa||"")}${p.comision?" · "+esc(COMISIONES[p.comision]?.corto||""):""}${(p.ponentes||[]).length?" · Ponente: "+p.ponentes.map(nombreCorto).join(", "):""}</div></div>
+      <span class="pill ${["sancionado"].includes(p.estado)?"ok":["archivado","retirado","objetado"].includes(p.estado)?"bad":"info"}">${esc(EST_LABEL[p.estado]||"")}</span></div>`).join("")}</div>`
+    :emptyBox("No hay proyectos radicados", S.canWrite?"Usa «Radicar proyecto» para registrar el primero.":"Aquí verás los proyectos de acuerdo y en qué etapa va cada uno.")}</div>
+  <p class="note" style="margin-top:10px">Ningún proyecto es acuerdo sin aprobación en primer debate (comisión), segundo debate (plenaria) y sanción del Alcalde (art. 78). Solo el Alcalde puede presentar proyectos sobre plan de desarrollo, presupuesto, estructura administrativa y autorizaciones para contratar (art. 76).</p>`;
+}
+function vProyecto(p){
+  const idx=ESTADOS_PA.findIndex(e=>e[0]===p.estado), fin=ESTADOS_PA_FIN.find(e=>e[0]===p.estado);
+  const next=idx>=0&&idx<ESTADOS_PA.length-1?ESTADOS_PA[idx+1]:null;
+  const ap1=(p.historial||[]).find(h=>h.estado==="aprobado_1");
+  const votos=[]; S.sesiones.forEach(s=>(s.votaciones||[]).forEach(v=>{if(v.proyectoId===p.id) votos.push({s,v,r:resultado(s,v)});}));
+  return `
+  <p style="margin-bottom:8px"><a href="#proyectos" data-act="back-proy" class="small">← Proyectos de acuerdo</a></p>
+  <div class="view-head"><div style="min-width:0"><div class="eyebrow">${esc(p.numero||"")} · Radicado el ${fmtFecha(p.fechaRadicacion)}</div><h1>${esc(p.titulo)}${demoTag(p)}</h1></div>
+    ${S.canWrite?`<div class="row-actions"><button class="btn" data-act="edit-proy">Editar</button><button class="btn danger" data-act="del-proy">Eliminar</button></div>`:""}</div>
+  <div class="steps">${ESTADOS_PA.map((e,i)=>`<span class="${fin?"":i<idx?"done":i===idx?"now":""}">${e[1]}</span>`).join("")}${fin?`<span class="now" style="background:var(--bad)">${fin[1]}</span>`:""}</div>
+  ${S.canWrite&&!fin&&p.estado!=="sancionado"?`<div class="row-actions" style="margin:10px 0 16px">${next?`<button class="btn primary" data-act="proy-avanzar" data-v="${next[0]}">Pasar a: ${next[1]}</button>`:""}
+    ${ESTADOS_PA_FIN.map(e=>`<button class="btn sm" data-act="proy-avanzar" data-v="${e[0]}">${e[1]}</button>`).join("")}</div>`:""}
+  ${p.estado==="aprobado_1"&&ap1?`<div class="banner">El segundo debate en plenaria puede hacerse desde el ${fmtFecha(addDias(ap1.fecha,3))} (tres días después del primer debate, art. 86).</div>`:""}
+  <div class="grid g2">
+    <div class="card"><h2>Datos del proyecto</h2><dl class="facts">
+      <dt>Iniciativa</dt><dd>${esc(p.iniciativa||"—")}</dd><dt>Autor</dt><dd>${esc(p.autor||"—")}</dd>
+      <dt>Comisión</dt><dd>${p.comision?esc(COMISIONES[p.comision].nombre):"—"}</dd>
+      <dt>Ponentes</dt><dd>${(p.ponentes||[]).map(id=>esc(byId[id]?.nombre||"")).join(", ")||"—"}</dd>
+      <dt>Artículos</dt><dd>${p.articulos?esc(p.articulos):"—"}</dd></dl>
+      <h3>Historial</h3>${(p.historial||[]).length?`<div class="list">${p.historial.map(h=>`<div class="item"><div class="main"><div class="t">${esc(EST_LABEL[h.estado]||h.estado)}</div><div class="s">${fmtFecha(h.fecha)}</div></div></div>`).join("")}</div>`:`<p class="muted small">Sin movimientos.</p>`}
+    </div>
+    <div class="card"><h2>En lenguaje ciudadano</h2>
+      ${S.canWrite?`<label class="f">Resumen para la ciudadanía: qué propone, a quién afecta y qué cambia<textarea id="pr-resumen" maxlength="1500" placeholder="Escríbelo en palabras sencillas, en 3 o 4 líneas">${esc(p.resumen||"")}</textarea></label>
+        <div class="row-actions" style="margin-top:8px"><button class="btn" data-act="save-resumen">Guardar resumen</button></div>`
+        :p.resumen?`<p style="white-space:pre-wrap">${esc(p.resumen)}</p>`:`<p class="muted">Aún no hay un resumen para la ciudadanía.</p>`}
+      ${votos.length?`<h3>Votaciones</h3><div class="list">${votos.map(({s,v,r})=>`<div class="item"><div class="main"><div class="t">${esc(v.asunto)}</div><div class="s">${fmtFecha(s.fecha)} · ${esc(INSTANCIAS[s.instancia])} · Sí ${r.si}, No ${r.no}</div></div><span class="pill ${r.cls}">${esc(r.res)}</span></div>`).join("")}</div>`:""}
+    </div>
+  </div>`;
+}
+function formProyecto(p={}){
+  return `<div class="form">
+    <label class="f">Número<input id="fp-num" placeholder="Ej. PA 012 de 2026" value="${esc(p.numero||"")}"></label>
+    <label class="f">Fecha de radicación<input id="fp-fecha" type="date" value="${esc(p.fechaRadicacion||hoyISO())}"></label>
+    <label class="f full">Título<input id="fp-tit" placeholder="«Por medio del cual…»" value="${esc(p.titulo||"")}"></label>
+    <label class="f">Iniciativa<select id="fp-ini">${["Alcalde","Concejal(es)","Personero","Iniciativa popular"].map(x=>`<option ${p.iniciativa===x?"selected":""}>${x}</option>`).join("")}</select></label>
+    <label class="f">Autor<input id="fp-autor" placeholder="Ej. Alcalde Municipal" value="${esc(p.autor||"")}"></label>
+    <label class="f">Comisión<select id="fp-com"><option value="">— Por asignar —</option>${Object.entries(COMISIONES).map(([k,c])=>`<option value="${k}" ${p.comision===k?"selected":""}>${c.nombre}</option>`).join("")}</select></label>
+    <label class="f">Ponente<select id="fp-pon"><option value="">— Por designar —</option>${CONCEJALES.map(c=>`<option value="${c.id}" ${(p.ponentes||[])[0]===c.id?"selected":""}>${esc(c.nombre)}</option>`).join("")}</select></label>
+    <label class="f">Número de artículos<input id="fp-art" type="number" min="1" value="${esc(p.articulos||"")}" placeholder="Define el plazo de objeción"></label>
+    <label class="f">Segundo ponente (opcional)<select id="fp-pon2"><option value="">—</option>${CONCEJALES.map(c=>`<option value="${c.id}" ${(p.ponentes||[])[1]===c.id?"selected":""}>${esc(c.nombre)}</option>`).join("")}</select></label>
+  </div><p class="note" style="margin-top:10px">El presidente reparte el proyecto a la comisión y designa ponente (art. 77). La comisión se elige según el tema (art. 50).</p>`;
+}
+
+/* ---------- Compromisos ---------- */
+function itemCompromiso(c){
+  const venc=c.estado!=="cumplido"&&c.fechaLimite&&c.fechaLimite<hoyISO();
+  return `<div class="item"><div class="main"><div class="t">${esc(c.texto)}${demoTag(c)}</div><div class="s">Responsable: ${esc(c.responsable||"por definir")}${c.fechaLimite?" · Plazo: "+fmtCorta(c.fechaLimite):""}${c.sesionId&&local("sesiones",c.sesionId)?" · Sesión del "+fmtCorta(local("sesiones",c.sesionId).fecha):""}</div></div>
+    <div class="row-actions"><span class="pill ${c.estado==="cumplido"?"ok":venc?"bad":"warn"}">${c.estado==="cumplido"?"Cumplido":venc?"Vencido":"Pendiente"}</span>
+    ${S.canWrite?`<button class="btn sm" data-act="comp-toggle" data-id="${esc(c.id)}">${c.estado==="cumplido"?"Reabrir":"Marcar cumplido"}</button><button class="btn sm danger" data-act="del-comp" data-id="${esc(c.id)}" aria-label="Eliminar">×</button>`:""}</div></div>`;
+}
+/* ---------- Ajustes ---------- */
+function vAjustes(){
+  const m=S.config?.mesa||{}, com=S.config?.comisiones||{}, w=S.canWrite;
+  const counts={}; Object.keys(COMISIONES).forEach(k=>counts[k]=CONCEJALES.filter(c=>com[c.id]===k).length);
+  const sel=(id,val)=>`<select id="${id}" ${w?"":"disabled"}><option value="">— Por definir —</option>${CONCEJALES.map(c=>`<option value="${c.id}" ${val===c.id?"selected":""}>${esc(c.nombre)}</option>`).join("")}</select>`;
+  const mesaIds=[m.presidente,m.vp1,m.vp2].filter(Boolean); const partidosMesa=mesaIds.map(id=>byId[id]?.partido);
+  const repetido=partidosMesa.length!==new Set(partidosMesa).size;
+  return `
+  <div class="view-head"><div><div class="eyebrow">Configuración del período</div><h1>Ajustes</h1></div></div>
+  <div class="grid g2">
+    <div class="card"><h2>Mesa directiva ${new Date().getFullYear()}</h2>
+      <div class="form"><label class="f full">Presidente${sel("aj-pres",m.presidente)}</label><label class="f full">Primer vicepresidente${sel("aj-vp1",m.vp1)}</label>
+      <label class="f full">Segundo vicepresidente${sel("aj-vp2",m.vp2)}</label><label class="f full">Secretario(a) General<input id="aj-sec" value="${esc(m.secretario||"")}" ${w?"":"disabled"} placeholder="Nombre completo"></label></div>
+      ${repetido?`<p class="small" style="color:var(--bad);margin-top:8px">Dos integrantes de la mesa son de la misma bancada; el reglamento no lo permite (art. 36).</p>`:""}
+      ${w?`<div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="save-mesa">Guardar mesa directiva</button></div>`:""}
+      <p class="note" style="margin-top:8px">Se elige cada año (1 de enero a 31 de diciembre). Nadie puede repetir el año siguiente y la oposición tiene derecho a la primera vicepresidencia (art. 36).</p></div>
+    <div class="card"><h2>Comisiones permanentes</h2>
+      <div class="row-actions" style="margin-bottom:10px">${Object.entries(COMISIONES).map(([k,c])=>`<span class="pill ${counts[k]===c.cupo?"ok":counts[k]>c.cupo?"bad":"warn"}">${c.corto}: ${counts[k]} de ${c.cupo}</span>`).join("")}</div>
+      <div class="list">${CONCEJALES.map(c=>`<div class="item"><div class="main"><div class="t">${esc(c.nombre)}</div><div class="s">${esc(c.partido)}</div></div>
+        <select data-act="set-com" data-id="${c.id}" id="com-${c.id}" style="width:auto;max-width:190px" ${w?"":"disabled"}><option value="">—</option>${Object.entries(COMISIONES).map(([k,x])=>`<option value="${k}" ${com[c.id]===k?"selected":""}>${x.corto}</option>`).join("")}</select></div>`).join("")}</div>
+      <p class="note" style="margin-top:8px">Cada concejal pertenece a una sola comisión y rotan cada año (arts. 44 y 45).</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h2>Honorarios</h2><div class="form">
+      <label class="f full">Valor de honorarios por sesión (pesos)<input id="aj-tarifa" type="number" min="0" step="1" value="${esc(S.config?.honorarios?.tarifa||"")}" ${w?"":"disabled"} placeholder="Según la categoría del municipio"></label>
+      <label class="f">Tope de sesiones ordinarias<input id="aj-tord" type="number" min="1" value="${esc(S.config?.honorarios?.topeOrd||70)}" ${w?"":"disabled"}></label>
+      <label class="f">Tope de sesiones extraordinarias<input id="aj-text" type="number" min="1" value="${esc(S.config?.honorarios?.topeExt||20)}" ${w?"":"disabled"}></label></div>
+      <p class="note" style="margin-top:8px">Categorías tercera a sexta: hasta 70 ordinarias y 20 extraordinarias pagadas al año (art. 66 Ley 136).</p></div>
+    <div class="card"><h2>Publicación</h2><div class="form">
+      <label class="f full">Enlace de transmisión de las sesiones<input id="aj-trans" value="${esc(S.config?.transmision||"https://www.facebook.com/concejo.montenegro.9/")}" ${w?"":"disabled"}></label>
+      <label class="f full" style="flex-direction:row;align-items:center;gap:8px;font-weight:400"><input type="checkbox" id="aj-obs" style="width:auto" ${S.config?.observatorioPublico?"checked":""} ${w?"":"disabled"}> Mostrar el Observatorio (asistencia y actividad por concejal) al público</label></div>
+      <p class="note" style="margin-top:8px">El Observatorio es transparencia pura, pero conviene que la mesa directiva esté de acuerdo antes de hacerlo público.</p></div>
+  </div>
+  ${w?`<div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="save-ajustes">Guardar honorarios y publicación</button></div>`:""}
+  ${w?`<div class="card" style="margin-top:14px"><h2>Datos de ejemplo</h2>
+    <p class="muted">Carga sesiones, votaciones y proyectos de ejemplo para mostrar la plataforma en una reunión. Quedan marcados como <span class="pill demo">EJEMPLO</span> en todas las pantallas y se borran con un clic.</p>
+    <div class="row-actions"><button class="btn" data-act="demo-load">Cargar ejemplos</button><button class="btn danger" data-act="demo-clear">Borrar ejemplos</button></div></div>`:""}`;
+}
+
+/* ---------- Documentos en Word (sin IA, con plantillas) ---------- */
+function docHtml(cuerpo){
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8">
+  <style>body{font-family:Arial,sans-serif;font-size:11.5pt;line-height:1.45}h1{font-size:13pt;text-align:center;margin:0}h2{font-size:11.5pt;text-align:center;margin:0 0 14pt;font-weight:normal}
+  table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:4pt 6pt;font-size:10.5pt;text-align:left}th{background:#e8efe9}.c{text-align:center}.r{text-align:right}.firma{margin-top:40pt}</style></head>
+  <body><h1>CONCEJO MUNICIPAL DE MONTENEGRO</h1><h2>Quindío · “Forjando el bienestar de los montenegrinos”</h2>${cuerpo}</body></html>`;
+}
+async function descargarWord(nombre, cuerpo){
+  const blob=new Blob([docHtml(cuerpo)],{type:"application/msword"}), fname=nombre.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\w.\-]+/g,"_").replace(/_+/g,"_")+".doc";
+  if(!S.dl){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); return; }
+  try{ await S.dl.save({filename:fname,data:blob}); }catch(err){ if(err?.code==="unavailable"||err?.code==="bad_request") toast("No se pudo descargar el documento."); }
+}
+const firmas = ()=>{ const m=S.config?.mesa||{}; const pres=m.presidente&&byId[m.presidente]?byId[m.presidente].nombre:"_____________________";
+  return `<table class="firma" style="border:0"><tr><td style="border:0;width:50%">______________________________<br>${esc(pres)}<br>Presidente</td><td style="border:0">______________________________<br>${esc(m.secretario||"_____________________")}<br>Secretario(a) General</td></tr></table>`; };
+const hora12 = h=>{ if(!h) return ""; const [H,M]=h.split(":").map(Number); return `${((H+11)%12)+1}:${String(M).padStart(2,"0")} ${H<12?"a. m.":"p. m."}`; };
+function docConvocatoria(s){
+  const elec=s.tipo==="Elección";
+  return descargarWord(`Convocatoria_${s.fecha}_${s.instancia}`, `
+  <p><b>CONVOCATORIA</b></p>
+  <p>Montenegro, Quindío, ${fmtFecha(hoyISO())}</p>
+  <p>Honorables Concejales<br>${s.instancia==="plenaria"||s.instancia==="conjunta"?"Concejo Municipal de Montenegro":esc(INSTANCIAS[s.instancia])}</p>
+  <p>Por instrucción de la Presidencia, se convoca a <b>sesión ${esc(String(s.tipo||"").toLowerCase())}</b> de ${esc(INSTANCIAS[s.instancia]||"")} que se realizará el <b>${fmtFecha(s.fecha)}</b>${s.hora?` a las <b>${hora12(s.hora)}</b>`:""}, en el recinto oficial de la Corporación, con el siguiente orden del día:</p>
+  <ol>${(s.orden||[]).map(o=>`<li>${esc(o.t)}</li>`).join("")}</ol>
+  <p style="font-size:10pt">Convocatoria realizada conforme al artículo 52 del Reglamento Interno (Acuerdo 018 de 2012): con al menos ${elec?"tres (3) días":"veinticuatro (24) horas"} de anticipación${elec?", indicando el cargo por proveer y los candidatos nominados":""}.</p>
+  ${firmas()}`);
+}
+function docCitacion(c){
+  const s=c.sesionId?local("sesiones",c.sesionId):null;
+  const preg=(c.cuestionario||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  return descargarWord(`Citacion_${(c.citado||"").slice(0,30)}`, `
+  <p>Montenegro, Quindío, ${fmtFecha(c.fechaEnvio||hoyISO())}</p>
+  <p>Señor(a)<br><b>${esc(c.citado||"")}</b><br>Municipio de Montenegro</p>
+  <p><b>Asunto:</b> Citación a debate de control político — ${esc(c.tema||"")}</p>
+  <p>En cumplimiento de la proposición aprobada por la Corporación${c.proponentes?.length?`, presentada por ${c.proponentes.map(id=>esc(byId[id]?.nombre||"")).join(", ")}`:""}${c.bancada?` (bancada ${esc(c.bancada)})`:""}, y con fundamento en el numeral 11 del artículo 313 de la Constitución Política y el artículo 27 del Reglamento Interno, me permito citarle a la sesión ${s?`del <b>${fmtFecha(s.fecha)}</b>${s.hora?` a las <b>${hora12(s.hora)}</b>`:""}`:"que se programe para el efecto"}, en el recinto del Concejo Municipal, para que responda el siguiente cuestionario:</p>
+  <ol>${preg.map(q=>`<li>${esc(q)}</li>`).join("")||"<li>[por completar]</li>"}</ol>
+  <p>Le solicitamos allegar la respuesta escrita con anticipación a la sesión. El debate no podrá extenderse a asuntos ajenos al cuestionario y encabezará el orden del día. La inasistencia sin excusa aceptada por el Concejo puede dar lugar a moción de censura.</p>
+  ${firmas()}`);
+}
+function sesionesConcejal(id, desde, hasta){
+  return S.sesiones.filter(s=>s.estado==="cerrada"&&s.fecha>=desde&&s.fecha<=hasta&&s.asistencia?.[id]==="P"&&miembros(s.instancia).includes(id))
+    .sort((a,b)=>a.fecha.localeCompare(b.fecha));
+}
+function docCertificado(id, anio, mes){
+  const c=byId[id], desde=`${anio}-${String(mes).padStart(2,"0")}-01`, hasta=`${anio}-${String(mes).padStart(2,"0")}-31`;
+  const ss=sesionesConcejal(id,desde,hasta), m=S.config?.mesa||{};
+  return descargarWord(`Certificado_asistencia_${c.nombre}_${MESES[mes-1]}_${anio}`, `
+  <p style="text-align:center"><b>LA SECRETARÍA GENERAL DEL CONCEJO MUNICIPAL DE MONTENEGRO</b></p><p style="text-align:center"><b>CERTIFICA</b></p>
+  <p>Que el(la) Honorable Concejal <b>${esc(c.nombre)}</b>, del partido ${esc(c.partido)}, asistió en el mes de <b>${MESES[mes-1]} de ${anio}</b> a las siguientes ${ss.length} sesiones:</p>
+  <table><tr><th>#</th><th>Fecha</th><th>Instancia</th><th>Tipo</th><th>Acta</th></tr>${ss.map((s,i)=>`<tr><td class="c">${i+1}</td><td>${fmtFecha(s.fecha)}</td><td>${esc(INSTANCIAS[s.instancia])}</td><td>${esc(s.tipo)}</td><td>${esc(s.numeroActa||"")}</td></tr>`).join("")||`<tr><td colspan="5">Sin sesiones registradas</td></tr>`}</table>
+  <p>Se expide a solicitud del interesado, en Montenegro, Quindío, el ${fmtFecha(hoyISO())}.</p>
+  <p class="firma">______________________________<br>${esc(m.secretario||"_____________________")}<br>Secretario(a) General</p>`);
+}
+
+/* ---------- Plazos y alertas ---------- */
+const esFinde = iso=>{const d=new Date(iso+"T12:00:00").getDay(); return d===0||d===6;};
+function addHabiles(iso,n){ let d=iso, k=0; while(k<n){ d=addDias(d,1); if(!esFinde(d)) k++; } return d; }
+const fechaEstado = (p,e)=>[...(p.historial||[])].reverse().find(h=>h.estado===e)?.fecha;
+const diasObjecion = p=>{ const a=+p.articulos||0; return a>50?20:a>20?10:5; };
+function alertas(){
+  const hoy=hoyISO(), out=[], y=String(new Date().getFullYear());
+  const add=(nivel,texto,href)=>out.push({nivel,texto,href});
+  S.proyectos.forEach(p=>{
+    const n=esc(p.numero||p.titulo);
+    if(p.estado==="aprobado_1"){ const f=fechaEstado(p,"aprobado_1"); if(f){ const d=addDias(f,3); add(d<=hoy?"info":"info", d<=hoy?`${n}: ya puede ir a segundo debate en plenaria.`:`${n}: segundo debate posible desde el ${fmtCorta(d)} (art. 86).`,"proyectos"); } }
+    if(p.estado==="aprobado_2"){ const f=fechaEstado(p,"aprobado_2"); if(f){ const d=addHabiles(f,5); add(d<hoy?"bad":"warn", `${n}: debe pasar al Alcalde para sanción a más tardar el ${fmtCorta(d)} (5 días hábiles, art. 76 Ley 136).`,"proyectos"); } }
+    if(p.estado==="sancion"){ const f=fechaEstado(p,"sancion"); if(f){ const dd=diasObjecion(p), d=addHabiles(f,dd); add(d<hoy?"warn":"info", d<hoy?`${n}: venció el plazo de ${dd} días del Alcalde para objetar (${fmtCorta(d)}); registre la sanción u objeción.`:`${n}: el Alcalde tiene hasta el ${fmtCorta(d)} para objetar (${dd} días, art. 78 Ley 136).`,"proyectos"); } }
+    if(p.estado==="objetado") add("warn",`${n}: fue objetado; la plenaria debe nombrar una comisión accidental para estudiar las objeciones (art. 93).`,"proyectos");
+  });
+  S.citaciones.forEach(c=>{
+    if(c.enviada) return; const s=c.sesionId&&local("sesiones",c.sesionId); if(!s?.fecha) return;
+    const lim=addDias(s.fecha,-5);
+    if(s.fecha<hoy) return;
+    if(lim<hoy) add("bad",`Citación a ${esc(c.citado)}: ya no se cumple la anticipación de 5 días para la sesión del ${fmtCorta(s.fecha)}.`,"control");
+    else if(addDias(lim,-3)<=hoy) add("warn",`Citación a ${esc(c.citado)}: debe enviarse a más tardar el ${fmtCorta(lim)} (5 días antes, art. 27).`,"control");
+  });
+  const sinActa=S.sesiones.filter(s=>s.estado==="cerrada"&&!s.actaAprobada).length;
+  if(sinActa) add("info",`${sinActa} acta${sinActa>1?"s":""} de sesiones cerradas sin aprobar.`,"sesiones");
+  const venc=S.compromisos.filter(c=>c.estado!=="cumplido"&&c.fechaLimite&&c.fechaLimite<hoy).length;
+  if(venc) add("bad",`${venc} compromiso${venc>1?"s":""} vencido${venc>1?"s":""} sin cumplir.`,"control");
+  const t=topes(y);
+  if(t.ord>=t.topeOrd) add("bad",`Se alcanzó el tope de ${t.topeOrd} sesiones ordinarias pagables en ${y}.`,"honorarios");
+  else if(t.ord>=t.topeOrd*0.9) add("warn",`Van ${t.ord} de ${t.topeOrd} sesiones ordinarias pagables en ${y}.`,"honorarios");
+  if(t.ext>=t.topeExt) add("bad",`Se alcanzó el tope de ${t.topeExt} sesiones extraordinarias en ${y}.`,"honorarios");
+  else if(t.ext>=t.topeExt*0.9) add("warn",`Van ${t.ext} de ${t.topeExt} sesiones extraordinarias en ${y}.`,"honorarios");
+  const d=new Date(), m=d.getMonth();
+  if([1,4,7,10].includes(m)){ const fin=new Date(d.getFullYear(),m+1,0).getDate(); if(fin-d.getDate()<=5) add("info",`El período ordinario de ${MESES[m]} termina el ${fin}; puede prorrogarse hasta 10 días por proposición aprobada en plenaria (art. 26).`,"sesiones"); }
+  const orden={bad:0,warn:1,info:2}; return out.sort((a,b)=>orden[a.nivel]-orden[b.nivel]);
+}
+function cardAlertas(){
+  if(!S.canWrite) return "";
+  const al=alertas();
+  return `<div class="card" style="margin-bottom:14px"><h2>Alertas y plazos ${al.length?`<span class="pill ${al.some(a=>a.nivel==="bad")?"bad":al.some(a=>a.nivel==="warn")?"warn":"info"}">${al.length}</span>`:""}</h2>
+    ${al.length?`<div class="list">${al.map(a=>`<div class="item"><div class="main"><div class="t" style="font-weight:400">${a.texto}</div></div><span class="pill ${a.nivel}">${a.nivel==="bad"?"Urgente":a.nivel==="warn"?"Atención":"Aviso"}</span><a class="btn sm" href="#${a.href}">Ver</a></div>`).join("")}</div>`
+      :`<p class="muted" style="margin:0">Todo al día. Aquí aparecerán los plazos de proyectos, citaciones, actas, compromisos y topes de sesiones.</p>`}
+    <p class="note" style="margin-top:8px">Los días hábiles se cuentan sin sábados ni domingos; revisa los festivos.</p></div>`;
+}
+
+/* ---------- Próxima sesión (agenda pública) ---------- */
+function proximaSesion(){ const hoy=hoyISO(); return S.sesiones.filter(s=>s.estado!=="cerrada"&&s.fecha>=hoy).sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora))[0]; }
+function cuentaRegresiva(s){
+  const t=new Date(`${s.fecha}T${s.hora||"00:00"}:00`)-new Date(); if(s.estado==="en_curso") return "En curso ahora";
+  if(t<=0) return "Hoy"; const d=Math.floor(t/864e5), h=Math.floor(t%864e5/36e5);
+  return d>0?`Faltan ${d} día${d>1?"s":""} y ${h} h`:`Faltan ${h} h ${Math.floor(t%36e5/6e4)} min`;
+}
+function cardProxima(){
+  const s=proximaSesion(), link=S.config?.transmision||"https://www.facebook.com/concejo.montenegro.9/";
+  if(!s) return `<div class="card" style="margin-bottom:14px"><h2>Próxima sesión</h2><p class="muted" style="margin:0">No hay sesiones programadas por ahora. Sigue al Concejo en <a href="${esc(link)}" target="_blank" rel="noopener">su página de Facebook</a>.</p></div>`;
+  return `<div class="card" style="margin-bottom:14px;border-color:var(--accent)">
+    <div class="view-head" style="margin-bottom:6px"><div><div class="eyebrow">Próxima sesión</div><h2 style="margin:2px 0 0;font-size:21px">${esc(tituloSesion(s))}${demoTag(s)}</h2>
+      <div class="muted">${fmtFecha(s.fecha)}${s.hora?" · "+hora12(s.hora):""} · Recinto del Concejo</div></div><span class="pill ok">${cuentaRegresiva(s)}</span></div>
+    <div class="row-actions" style="margin-top:8px"><a class="btn primary" href="${esc(link)}" target="_blank" rel="noopener">Ver transmisión</a><button class="btn" data-act="ics" data-id="${esc(s.id)}">Agregar a mi calendario</button>
+      <a class="btn" href="#participa">Inscribirme para intervenir</a>${S.canWrite?`<button class="btn" data-act="open-sesion" data-id="${esc(s.id)}">Abrir sesión</button>`:""}</div></div>`;
+}
+async function descargarIcs(s){
+  const dt=(f,h)=>f.replace(/-/g,"")+"T"+(h||"18:00").replace(":","")+"00";
+  const [H,M]=(s.hora||"18:00").split(":").map(Number), fin=`${String(Math.min(23,H+3)).padStart(2,"0")}:${String(M).padStart(2,"0")}`;
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Concejo Montenegro//Concejo Inteligente//ES","BEGIN:VEVENT",`UID:${s.id}@concejo-montenegro`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g,"").slice(0,15)}Z`,`DTSTART;TZID=America/Bogota:${dt(s.fecha,s.hora)}`,`DTEND;TZID=America/Bogota:${dt(s.fecha,fin)}`,
+    `SUMMARY:Concejo de Montenegro - ${tituloSesion(s)}`,"LOCATION:Recinto del Concejo Municipal\\, Montenegro (Quindío)",`DESCRIPTION:Transmisión: ${S.config?.transmision||"https://www.facebook.com/concejo.montenegro.9/"}`,"END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const blob=new Blob([ics],{type:"text/calendar"}), fname=`Sesion_Concejo_${s.fecha}.ics`;
+  if(!S.dl){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname; a.click(); return; }
+  try{ await S.dl.save({filename:fname,data:blob}); }catch{}
+}
+
+/* ---------- Control político: citaciones y compromisos ---------- */
+let controlTab="citaciones";
+function vControl(loading){
+  const tabs=[["citaciones",`Citaciones (${S.citaciones.length})`],["compromisos",`Compromisos (${S.compromisos.filter(c=>c.estado!=="cumplido").length} pendientes)`]];
+  const btn = S.canWrite ? (controlTab==="citaciones"?`<button class="btn primary" data-act="new-cit">+ Citación</button>`:`<button class="btn primary" data-act="new-comp">+ Compromiso</button>`) : "";
+  let body;
+  if(controlTab==="citaciones"){
+    const cs=[...S.citaciones].sort((a,b)=>(local("sesiones",b.sesionId)?.fecha||"").localeCompare(local("sesiones",a.sesionId)?.fecha||""));
+    body = loading?`<p class="muted">Cargando…</p>`:cs.length?`<div class="list">${cs.map(c=>{const s=c.sesionId&&local("sesiones",c.sesionId);
+      return `<div class="item"><div class="main"><div class="t">${esc(c.citado)} — ${esc(c.tema)}${demoTag(c)}</div>
+        <div class="s">${s?`Sesión del ${fmtCorta(s.fecha)}`:"Sesión por definir"}${c.proponentes?.length?" · Citan: "+c.proponentes.map(nombreCorto).join(", "):""}${c.bancada?" · Bancada "+esc(c.bancada):""} · ${(c.cuestionario||"").split("\n").filter(x=>x.trim()).length} preguntas</div></div>
+        <div class="row-actions"><span class="pill ${c.respondida?"ok":c.enviada?"info":"warn"}">${c.respondida?"Respondida":c.enviada?"Enviada":"Por enviar"}</span>
+        <button class="btn sm" data-act="doc-cit" data-id="${esc(c.id)}">Citación (Word)</button>
+        ${S.canWrite?`<button class="btn sm" data-act="cit-estado" data-id="${esc(c.id)}">${c.respondida?"Reabrir":c.enviada?"Marcar respondida":"Marcar enviada"}</button><button class="btn sm" data-act="edit-cit" data-id="${esc(c.id)}">Editar</button><button class="btn sm danger" data-act="del-cit" data-id="${esc(c.id)}" aria-label="Eliminar">×</button>`:""}</div></div>`;}).join("")}</div>`
+      :emptyBox("Sin citaciones","Aquí se registran los debates de control político: a quién se cita, el tema y el cuestionario. La citación se descarga lista en Word.");
+    body+=`<p class="note" style="margin-top:10px">La citación se hace con anticipación no menor de 5 días y con cuestionario escrito; el debate encabeza el orden del día y no puede salirse del cuestionario (art. 27, numeral 11). La bancada citante interviene primero hasta 20 minutos y la administración tiene 30 (art. 22).</p>`;
+  } else {
+    const cs=[...S.compromisos].sort((a,b)=>(a.estado==="cumplido")-(b.estado==="cumplido")||(a.fechaLimite||"9").localeCompare(b.fechaLimite||"9"));
+    body = loading?`<p class="muted">Cargando…</p>`:cs.length?`<div class="list">${cs.map(itemCompromiso).join("")}</div>`:emptyBox("Sin compromisos registrados","Aquí se siguen las respuestas e informes que la administración o los concejales se comprometen a entregar en las sesiones.");
+  }
+  return `<div class="view-head"><div><div class="eyebrow">Seguimiento a la administración</div><h1>Control político</h1></div>${btn}</div>
+  <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-act="control-tab" data-v="${k}" aria-selected="${k===controlTab}">${l}</button>`).join("")}</div>
+  <div class="card">${body}</div>`;
+}
+function formCitacion(c={}){
+  const prox=S.sesiones.filter(s=>s.estado!=="cerrada").sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  return `<div class="form">
+    <label class="f full">Funcionario citado (cargo y nombre)<input id="fc-cit" value="${esc(c.citado||"")}" placeholder="Ej. Secretario de Gobierno, Juan Pérez"></label>
+    <label class="f full">Tema del debate<input id="fc-tema" value="${esc(c.tema||"")}" placeholder="Ej. Seguridad en la zona rural"></label>
+    <label class="f">Sesión<select id="fc-ses"><option value="">— Por definir —</option>${prox.map(s=>`<option value="${esc(s.id)}" ${c.sesionId===s.id?"selected":""}>${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</option>`).join("")}</select></label>
+    <label class="f">Bancada citante<input id="fc-banc" value="${esc(c.bancada||"")}" placeholder="Ej. Partido Liberal"></label>
+    <label class="f">Concejal que cita<select id="fc-pro"><option value="">—</option>${CONCEJALES.map(x=>`<option value="${x.id}" ${(c.proponentes||[])[0]===x.id?"selected":""}>${esc(x.nombre)}</option>`).join("")}</select></label>
+    <label class="f">Fecha de envío<input id="fc-env" type="date" value="${esc(c.fechaEnvio||hoyISO())}"></label>
+    <label class="f full">Cuestionario (una pregunta por línea)<textarea id="fc-cue" style="min-height:130px">${esc(c.cuestionario||"")}</textarea></label>
+  </div>`;
+}
+function readCitacion(){ return {citado:$("#fc-cit").value.trim(),tema:$("#fc-tema").value.trim(),sesionId:$("#fc-ses").value,bancada:$("#fc-banc").value.trim(),proponentes:[$("#fc-pro").value].filter(Boolean),fechaEnvio:$("#fc-env").value,cuestionario:$("#fc-cue").value.slice(0,8000)}; }
+
+/* ---------- Participa ---------- */
+let partTab="inscribirse";
+function vParticipa(){
+  const futuras=S.sesiones.filter(s=>s.estado!=="cerrada"&&s.fecha>=hoyISO()).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const puede = B.mode==="supabase" || (B.mode==="claude"&&S.myId);
+  const aviso = `<label class="f" style="flex-direction:row;align-items:flex-start;gap:8px;font-weight:400;grid-column:1/-1"><input type="checkbox" id="pp-datos" style="width:auto;margin-top:3px"> <span class="small">Autorizo al Concejo Municipal de Montenegro a usar estos datos solo para gestionar mi participación, conforme a la Ley 1581 de 2012. No se publican.</span></label>`;
+  let form="";
+  if(partTab==="inscribirse") form = futuras.length? `<div class="form">
+      <label class="f full">Sesión<select id="pi-ses">${futuras.map(s=>`<option value="${esc(s.id)}">${fmtFecha(s.fecha)} · ${esc(tituloSesion(s))}</option>`).join("")}</select></label>
+      <label class="f">Nombre completo<input id="pi-nom" maxlength="120" autocomplete="name"></label>
+      <label class="f">Participo como<select id="pi-cal"><option>Ciudadano(a)</option><option>Veedor(a) ciudadano(a)</option><option>Representante de organización</option><option>Junta de Acción Comunal</option></select></label>
+      <label class="f">Organización o veeduría (si aplica)<input id="pi-org" maxlength="120"></label>
+      <label class="f">Teléfono o correo de contacto<input id="pi-con" maxlength="120"></label>
+      <label class="f full">¿Sobre qué tema quiere intervenir?<textarea id="pi-tema" maxlength="800" style="min-height:70px"></textarea></label>${aviso}</div>
+      <div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="enviar-insc" ${puede?"":"disabled"}>Enviar inscripción</button></div>
+      <p class="note" style="margin-top:8px">Los veedores y la comunidad pueden intervenir en las sesiones, hasta por 10 minutos y sobre el tema en discusión (art. 19, modificado por el Acuerdo 001 de 2013). La Secretaría confirma el turno.</p>`
+    : emptyBox("No hay sesiones programadas","Cuando se programe una sesión podrás inscribirte para intervenir.");
+  else form = `<div class="form">
+      <label class="f">Nombre (opcional)<input id="pb-nom" maxlength="120"></label>
+      <label class="f">Barrio o vereda<input id="pb-bar" maxlength="120"></label>
+      <label class="f full">Tema<select id="pb-tema">${["Seguridad","Vías y movilidad","Servicios públicos","Salud","Educación","Medio ambiente","Turismo y desarrollo económico","Cultura y deporte","Otro"].map(x=>`<option>${x}</option>`).join("")}</select></label>
+      <label class="f full">¿Qué quiere que el Concejo revise o pregunte a la administración?<textarea id="pb-msg" maxlength="1500" style="min-height:110px"></textarea></label>
+      <label class="f">Contacto (opcional)<input id="pb-con" maxlength="120"></label>${aviso}</div>
+      <div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="enviar-buzon" ${puede?"":"disabled"}>Enviar propuesta</button></div>
+      <p class="note" style="margin-top:8px">Las propuestas llegan a la Secretaría General y pueden convertirse en debates de control político.</p>`;
+  const tabs=[["inscribirse","Inscribirme para intervenir"],["buzon","Proponer un tema"]];
+  if(S.canWrite) tabs.push(["recibidas",`Recibidas (${S.inscripciones.length+S.buzon.length})`]);
+  if(partTab==="recibidas"&&S.canWrite){
+    const ins=[...S.inscripciones].sort((a,b)=>(b.fecha||"").localeCompare(a.fecha||"")), bz=[...S.buzon].sort((a,b)=>(b.fecha||"").localeCompare(a.fecha||""));
+    form=`<h2>Inscripciones para intervenir</h2>${ins.length?`<div class="list">${ins.map(x=>{const s=local("sesiones",x.sesionId); return `<div class="item"><div class="main"><div class="t">${esc(x.nombre)} · ${esc(x.calidad||"")}${x.organizacion?" · "+esc(x.organizacion):""}</div><div class="s">${s?"Sesión del "+fmtCorta(s.fecha):"Sesión"} · ${esc(x.tema)}${x.contacto?" · "+esc(x.contacto):""}</div></div><button class="btn sm danger" data-act="del-part" data-tipo="inscripciones" data-id="${esc(x.id)}">Archivar</button></div>`;}).join("")}</div>`:emptyBox("Sin inscripciones","")}
+      <h2 style="margin-top:18px">Temas propuestos</h2>${bz.length?`<div class="list">${bz.map(x=>`<div class="item"><div class="main"><div class="t">${esc(x.tema)} · ${esc(x.barrio||"")}</div><div class="s" style="white-space:pre-wrap">${esc(x.mensaje)}</div><div class="s">${esc(x.nombre||"Anónimo")}${x.contacto?" · "+esc(x.contacto):""} · ${x.fecha?fmtCorta(x.fecha.slice(0,10)):""}</div></div><button class="btn sm danger" data-act="del-part" data-tipo="buzon" data-id="${esc(x.id)}">Archivar</button></div>`).join("")}</div>`:emptyBox("Sin propuestas","")}`;
+  }
+  return `<div class="view-head"><div><div class="eyebrow">El Concejo te escucha</div><h1>Participa</h1></div></div>
+    ${!puede?`<div class="banner">Para enviar formularios desde este enlace necesitas iniciar sesión en Claude con permiso de colaborador. En la versión pública de la plataforma cualquier persona puede participar.</div>`:""}
+    <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-act="part-tab" data-v="${k}" aria-selected="${k===partTab}">${l}</button>`).join("")}</div>
+    <div class="card">${form}</div>
+    <div class="card" style="margin-top:14px"><h2>Otras formas de participar</h2><div class="grid g4">
+      <div><b>Asistir a las sesiones</b><p class="small muted">Las sesiones son públicas. Puedes entrar a las barras guardando silencio y respeto (art. 53).</p></div>
+      <div><b>Cabildo abierto</b><p class="small muted">Con firmas de al menos el 5 por mil del censo electoral, la comunidad puede pedir que un tema se discuta en cabildo abierto (art. 96).</p></div>
+      <div><b>Peticiones (PQRDS)</b><p class="small muted">Puedes radicar peticiones, quejas y reclamos en la página oficial del Concejo.</p></div>
+      <div><b>Iniciativa popular</b><p class="small muted">La ciudadanía también puede presentar proyectos de acuerdo, según la ley de participación (art. 76).</p></div></div></div>`;
+}
+
+/* ---------- Honorarios ---------- */
+let honMes=new Date().getMonth()+1, honAnio=new Date().getFullYear();
+function topes(y){
+  const ss=S.sesiones.filter(s=>s.estado==="cerrada"&&(s.fecha||"").startsWith(String(y)));
+  return {ord:ss.filter(s=>s.tipo!=="Extraordinaria").length, ext:ss.filter(s=>s.tipo==="Extraordinaria").length,
+    topeOrd:+(S.config?.honorarios?.topeOrd)||70, topeExt:+(S.config?.honorarios?.topeExt)||20};
+}
+const pesos = n=>"$ "+Math.round(n).toLocaleString("es-CO");
+function tablaHonorarios(anio,mes){
+  const mm=String(mes).padStart(2,"0"), desde=`${anio}-${mm}-01`, hasta=`${anio}-${mm}-31`, tarifa=+(S.config?.honorarios?.tarifa)||0;
+  const tope=topes(anio);
+  return CONCEJALES.map(c=>{
+    const ss=sesionesConcejal(c.id,desde,hasta);
+    const pl=ss.filter(s=>s.instancia==="plenaria").length, co=ss.length-pl;
+    const ord=ss.filter(s=>s.tipo!=="Extraordinaria").length, ext=ss.length-ord;
+    const acum=sesionesConcejal(c.id,`${anio}-01-01`,hasta);
+    const acOrd=acum.filter(s=>s.tipo!=="Extraordinaria").length, acExt=acum.length-acOrd;
+    // sesiones pagables: no superar los topes anuales (arts. 65 y 66 Ley 136)
+    const pagOrd=Math.max(0,Math.min(ord, tope.topeOrd-(acOrd-ord))), pagExt=Math.max(0,Math.min(ext, tope.topeExt-(acExt-ext)));
+    return {c,pl,co,total:ss.length,ord,ext,acOrd,acExt,pag:pagOrd+pagExt,valor:(pagOrd+pagExt)*tarifa,demo:ss.some(s=>s.demo)};
+  });
+}
+function vHonorarios(){
+  const rows=tablaHonorarios(honAnio,honMes), tarifa=+(S.config?.honorarios?.tarifa)||0, t=topes(honAnio);
+  const tot=rows.reduce((a,r)=>({ses:a.ses+r.total,pag:a.pag+r.pag,valor:a.valor+r.valor}),{ses:0,pag:0,valor:0});
+  const years=[...new Set([new Date().getFullYear(),...S.sesiones.map(s=>+(s.fecha||"").slice(0,4)).filter(Boolean)])].sort();
+  return `<div class="view-head"><div><div class="eyebrow">Arts. 65 y 66 de la Ley 136 de 1994</div><h1>Honorarios por asistencia</h1></div>
+    <div class="row-actions"><select id="hon-mes" style="width:auto">${MESES.map((m,i)=>`<option value="${i+1}" ${i+1===honMes?"selected":""}>${m[0].toUpperCase()+m.slice(1)}</option>`).join("")}</select>
+    <select id="hon-anio" style="width:auto">${years.map(y=>`<option ${y===honAnio?"selected":""}>${y}</option>`).join("")}</select>
+    <button class="btn primary" data-act="doc-hon">Descargar anexo (Word)</button></div></div>
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="card kpi"><div class="num">${t.ord} <span style="font-size:16px;color:var(--muted)">/ ${t.topeOrd}</span></div><div class="lbl">Sesiones ordinarias en ${honAnio}</div><div class="meter" style="margin-top:8px"><i style="width:${Math.min(100,t.ord*100/t.topeOrd)}%;background:${t.ord>=t.topeOrd?"var(--bad)":t.ord>=t.topeOrd*.9?"var(--warn)":"var(--accent)"}"></i></div></div>
+    <div class="card kpi"><div class="num">${t.ext} <span style="font-size:16px;color:var(--muted)">/ ${t.topeExt}</span></div><div class="lbl">Sesiones extraordinarias en ${honAnio}</div><div class="meter" style="margin-top:8px"><i style="width:${Math.min(100,t.ext*100/t.topeExt)}%;background:${t.ext>=t.topeExt?"var(--bad)":t.ext>=t.topeExt*.9?"var(--warn)":"var(--accent)"}"></i></div></div>
+    <div class="card kpi"><div class="num">${tot.pag}</div><div class="lbl">Sesiones pagables en ${MESES[honMes-1]}</div></div>
+    <div class="card kpi"><div class="num" style="font-size:24px">${tarifa?pesos(tot.valor):"—"}</div><div class="lbl">${tarifa?`Total del mes · ${pesos(tarifa)} por sesión`:`Configura el valor por sesión en <a href="#ajustes">Ajustes</a>`}</div></div>
+  </div>
+  <div class="card"><div class="scroll-x"><table class="t"><thead><tr><th>Concejal</th><th>Plenarias</th><th>Comisiones</th><th>Total mes</th><th>Acumulado año (ord. / ext.)</th><th>Pagables</th><th>Valor</th><th></th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td><b>${esc(r.c.nombre)}</b>${r.demo?" "+demoTag({demo:1}):""}<div class="small muted">${esc(r.c.partido)}</div></td><td>${r.pl}</td><td>${r.co}</td><td>${r.total}</td>
+      <td>${r.acOrd} / ${r.acExt}${r.acOrd>t.topeOrd||r.acExt>t.topeExt?` <span class="pill bad">Supera tope</span>`:""}</td><td><b>${r.pag}</b></td><td>${tarifa?pesos(r.valor):"—"}</td>
+      <td><button class="btn sm" data-act="doc-cert" data-id="${r.c.id}">Certificado</button></td></tr>`).join("")}
+    <tr><td><b>Total</b></td><td></td><td></td><td><b>${tot.ses}</b></td><td></td><td><b>${tot.pag}</b></td><td><b>${tarifa?pesos(tot.valor):"—"}</b></td><td></td></tr></tbody></table></div>
+    <p class="note" style="margin-top:10px">Solo se cuentan sesiones <b>cerradas</b> con el concejal marcado como presente. Las sesiones de comisiones permanentes se pagan igual que una ordinaria. En municipios de categoría tercera a sexta se pagan hasta ${t.topeOrd} ordinarias y ${t.topeExt} extraordinarias al año (art. 66); las que pasan del tope no se suman. El valor por sesión lo fija la ley según la categoría del municipio y se actualiza cada año.</p></div>`;
+}
+function docHonorarios(){
+  const rows=tablaHonorarios(honAnio,honMes), tarifa=+(S.config?.honorarios?.tarifa)||0;
+  const tot=rows.reduce((a,r)=>({ses:a.ses+r.total,pag:a.pag+r.pag,valor:a.valor+r.valor}),{ses:0,pag:0,valor:0});
+  return descargarWord(`Anexo_honorarios_${MESES[honMes-1]}_${honAnio}`, `
+  <p style="text-align:center"><b>ANEXO — RELACIÓN DE ASISTENCIA Y HONORARIOS</b><br>${MESES[honMes-1].toUpperCase()} DE ${honAnio}</p>
+  <p>Valor por sesión: <b>${tarifa?pesos(tarifa):"[por definir]"}</b>. Fundamento: artículos 65 y 66 de la Ley 136 de 1994.</p>
+  <table><tr><th>#</th><th>Concejal</th><th>Partido</th><th class="c">Plenarias</th><th class="c">Comisiones</th><th class="c">Sesiones pagables</th><th class="r">Valor</th></tr>
+  ${rows.map((r,i)=>`<tr><td class="c">${i+1}</td><td>${esc(r.c.nombre)}</td><td>${esc(r.c.partido)}</td><td class="c">${r.pl}</td><td class="c">${r.co}</td><td class="c">${r.pag}</td><td class="r">${tarifa?pesos(r.valor):""}</td></tr>`).join("")}
+  <tr><td></td><td colspan="4"><b>TOTAL</b></td><td class="c"><b>${tot.pag}</b></td><td class="r"><b>${tarifa?pesos(tot.valor):""}</b></td></tr></table>
+  ${firmas()}`);
+}
+
+/* ---------- Observatorio ---------- */
+let obsOrden="asis";
+function datosObservatorio(){
+  return CONCEJALES.map(c=>{
+    const ss=S.sesiones.filter(s=>s.estado==="cerrada"&&miembros(s.instancia).includes(c.id));
+    const pres=ss.filter(s=>s.asistencia?.[c.id]==="P").length;
+    const pon=S.proyectos.filter(p=>(p.ponentes||[]).includes(c.id)).length;
+    const prop=S.sesiones.reduce((a,s)=>a+(s.proposiciones||[]).filter(p=>p.autor===c.id).length,0);
+    const cit=S.citaciones.filter(x=>(x.proponentes||[]).includes(c.id)).length;
+    let vot=0,tot=0; S.sesiones.forEach(s=>(s.votaciones||[]).forEach(v=>{ if(v.cerrada){ if(s.asistencia?.[c.id]==="P"||v.votos?.[c.id]) tot++; if(v.votos?.[c.id]) vot++; } }));
+    return {c,ses:ss.length,pres,asis:ss.length?Math.round(pres*100/ss.length):null,pon,prop,cit,vot};
+  });
+}
+function vObservatorio(){
+  const pub=!!S.config?.observatorioPublico;
+  if(!pub&&!S.canWrite) return emptyBox("El observatorio no está disponible","");
+  const rows=datosObservatorio().sort((a,b)=>obsOrden==="nombre"?a.c.nombre.localeCompare(b.c.nombre):(b[obsOrden]??-1)-(a[obsOrden]??-1));
+  const th=(k,l)=>`<th><button class="btn sm" style="border:0;padding:0;background:none;color:${obsOrden===k?"var(--accent)":"inherit"};text-transform:inherit;letter-spacing:inherit;font-size:inherit" data-act="obs-orden" data-v="${k}">${l}${obsOrden===k?" ↓":""}</button></th>`;
+  return `<div class="view-head"><div><div class="eyebrow">Transparencia</div><h1>Observatorio del Concejo</h1></div>
+    ${S.canWrite?`<span class="pill ${pub?"ok":"warn"}">${pub?"Visible al público":"Solo lo ve la Secretaría"}</span>`:""}</div>
+  <div class="card"><div class="scroll-x"><table class="t"><thead><tr>${th("nombre","Concejal")}${th("asis","Asistencia")}${th("ses","Sesiones")}${th("pon","Ponencias")}${th("prop","Proposiciones")}${th("cit","Citaciones")}${th("vot","Votos emitidos")}</tr></thead><tbody>
+  ${rows.map(r=>`<tr><td><span class="dot" style="background:${PARTIDOS[r.c.partido].color}"></span> <b>${esc(r.c.nombre)}</b><div class="small muted">${esc(r.c.partido)}${comisionDe(r.c.id)?" · "+esc(COMISIONES[comisionDe(r.c.id)].corto):""}</div></td>
+    <td>${r.asis===null?"—":`<b>${r.asis}%</b><div class="meter" style="min-width:80px;height:8px;margin-top:4px"><i style="width:${r.asis}%"></i></div>`}</td><td>${r.pres} de ${r.ses}</td><td>${r.pon}</td><td>${r.prop}</td><td>${r.cit}</td><td>${r.vot}</td></tr>`).join("")}
+  </tbody></table></div>
+  <p class="note" style="margin-top:10px">Calculado con las sesiones cerradas registradas en la plataforma${S.sesiones.some(s=>s.demo)?" (incluye datos de ejemplo)":""}. La asistencia cuenta plenarias y las sesiones de la comisión a la que pertenece cada concejal. Las cifras reflejan registros, no evalúan la calidad del trabajo de cada concejal.</p></div>`;
+}
+
+/* ============================================================
+   MODALES
+   ============================================================ */
+function modal(title, body, okLabel, onOk, danger=false){
+  const root=$("#modal-root");
+  root.innerHTML=`<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}
+    <div class="foot"><button class="btn" data-m="cancel">Cancelar</button><button class="btn ${danger?"danger":"primary"}" data-m="ok">${esc(okLabel)}</button></div></div></div>`;
+  const close=()=>root.innerHTML="";
+  root.querySelector('[data-m="cancel"]').onclick=close;
+  root.querySelector(".modal-bg").addEventListener("click",e=>{if(e.target.classList.contains("modal-bg")) close();});
+  root.querySelector('[data-m="ok"]').onclick=async()=>{ const r=await onOk(); if(r!==false) close(); };
+  root.querySelector("input,select,textarea,button[data-m=ok]")?.focus();
+}
+
+/* ============================================================
+   ACCIONES
+   ============================================================ */
+const view=$("#view");
+view.addEventListener("click",e=>{const el=e.target.closest("[data-act]"); if(!el||el.tagName==="SELECT"||el.tagName==="TEXTAREA") return; act(el.dataset.act, el, e);});
+view.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.matches(".item.click")){e.preventDefault(); act(e.target.dataset.act,e.target,e);} });
+view.addEventListener("change",e=>{const el=e.target; if(el.dataset.act==="set-com") setComision(el.dataset.id, el.value);
+  if(el.id==="hon-mes"){honMes=+el.value; render();} if(el.id==="hon-anio"){honAnio=+el.value; render();} });
+let notaTimer=null;
+view.addEventListener("input",e=>{const el=e.target; if(el.dataset.act==="orden-nota"){ const cur=local("sesiones",salaId); if(!cur) return;
+  const s=structuredClone(cur); s.orden[+el.dataset.i].nota=el.value; upsertLocal("sesiones",s);
+  clearTimeout(notaTimer); notaTimer=setTimeout(()=>save("sesiones",s.id,local("sesiones",s.id)),900);} });
+// No repintar mientras alguien escribe: se aplaza hasta que salga del campo
+let pendingRender=false;
+function softRender(){ const a=document.activeElement; if(a&&view.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)){pendingRender=true; return;} render(); }
+view.addEventListener("focusout",()=>{ setTimeout(()=>{ if(pendingRender&&!(view.contains(document.activeElement)&&/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))){pendingRender=false; render();} },0); });
+document.querySelector("nav.side").addEventListener("click",e=>{ const a=e.target.closest(".nav-link"); if(a&&a.getAttribute("href")==="#proyectos"){ proyectoId=null; if(route==="proyectos") render(); } });
+
+function sesionMut(fn){ const s=structuredClone(local("sesiones",salaId)); fn(s); commit("sesiones",s); }
+
+async function act(a,el,e){
+  const s=salaId?local("sesiones",salaId):null;
+  switch(a){
+    case "open-sesion": salaId=el.dataset.id; salaTab="asistencia"; go("sala"); break;
+    case "sala-tab": salaTab=el.dataset.v; render(); break;
+    case "new-sesion": modal("Programar sesión", formSesion(), "Programar", ()=>{ const d=readFormSesion(); if(!d.fecha){toast("Indica la fecha.");return false;}
+        const obj={id:uid("s"),...d,estado:"programada",orden:(d.tipo==="Elección"?ORDEN_ELECCION:ORDEN_BASE).map(t=>({t,nota:""})),asistencia:{},votaciones:[],proposiciones:[],creada:new Date().toISOString()};
+        commit("sesiones",obj); salaId=obj.id; salaTab="asistencia"; go("sala"); toast("Sesión programada"); }); break;
+    case "edit-sesion": modal("Editar sesión", formSesion(s), "Guardar", ()=>{ sesionMut(x=>Object.assign(x,readFormSesion())); toast("Cambios guardados"); }); break;
+    case "del-sesion": modal("Eliminar sesión", `<p>Se borrará la sesión del ${fmtFecha(s.fecha)} con su asistencia y votaciones. Esto no se puede deshacer.</p>`, "Eliminar", ()=>{ S.sesiones=S.sesiones.filter(x=>x.id!==s.id); remove("sesiones",s.id); salaId=null; go("sesiones"); }, true); break;
+    case "sesion-estado": sesionMut(x=>{x.estado=el.dataset.v;}); toast(el.dataset.v==="en_curso"?"Sesión instalada":"Sesión cerrada"); break;
+    case "asis": sesionMut(x=>{x.asistencia=x.asistencia||{}; x.asistencia[el.dataset.id]= x.asistencia[el.dataset.id]===el.dataset.v?"":el.dataset.v;}); break;
+    case "asis-todos": sesionMut(x=>{x.asistencia={}; miembros(x.instancia).forEach(id=>x.asistencia[id]="P");}); break;
+    case "asis-limpiar": sesionMut(x=>{x.asistencia={};}); break;
+    case "orden-add": { const v=$("#orden-new").value.trim(); if(!v) return; sesionMut(x=>{x.orden.push({t:v,nota:""});}); break; }
+    case "orden-del": sesionMut(x=>{x.orden.splice(+el.dataset.i,1);}); break;
+    case "orden-up": { const i=+el.dataset.i; if(i>0) sesionMut(x=>{[x.orden[i-1],x.orden[i]]=[x.orden[i],x.orden[i-1]];}); break; }
+    case "new-vot": { const as=$("#nv-asunto").value.trim(); if(!as){toast("Escribe el asunto que se vota.");return;}
+        if(presentes(s).length===0){toast("Registra primero la asistencia.");return;}
+        sesionMut(x=>{x.votaciones=x.votaciones||[]; x.votaciones.push({id:uid("v"),asunto:as,proyectoId:$("#nv-proy").value,mayoria:$("#nv-may").value,votos:{},cerrada:false});}); break; }
+    case "voto": sesionMut(x=>{const v=x.votaciones[+el.dataset.vi]; v.votos=v.votos||{}; v.votos[el.dataset.id]= v.votos[el.dataset.id]===el.dataset.v?"":el.dataset.v;}); break;
+    case "cerrar-vot": sesionMut(x=>{x.votaciones[+el.dataset.vi].cerrada=true;}); toast("Votación cerrada"); break;
+    case "reabrir-vot": sesionMut(x=>{x.votaciones[+el.dataset.vi].cerrada=false;}); break;
+    case "del-vot": sesionMut(x=>{x.votaciones.splice(+el.dataset.vi,1);}); break;
+    case "add-prop": { const t=$("#np-texto").value.trim(); if(!t) return; sesionMut(x=>{x.proposiciones=x.proposiciones||[]; x.proposiciones.push({texto:t,autor:$("#np-autor").value,aprobada:$("#np-ap").value==="1"});}); break; }
+    case "del-prop": sesionMut(x=>{x.proposiciones.splice(+el.dataset.i,1);}); break;
+    case "copy-acta": { const t=$("#acta-text").textContent; try{await navigator.clipboard.writeText(t); toast("Acta copiada");}catch{const r=document.createRange(); r.selectNodeContents($("#acta-text")); getSelection().removeAllRanges(); getSelection().addRange(r); toast("Texto seleccionado: cópialo con Ctrl+C");} break; }
+    case "dl-acta": { const t=$("#acta-text").textContent;
+        const html=`<html><head><meta charset="utf-8"></head><body style="font-family:Arial;font-size:12pt"><pre style="font-family:Arial;white-space:pre-wrap">${esc(t)}</pre></body></html>`;
+        const fname=`Acta_${s.numeroActa||s.fecha}_${s.instancia}.doc`, blob=new Blob([html],{type:"application/msword"});
+        if(!S.dl){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); break; }
+        try{ await S.dl.save({filename:fname, data:blob}); }catch(err){ if(err?.code==="unavailable"||err?.code==="bad_request") toast("No se pudo descargar el acta."); } break; }
+    case "acta-aprobar": sesionMut(x=>{x.actaAprobada=!x.actaAprobada; x.actaAprobadaFecha=x.actaAprobada?hoyISO():"";}); break;
+    case "doc-conv": docConvocatoria(s); break;
+    case "new-proy": modal("Radicar proyecto de acuerdo", formProyecto(), "Radicar", ()=>{ const d=readProy(); if(!d.titulo){toast("Escribe el título.");return false;}
+        const obj={id:uid("p"),...d,estado:"radicado",historial:[{estado:"radicado",fecha:d.fechaRadicacion}]}; commit("proyectos",obj); proyectoId=obj.id; render(); toast("Proyecto radicado"); }); break;
+    case "open-proy": proyectoId=el.dataset.id; render(); $("#main").scrollTop=0; break;
+    case "back-proy": e.preventDefault(); proyectoId=null; render(); break;
+    case "edit-proy": { const p=local("proyectos",proyectoId); modal("Editar proyecto", formProyecto(p), "Guardar", ()=>{ commit("proyectos",{...structuredClone(p),...readProy()}); toast("Cambios guardados"); }); break; }
+    case "del-proy": { const p=local("proyectos",proyectoId); modal("Eliminar proyecto", `<p>Se borrará «${esc(p.titulo)}». Esto no se puede deshacer.</p>`, "Eliminar", ()=>{ S.proyectos=S.proyectos.filter(x=>x.id!==p.id); remove("proyectos",p.id); proyectoId=null; render(); }, true); break; }
+    case "proy-avanzar": { const p=structuredClone(local("proyectos",proyectoId)); const v=el.dataset.v;
+        modal(`Registrar: ${EST_LABEL[v]}`, `<label class="f">Fecha<input id="pa-fecha" type="date" value="${hoyISO()}"></label>`, "Registrar", ()=>{ const f=$("#pa-fecha").value||hoyISO();
+          if(v==="aprobado_2"){ const a1=(p.historial||[]).find(h=>h.estado==="aprobado_1"); if(a1&&f<addDias(a1.fecha,3)) { toast("Deben pasar al menos 3 días desde el primer debate (art. 86)."); return false; } }
+          p.estado=v; p.historial=[...(p.historial||[]),{estado:v,fecha:f}]; commit("proyectos",p); toast("Estado actualizado"); }); break; }
+    case "save-resumen": { const p=structuredClone(local("proyectos",proyectoId)); p.resumen=$("#pr-resumen").value.trim().slice(0,1500); commit("proyectos",p); toast("Resumen guardado"); break; }
+    case "new-comp": modal("Nuevo compromiso", `<div class="form"><label class="f full">Compromiso<textarea id="nc-t" style="min-height:60px" placeholder="Ej. La Secretaría de Hacienda entregará el informe de recaudo del predial"></textarea></label>
+        <label class="f">Responsable<input id="nc-r" placeholder="Ej. Secretaría de Hacienda"></label><label class="f">Plazo<input id="nc-f" type="date"></label></div>`, "Agregar", ()=>{
+        const t=$("#nc-t").value.trim(); if(!t){toast("Escribe el compromiso.");return false;}
+        commit("compromisos",{id:uid("c"),texto:t,responsable:$("#nc-r").value.trim(),fechaLimite:$("#nc-f").value,estado:"pendiente",sesionId:el.dataset.sesion||""}); toast("Compromiso agregado"); }); break;
+    case "comp-toggle": { const c=structuredClone(local("compromisos",el.dataset.id)); c.estado=c.estado==="cumplido"?"pendiente":"cumplido"; commit("compromisos",c); break; }
+    case "del-comp": { const id=el.dataset.id; S.compromisos=S.compromisos.filter(x=>x.id!==id); render(); remove("compromisos",id); break; }
+    case "save-mesa": { const cfg=structuredClone(S.config||{}); cfg.mesa={presidente:$("#aj-pres").value,vp1:$("#aj-vp1").value,vp2:$("#aj-vp2").value,secretario:$("#aj-sec").value.trim()};
+        S.config=cfg; render(); await saveConfig(); toast("Mesa directiva guardada"); CI.refreshRecinto?.(); break; }
+    case "control-tab": controlTab=el.dataset.v; render(); break;
+    case "new-cit": modal("Nueva citación de control político", formCitacion(), "Guardar", ()=>{ const d=readCitacion(); if(!d.citado||!d.tema){toast("Indica a quién se cita y el tema.");return false;}
+        commit("citaciones",{id:uid("t"),...d,enviada:false,respondida:false}); toast("Citación registrada"); }); break;
+    case "edit-cit": { const c=local("citaciones",el.dataset.id); modal("Editar citación", formCitacion(c), "Guardar", ()=>{ commit("citaciones",{...structuredClone(c),...readCitacion()}); toast("Cambios guardados"); }); break; }
+    case "del-cit": { const id=el.dataset.id; modal("Eliminar citación","<p>Se borrará esta citación. Esto no se puede deshacer.</p>","Eliminar",()=>{ S.citaciones=S.citaciones.filter(x=>x.id!==id); remove("citaciones",id); render(); },true); break; }
+    case "cit-estado": { const c=structuredClone(local("citaciones",el.dataset.id)); if(c.respondida){c.respondida=false;c.enviada=false;} else if(c.enviada) c.respondida=true; else {c.enviada=true; c.fechaEnvio=c.fechaEnvio||hoyISO();} commit("citaciones",c); break; }
+    case "doc-cit": docCitacion(local("citaciones",el.dataset.id)); break;
+    case "part-tab": partTab=el.dataset.v; render(); break;
+    case "enviar-insc": case "enviar-buzon": {
+        if(!$("#pp-datos").checked){ toast("Debes autorizar el uso de tus datos para enviar."); return; }
+        const ins=a==="enviar-insc";
+        const item= ins ? {sesionId:$("#pi-ses").value,nombre:$("#pi-nom").value.trim(),calidad:$("#pi-cal").value,organizacion:$("#pi-org").value.trim(),contacto:$("#pi-con").value.trim(),tema:$("#pi-tema").value.trim()}
+                        : {nombre:$("#pb-nom").value.trim(),barrio:$("#pb-bar").value.trim(),tema:$("#pb-tema").value,mensaje:$("#pb-msg").value.trim(),contacto:$("#pb-con").value.trim()};
+        if(ins&&(!item.nombre||!item.tema)){ toast("Escribe tu nombre y el tema."); return; }
+        if(!ins&&item.mensaje.length<10){ toast("Cuéntanos un poco más."); return; }
+        el.disabled=true;
+        try{ await enviarParticipacion(ins?"inscripciones":"buzon",item); render(); toast(ins?"Inscripción enviada. La Secretaría confirmará tu turno.":"Propuesta enviada. ¡Gracias!"); B.fetchAll?.(); }
+        catch{ el.disabled=false; toast("No se pudo enviar. Intenta de nuevo."); }
+        break; }
+    case "del-part": archivarParticipacion(el.dataset.tipo, el.dataset.id); break;
+    case "ics": descargarIcs(local("sesiones",el.dataset.id)); break;
+    case "doc-hon": docHonorarios(); break;
+    case "doc-cert": docCertificado(el.dataset.id, honAnio, honMes); break;
+    case "obs-orden": obsOrden=el.dataset.v; render(); break;
+    case "save-ajustes": { const cfg=structuredClone(S.config||{});
+        cfg.honorarios={tarifa:+$("#aj-tarifa").value||0,topeOrd:+$("#aj-tord").value||70,topeExt:+$("#aj-text").value||20};
+        cfg.transmision=$("#aj-trans").value.trim(); cfg.observatorioPublico=$("#aj-obs").checked;
+        S.config=cfg; render(); await saveConfig(); toast("Ajustes guardados"); break; }
+    case "demo-load": loadDemo(); break;
+    case "demo-clear": modal("Borrar datos de ejemplo","<p>Se borran todas las sesiones, proyectos, citaciones y compromisos marcados como EJEMPLO. Los registros reales no se tocan.</p>","Borrar ejemplos",()=>{clearDemo();},true); break;
+  }
+}
+function readProy(){ return {numero:$("#fp-num").value.trim(),fechaRadicacion:$("#fp-fecha").value,titulo:$("#fp-tit").value.trim(),iniciativa:$("#fp-ini").value,autor:$("#fp-autor").value.trim(),comision:$("#fp-com").value,ponentes:[$("#fp-pon").value,$("#fp-pon2").value].filter(Boolean),articulos:$("#fp-art").value}; }
+function saveConfig(){ return save("config","concejo",S.config); }
+let comTimer=null;
+function setComision(id,k){ const cfg=structuredClone(S.config||{}); cfg.comisiones={...(cfg.comisiones||{}),[id]:k}; S.config=cfg; render(); clearTimeout(comTimer); comTimer=setTimeout(()=>{saveConfig(); CI.refreshRecinto?.();},600); }
+
+/* ---------- Datos de ejemplo (marcados) ---------- */
+async function loadDemo(){
+  const ids=CONCEJALES.map(c=>c.id), y=new Date().getFullYear();
+  const asis={}; ids.forEach((id,i)=>asis[id]= i===3?"E": i===8?"A":"P");
+  const votos={}; ids.forEach((id,i)=>{ if(asis[id]==="P") votos[id]= i===5||i===11?"no":"si"; });
+  const p1={id:"demo-p1",demo:true,numero:`PA 010 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se adopta la política pública de turismo cafetero",fechaRadicacion:`${y}-10-20`,iniciativa:"Alcalde",autor:"Alcalde Municipal",comision:"plan",ponentes:["tabares"],estado:"aprobado_1",historial:[{estado:"radicado",fecha:`${y}-10-20`},{estado:"primer_debate",fecha:`${y}-10-24`},{estado:"aprobado_1",fecha:`${y}-11-02`}],resumen:"Ejemplo de resumen ciudadano: el proyecto organiza cómo el municipio promueve el turismo alrededor del café."};
+  const p2={id:"demo-p2",demo:true,numero:`PA 011 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se expide el presupuesto general del municipio para la vigencia siguiente",fechaRadicacion:`${y}-10-01`,iniciativa:"Alcalde",autor:"Alcalde Municipal",comision:"hacienda",ponentes:["guerra","coronado"],estado:"primer_debate",historial:[{estado:"radicado",fecha:`${y}-10-01`},{estado:"primer_debate",fecha:`${y}-10-10`}]};
+  const p3={id:"demo-p3",demo:true,numero:`PA 007 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se institucionaliza la semana de la juventud",fechaRadicacion:`${y}-08-04`,iniciativa:"Concejal(es)",autor:"Bancada de ejemplo",comision:"gobierno",ponentes:["florez"],estado:"sancionado",historial:[{estado:"radicado",fecha:`${y}-08-04`},{estado:"aprobado_1",fecha:`${y}-08-12`},{estado:"aprobado_2",fecha:`${y}-08-20`},{estado:"sancion",fecha:`${y}-08-21`},{estado:"sancionado",fecha:`${y}-08-28`}]};
+  const s1={id:"demo-s1",demo:true,instancia:"plenaria",tipo:"Ordinaria",fecha:`${y}-08-20`,hora:"18:00",numeroActa:"EJ-001",estado:"cerrada",
+    orden:ORDEN_BASE.map((t,i)=>({t,nota:i===6?"[Ejemplo] Se dio segundo debate al proyecto de la semana de la juventud.":""})),asistencia:asis,
+    votaciones:[{id:"demo-v1",asunto:`[EJEMPLO] Segundo debate al PA 007 de ${y}`,proyectoId:"demo-p3",mayoria:"simple",votos,cerrada:true}],proposiciones:[{texto:"[EJEMPLO] Invitar al Secretario de Gobierno a rendir informe sobre seguridad",autor:"molina",aprobada:true}]};
+  const s2={id:"demo-s2",demo:true,instancia:"plenaria",tipo:"Ordinaria",fecha:addDias(hoyISO(),2),hora:"18:00",numeroActa:"EJ-002",estado:"programada",orden:ORDEN_BASE.map(t=>({t,nota:""})),asistencia:{},votaciones:[],proposiciones:[]};
+  const t1={id:"demo-t1",demo:true,citado:"[EJEMPLO] Secretario de Gobierno",tema:"Seguridad en la zona rural",sesionId:"demo-s2",bancada:"Cambio Radical",proponentes:["molina"],fechaEnvio:hoyISO(),enviada:false,respondida:false,
+    cuestionario:"¿Cuántos casos de hurto rural se reportaron en el último año?\n¿Qué acciones ha coordinado la administración con la Policía?\n¿Con qué presupuesto cuenta el plan de seguridad rural?"};
+  const c1={id:"demo-c1",demo:true,texto:"[EJEMPLO] Informe de la Secretaría de Gobierno sobre seguridad en la zona rural",responsable:"Secretaría de Gobierno",fechaLimite:addDias(hoyISO(),10),estado:"pendiente",sesionId:"demo-s1"};
+  for(const [col,o] of [["proyectos",p1],["proyectos",p2],["proyectos",p3],["sesiones",s1],["sesiones",s2],["compromisos",c1],["citaciones",t1]]){ upsertLocal(col,o); await save(col,o.id,o); }
+  render(); toast("Ejemplos cargados"); CI.refreshRecinto?.();
+}
+async function clearDemo(){
+  for(const col of ["sesiones","proyectos","compromisos","citaciones"]){ const ds=S[col].filter(x=>x.demo); S[col]=S[col].filter(x=>!x.demo); for(const d of ds) await remove(col,d.id); }
+  render(); toast("Ejemplos borrados"); CI.refreshRecinto?.();
+}
+
+/* ============================================================ */
+onRoute(); renderMode(); boot();
+</script>
+
+</body>
+</html>
