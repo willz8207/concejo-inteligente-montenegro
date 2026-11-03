@@ -574,7 +574,7 @@ function onRoute(){
   document.querySelectorAll(".nav-link").forEach(a=>a.setAttribute("aria-current", a.getAttribute("href")==="#"+(route==="sala"?"sesiones":route)?"page":"false"));
   const isR = route==="recinto";
   $("#recinto").hidden=!isR; $("#view").hidden=isR; $("#main").style.overflowY=isR?"hidden":"auto";
-  if(isR&&!recintoLoaded){ recintoLoaded=true; import("./recinto.js").then(()=>{$("#r-loading").remove(); CI.refreshRecinto?.();}).catch(()=>{$("#r-loading").textContent="No se pudo cargar el recinto 3D.";}); }
+  if(isR&&!recintoLoaded){ recintoLoaded=true; import("./recinto.js?v=20261103").then(()=>{$("#r-loading").remove(); CI.refreshRecinto?.();}).catch(()=>{$("#r-loading").textContent="No se pudo cargar el recinto 3D.";}); }
   if(isR) window.dispatchEvent(new Event("resize"));
   render(); $("#main").scrollTop=0;
 }
