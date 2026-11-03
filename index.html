@@ -135,6 +135,57 @@ pre.acta{white-space:pre-wrap;font-family:var(--font-body);font-size:14px;backgr
 .modal-bg{position:fixed;inset:0;background:rgba(10,20,14,.45);z-index:50;display:grid;place-items:center;padding:16px}
 .modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);width:min(640px,100%);max-height:calc(100% - 32px);overflow:auto;padding:20px;border:1px solid var(--line)}
 .modal .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+*,*::before,*::after{box-sizing:border-box}
+.vistas{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.arbol{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.arbol>summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:center;list-style:none}
+.arbol>summary::-webkit-details-marker{display:none}
+.arbol>summary::before{content:"▸";color:var(--accent);font-weight:700;transition:transform .15s}
+.arbol[open]>summary::before{transform:rotate(90deg)}
+.rama{border-left:2px solid var(--line);margin:10px 0 2px 6px;padding-left:14px;display:flex;flex-direction:column;gap:8px}
+.rama-t{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.nodo{border:1px solid var(--line);border-radius:10px;padding:8px 11px;background:var(--surface-2);cursor:pointer}
+.nodo:hover{border-color:var(--accent)}
+.nodo-t{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nodo-cit{background:var(--warn-soft);cursor:default}
+.nodo-vacio{color:var(--muted);font-style:italic;cursor:default;background:none;border-style:dashed}
+.flecha{color:var(--accent);font-weight:700;padding-left:14px;font-size:13px}
+.flecha span{color:var(--muted);font-weight:400}
+.hojas{margin:6px 0 0;padding-left:18px;font-size:13px}
+.ruta-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:980px){.ruta-grid{grid-template-columns:1fr}}
+.ruta{list-style:none;margin:8px 0 0;padding:0;position:relative}
+.ruta li{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.ruta li::before{content:"";position:absolute;left:7px;top:16px;bottom:0;width:2px;background:var(--line)}
+.ruta li:last-child::before{display:none}
+.r-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);background:var(--surface);flex:none;margin-top:2px;position:relative;z-index:1}
+.ruta li.hecho .r-dot{background:var(--ok);border-color:var(--ok)}
+.ruta li.hecho::before{background:var(--ok)}
+.ruta li.actual .r-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.ruta li.atrasado .r-dot{border-color:var(--bad)}
+.r-body{min-width:0;flex:1}
+.r-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between}
+.r-ref{font-size:11.5px;color:var(--accent);white-space:nowrap}
+.r-aqui{font-size:12.5px;font-weight:700;color:var(--accent);margin-top:3px}
+.ruta-fin li:not(.hecho){opacity:.45}
+.desvio{border-top:1px dashed var(--line);margin-top:10px;padding-top:12px}
+.posibles{margin-top:10px;font-size:14px}.posibles summary{cursor:pointer;font-weight:700;color:var(--accent)}.posibles ul{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.cal-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px}
+.cal{border:1px solid var(--line);border-radius:10px;padding:8px}
+.cal-h{font-size:12.5px;font-weight:700;text-transform:capitalize;margin-bottom:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:11px;font-variant-numeric:tabular-nums}
+.cal-g b{color:var(--muted);font-weight:400}
+.cd{display:inline-grid;place-items:center;height:21px;border-radius:5px;color:var(--muted)}
+.cd.ord{background:var(--surface-2)}
+.cd.hoy{outline:2px solid var(--fg);outline-offset:-2px;color:var(--fg)}
+.cd.mk{color:#fff;font-weight:700;cursor:help}
+.cd.mk.real{background:var(--ok)}.cd.mk.actual{background:var(--accent)}.cd.mk.legal{background:var(--warn)}.cd.mk.estimado{background:var(--muted)}.cd.mk.atrasado{background:var(--bad)}.cd.mk.desvio{background:var(--wine)}
+.cal-ley{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted);margin-top:8px}
+.cal-ley span{display:inline-flex;align-items:center;gap:4px}.cal-ley i.cd{width:12px;height:12px;display:inline-block}
+.vt{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px}
+.vt.si{background:var(--ok-soft);color:var(--ok)}.vt.no{background:var(--bad-soft);color:var(--bad)}.vt.imp{background:var(--warn-soft);color:var(--warn)}.vt.aus{color:var(--muted)}.vt.na{color:var(--muted)}
+.vt-wrap{cursor:help;white-space:nowrap}.vt-wrap sup{color:var(--accent);font-weight:700;margin-left:2px}
+.vot-t th{min-width:150px;vertical-align:bottom}
 .help-tip{position:fixed;z-index:70;background:var(--surface);color:var(--fg);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;box-shadow:var(--shadow);pointer-events:none}
 .help-tip b{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
 .toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px)}
@@ -200,7 +251,6 @@ dl.facts dd{margin:0;font-weight:700;min-width:0}
 </style>
 </head>
 <body>
-
 <div class="shell">
   <nav class="side" aria-label="Secciones">
     <div class="brand"><img src="img/logo-concejo.png" alt="Logo del Concejo de Montenegro" width="46" height="46"><div><b>Concejo Inteligente</b><span>Montenegro, Quindío</span></div></div>
@@ -314,9 +364,9 @@ const ORDEN_ELECCION = [ // Art. 58
 ];
 const ESTADOS_PA = [
   ["radicado","Radicado"],["primer_debate","En primer debate (comisión)"],["aprobado_1","Aprobado en primer debate"],
-  ["aprobado_2","Aprobado en segundo debate (plenaria)"],["sancion","Enviado a sanción del Alcalde"],["sancionado","Sancionado"],
+  ["aprobado_2","Aprobado en segundo debate (plenaria)"],["sancion","Enviado a sanción del Alcalde"],["sancionado","Sancionado"],["publicado","Publicado en la Gaceta"],
 ];
-const ESTADOS_PA_FIN = [["objetado","Objetado por el Alcalde"],["archivado","Archivado"],["retirado","Retirado"]];
+const ESTADOS_PA_FIN = [["objetado","Objetado por el Alcalde"],["obj_rechazadas","Objeciones rechazadas por la plenaria"],["tribunal","Enviado al Tribunal Administrativo"],["archivado","Archivado"],["apelacion","En apelación"],["retirado","Retirado"]];
 const EST_LABEL = Object.fromEntries([...ESTADOS_PA,...ESTADOS_PA_FIN]);
 const MAYORIAS = {simple:"Mayoría simple de los asistentes", absoluta:"Mayoría absoluta (7 de 13)", dos_tercios:"Dos terceras partes (9 de 13)"};
 
@@ -540,6 +590,7 @@ function render(){
   html += ({inicio:vInicio,sesiones:vSesiones,sala:vSala,proyectos:vProyectos,control:vControl,participa:vParticipa,honorarios:vHonorarios,observatorio:vObservatorio,ajustes:vAjustes}[route]||vInicio)(loading);
   html+=`<footer class="foot-cred"><span>Concejo Inteligente Montenegro · Concejo Municipal de Montenegro, Quindío</span><span>© 2026 · Desarrollado por <b>William Andrés Muriel</b> · Gobierno | Territorio | Tecnología · <a href="https://www.linkedin.com/in/willi-muriel" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://elpoderdetrasdelpoder.lovable.app" target="_blank" rel="noopener">Blog</a></span></footer>`;
   v.innerHTML=html;
+  [["fpa-est","estado"],["fpa-com","comision"],["fpa-con","concejal"],["fpa-sen","sentido"]].forEach(([id,k])=>{ const x=document.getElementById(id); if(x) x.value=FPA[k]; });
 }
 const demoTag = x=>x.demo?` <span class="pill demo">EJEMPLO</span>`:"";
 const emptyBox = (t,s)=>`<div class="empty"><strong>${t}</strong>${s}</div>`;
@@ -549,7 +600,7 @@ function vInicio(loading){
   const per=periodoActual(), year=String(new Date().getFullYear());
   const cerradas=S.sesiones.filter(s=>s.estado==="cerrada"&&(s.fecha||"").startsWith(year));
   let asis="—"; if(cerradas.length){ let tot=0,pr=0; cerradas.forEach(s=>{const m=miembros(s.instancia); tot+=m.length; pr+=m.filter(id=>s.asistencia?.[id]==="P").length;}); asis=Math.round(pr*100/tot)+"%"; }
-  const tramite=S.proyectos.filter(p=>!["sancionado","archivado","retirado"].includes(p.estado)).length;
+  const tramite=S.proyectos.filter(p=>!["sancionado","publicado","archivado","retirado"].includes(p.estado)).length;
   const hoy=hoyISO();
   const pend=S.compromisos.filter(c=>c.estado!=="cumplido"); const venc=pend.filter(c=>c.fechaLimite&&c.fechaLimite<hoy).length;
   const prox=S.sesiones.filter(s=>s.estado!=="cerrada").sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)).slice(0,5);
@@ -593,8 +644,9 @@ function vSesiones(loading){
   return `
   <div class="view-head"><div><div class="eyebrow">Plenaria y comisiones</div><h1>Sesiones</h1></div>
     ${S.canWrite?`<button class="btn primary" data-act="new-sesion">+ Programar sesión</button>`:""}</div>
-  <div class="card">${loading?`<p class="muted">Cargando sesiones…</p>`:ss.length?`<div class="list">${ss.map(itemSesion).join("")}</div>`:
-    emptyBox("Todavía no hay sesiones", S.canWrite?"Usa «Programar sesión» para crear la primera. El orden del día se llena con la estructura del reglamento (art. 57).":"Cuando la Secretaría programe sesiones, aparecerán aquí.")}</div>
+  ${ss.length&&!loading?`<div class="vistas" role="tablist" aria-label="Ver las sesiones como">${VISTAS_SES.map(([k,l])=>`<button class="chip" type="button" data-act="ses-vista" data-v="${k}" aria-pressed="${k===sesVista}">${l}</button>`).join("")}</div>`:""}
+  ${ss.length&&!loading?vistaSesiones():`<div class="card">${loading?`<p class="muted">Cargando sesiones…</p>`:
+    emptyBox("Todavía no hay sesiones", S.canWrite?"Usa «Programar sesión» para crear la primera. El orden del día se llena con la estructura del reglamento (art. 57).":"Cuando la Secretaría programe sesiones, aparecerán aquí.")}</div>`}
   <p class="note" style="margin-top:10px">Convocatoria con mínimo 24 horas de anticipación; 3 días cuando hay elecciones (art. 52). Las sesiones duran hasta 3 horas, prorrogables como sesión permanente (art. 51).</p>`;
 }
 function formSesion(s={}){
@@ -631,8 +683,11 @@ function vSala(){
       ${S.canWrite&&s.estado==="en_curso"?`<button class="btn primary" data-act="sesion-estado" data-v="cerrada">Cerrar sesión</button>`:""}
       ${S.canWrite&&s.estado==="cerrada"?`<button class="btn" data-act="sesion-estado" data-v="en_curso">Reabrir</button>`:""}
       <button class="btn" data-act="doc-conv">Convocatoria (Word)</button>
+      ${S.canWrite&&s.estado!=="programada"?`<button class="btn" data-act="cont-sesion">Continuar en otra sesión</button>`:""}
       ${S.canWrite?`<button class="btn" data-act="edit-sesion">Editar datos</button><button class="btn danger" data-act="del-sesion">Eliminar</button>`:""}
     </div></div>
+  ${s.continuaDe&&local("sesiones",s.continuaDe)?`<div class="banner" style="background:var(--accent-soft)">Esta sesión continúa la del ${fmtFecha(local("sesiones",s.continuaDe).fecha)}.&nbsp;<a href="#sala" data-act="open-sesion" data-id="${esc(s.continuaDe)}">Ver sesión anterior</a></div>`:""}
+  ${S.sesiones.filter(x=>x.continuaDe===s.id).map(x=>`<div class="banner" style="background:var(--accent-soft)">Continuó el ${fmtFecha(x.fecha)}.&nbsp;<a href="#sala" data-act="open-sesion" data-id="${esc(x.id)}">Ver continuación</a></div>`).join("")}
   <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-act="sala-tab" data-v="${k}" aria-selected="${k===salaTab}">${l}</button>`).join("")}</div>
   ${body}`;
 }
@@ -671,12 +726,13 @@ function tabVotaciones(s,w){
   ${w?`<div class="card" style="margin-bottom:14px"><h2>Nueva votación</h2><div class="form">
     <label class="f full">Asunto que se vota<input id="nv-asunto" placeholder="Ej. Aprobación en segundo debate del Proyecto de Acuerdo 012 de 2026"></label>
     <label class="f">Proyecto relacionado (opcional)<select id="nv-proy"><option value="">— Ninguno —</option>${proyOpts}</select></label>
+    <label class="f">Debate<select id="nv-deb">${Object.entries(DEBATES).map(([k,l])=>`<option value="${k}" ${k===(s.instancia==="plenaria"?"segundo":COMISIONES[s.instancia]||s.instancia==="conjunta"?"primero":"otro")?"selected":""}>${l}</option>`).join("")}</select></label>
     <label class="f">Mayoría requerida<select id="nv-may">${Object.entries(MAYORIAS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label>
   </div><div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="new-vot">Abrir votación nominal</button></div>
   <p class="note" style="margin-top:8px">La votación nominal llama a cada concejal por bancada y en orden alfabético; el resultado queda en el acta con los nombres de quienes votaron Sí y No (art. 72).</p></div>`:""}
   ${vs.length?vs.map((v,i)=>{const r=resultado(s,v), open=w&&!v.cerrada;
     return `<div class="card" style="margin-bottom:12px">
-      <div class="view-head" style="margin-bottom:8px"><div style="min-width:0"><h2 style="margin:0">${esc(v.asunto)}</h2><div class="small muted">${MAYORIAS[v.mayoria||"simple"]}${v.proyectoId&&local("proyectos",v.proyectoId)?" · "+esc(local("proyectos",v.proyectoId).numero||""):""}</div></div>
+      <div class="view-head" style="margin-bottom:8px"><div style="min-width:0"><h2 style="margin:0">${esc(v.asunto)}</h2><div class="small muted">${v.debate?esc(DEBATES[v.debate])+" · ":""}${MAYORIAS[v.mayoria||"simple"]}${v.proyectoId&&local("proyectos",v.proyectoId)?" · "+esc(local("proyectos",v.proyectoId).numero||""):""}</div></div>
         <div style="text-align:right"><div class="vote-res" style="color:var(--${r.cls==="ok"?"ok":r.cls==="bad"?"bad":"warn"})">${r.res}</div><div class="small muted">Sí ${r.si} · No ${r.no} · Impedidos ${r.imp} · Presentes ${r.pres}</div></div></div>
       ${open?`<div class="att">${pres.map(id=>{const c=byId[id], x=v.votos?.[id]||"";
         return `<div class="att-row"><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span><div class="who"><b>${esc(c.nombre)}</b><span>${esc(c.partido)}</span></div>
@@ -684,7 +740,10 @@ function tabVotaciones(s,w){
         <div class="row-actions" style="margin-top:10px"><button class="btn primary" data-act="cerrar-vot" data-vi="${i}" ${r.faltan>0?"disabled":""}>Cerrar votación</button><button class="btn danger" data-act="del-vot" data-vi="${i}">Eliminar</button></div>`
       :`<div class="scroll-x"><table class="t"><thead><tr><th>Sentido</th><th>Concejales</th></tr></thead><tbody>
         ${[["si","Sí"],["no","No"],["imp","Impedidos"]].map(([k,l])=>{const ids=mem.filter(id=>v.votos?.[id]===k); return ids.length?`<tr><td><b>${l}</b></td><td>${ids.map(id=>esc(byId[id].nombre)).join(", ")}</td></tr>`:"";}).join("")}
-        </tbody></table></div>${w?`<div class="row-actions" style="margin-top:8px"><button class="btn sm" data-act="reabrir-vot" data-vi="${i}">Corregir votación</button></div>`:""}`}
+        </tbody></table></div>
+        ${v.observacion?`<p class="small" style="margin:8px 0 0"><b>Observación:</b> ${esc(v.observacion)}</p>`:""}
+        ${v.aclaraciones&&Object.values(v.aclaraciones).some(Boolean)?`<p class="small" style="margin:6px 0 0"><b>Aclaraciones de voto:</b> ${Object.entries(v.aclaraciones).filter(([,t])=>t).map(([id,t])=>`${esc(byId[id]?.corto||"")}: ${esc(t)}`).join(" · ")}</p>`:""}
+        ${S.canWrite?`<div class="row-actions" style="margin-top:8px"><button class="btn sm" data-act="obs-vot" data-vi="${i}">Observación y aclaraciones</button><button class="btn sm" data-act="reabrir-vot" data-vi="${i}">Corregir votación</button></div>`:""}`}
     </div>`;}).join(""):emptyBox("Sin votaciones en esta sesión", w?"Abre una votación nominal arriba.":"")}`;
 }
 function tabProposiciones(s,w){
@@ -746,30 +805,27 @@ function tabActa(s){
 /* ---------- Proyectos de acuerdo ---------- */
 function vProyectos(loading){
   if(proyectoId&&local("proyectos",proyectoId)) return vProyecto(local("proyectos",proyectoId));
-  const ps=[...S.proyectos].sort((a,b)=>(b.fechaRadicacion||"").localeCompare(a.fechaRadicacion||""));
+  const todos=[...S.proyectos].sort((a,b)=>(b.fechaRadicacion||"").localeCompare(a.fechaRadicacion||""));
+  const ps=filtrarProyectos(todos);
   return `
   <div class="view-head"><div><div class="eyebrow">Trámite normativo</div><h1>Proyectos de acuerdo</h1></div>
     ${S.canWrite?`<button class="btn primary" data-act="new-proy">+ Radicar proyecto</button>`:""}</div>
+  ${todos.length&&!loading?barraFiltros(ps.length,todos.length):""}
   <div class="card">${loading?`<p class="muted">Cargando…</p>`:ps.length?`<div class="list">${ps.map(p=>`
     <div class="item click" data-act="open-proy" data-id="${esc(p.id)}" role="button" tabindex="0"><div class="main"><div class="t">${esc(p.numero||"")} — ${esc(p.titulo)}${demoTag(p)}</div>
       <div class="s">${esc(p.iniciativa||"")}${p.comision?" · "+esc(COMISIONES[p.comision]?.corto||""):""}${(p.ponentes||[]).length?" · Ponente: "+p.ponentes.map(nombreCorto).join(", "):""}</div></div>
-      <span class="pill ${["sancionado"].includes(p.estado)?"ok":["archivado","retirado","objetado"].includes(p.estado)?"bad":"info"}">${esc(EST_LABEL[p.estado]||"")}</span></div>`).join("")}</div>`
-    :emptyBox("No hay proyectos radicados", S.canWrite?"Usa «Radicar proyecto» para registrar el primero.":"Aquí verás los proyectos de acuerdo y en qué etapa va cada uno.")}</div>
+      <span class="pill ${pillEstado(p.estado)}">${esc(EST_LABEL[p.estado]||"")}</span></div>`).join("")}</div>`
+    :todos.length?emptyBox("Ningún proyecto cumple los filtros","Prueba con otros filtros o quítalos."):emptyBox("No hay proyectos radicados", S.canWrite?"Usa «Radicar proyecto» para registrar el primero.":"Aquí verás los proyectos de acuerdo y en qué etapa va cada uno.")}</div>
   <p class="note" style="margin-top:10px">Ningún proyecto es acuerdo sin aprobación en primer debate (comisión), segundo debate (plenaria) y sanción del Alcalde (art. 78). Solo el Alcalde puede presentar proyectos sobre plan de desarrollo, presupuesto, estructura administrativa y autorizaciones para contratar (art. 76).</p>`;
 }
 function vProyecto(p){
-  const idx=ESTADOS_PA.findIndex(e=>e[0]===p.estado), fin=ESTADOS_PA_FIN.find(e=>e[0]===p.estado);
-  const next=idx>=0&&idx<ESTADOS_PA.length-1?ESTADOS_PA[idx+1]:null;
-  const ap1=(p.historial||[]).find(h=>h.estado==="aprobado_1");
-  const votos=[]; S.sesiones.forEach(s=>(s.votaciones||[]).forEach(v=>{if(v.proyectoId===p.id) votos.push({s,v,r:resultado(s,v)});}));
+  const sig=TRANS[p.estado]||[];
   return `
   <p style="margin-bottom:8px"><a href="#proyectos" data-act="back-proy" class="small">← Proyectos de acuerdo</a></p>
   <div class="view-head"><div style="min-width:0"><div class="eyebrow">${esc(p.numero||"")} · Radicado el ${fmtFecha(p.fechaRadicacion)}</div><h1>${esc(p.titulo)}${demoTag(p)}</h1></div>
     ${S.canWrite?`<div class="row-actions"><button class="btn" data-act="edit-proy">Editar</button><button class="btn danger" data-act="del-proy">Eliminar</button></div>`:""}</div>
-  <div class="steps">${ESTADOS_PA.map((e,i)=>`<span class="${fin?"":i<idx?"done":i===idx?"now":""}">${e[1]}</span>`).join("")}${fin?`<span class="now" style="background:var(--bad)">${fin[1]}</span>`:""}</div>
-  ${S.canWrite&&!fin&&p.estado!=="sancionado"?`<div class="row-actions" style="margin:10px 0 16px">${next?`<button class="btn primary" data-act="proy-avanzar" data-v="${next[0]}">Pasar a: ${next[1]}</button>`:""}
-    ${ESTADOS_PA_FIN.map(e=>`<button class="btn sm" data-act="proy-avanzar" data-v="${e[0]}">${e[1]}</button>`).join("")}</div>`:""}
-  ${p.estado==="aprobado_1"&&ap1?`<div class="banner">El segundo debate en plenaria puede hacerse desde el ${fmtFecha(addDias(ap1.fecha,3))} (tres días después del primer debate, art. 86).</div>`:""}
+  ${S.canWrite&&sig.length?`<div class="row-actions" style="margin:4px 0 14px"><span class="small muted" style="align-self:center">Registrar siguiente paso:</span>${sig.map((e,i)=>`<button class="btn ${i===0?"primary":"sm"}" data-act="proy-avanzar" data-v="${e}">${esc(EST_LABEL[e])}</button>`).join("")}</div>`:""}
+  ${vRuta(p)}
   <div class="grid g2">
     <div class="card"><h2>Datos del proyecto</h2><dl class="facts">
       <dt>Iniciativa</dt><dd>${esc(p.iniciativa||"—")}</dd><dt>Autor</dt><dd>${esc(p.autor||"—")}</dd>
@@ -782,9 +838,8 @@ function vProyecto(p){
       ${S.canWrite?`<label class="f">Resumen para la ciudadanía: qué propone, a quién afecta y qué cambia<textarea id="pr-resumen" maxlength="1500" placeholder="Escríbelo en palabras sencillas, en 3 o 4 líneas">${esc(p.resumen||"")}</textarea></label>
         <div class="row-actions" style="margin-top:8px"><button class="btn" data-act="save-resumen">Guardar resumen</button></div>`
         :p.resumen?`<p style="white-space:pre-wrap">${esc(p.resumen)}</p>`:`<p class="muted">Aún no hay un resumen para la ciudadanía.</p>`}
-      ${votos.length?`<h3>Votaciones</h3><div class="list">${votos.map(({s,v,r})=>`<div class="item"><div class="main"><div class="t">${esc(v.asunto)}</div><div class="s">${fmtFecha(s.fecha)} · ${esc(INSTANCIAS[s.instancia])} · Sí ${r.si}, No ${r.no}</div></div><span class="pill ${r.cls}">${esc(r.res)}</span></div>`).join("")}</div>`:""}
     </div>
-  </div>`;
+  </div>${tablaVotosProyecto(p)}`;
 }
 function formProyecto(p={}){
   return `<div class="form">
@@ -840,7 +895,12 @@ function vAjustes(){
       <label class="f full" style="flex-direction:row;align-items:center;gap:8px;font-weight:400"><input type="checkbox" id="aj-obs" style="width:auto" ${S.config?.observatorioPublico?"checked":""} ${w?"":"disabled"}> Mostrar el Observatorio (asistencia y actividad por concejal) al público</label></div>
       <p class="note" style="margin-top:8px">El Observatorio es transparencia pura, pero conviene que la mesa directiva esté de acuerdo antes de hacerlo público.</p></div>
   </div>
-  ${w?`<div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="save-ajustes">Guardar honorarios y publicación</button></div>`:""}
+  <div class="card" style="margin-top:14px"><h2>Tiempos estimados de los proyectos</h2>
+    <p class="small muted" style="margin-top:0">Se usan para calcular las fechas «estimadas» de la ruta de cada proyecto en los pasos donde la ley no fija un plazo.</p>
+    <div class="form"><label class="f">Días para reparto y designar ponente<input id="aj-trep" type="number" min="0" value="${esc(tiempos().reparto)}" ${w?"":"disabled"}></label>
+    <label class="f">Días de estudio y ponencia<input id="aj-tpon" type="number" min="0" value="${esc(tiempos().ponencia)}" ${w?"":"disabled"}></label>
+    <label class="f">Días entre primer y segundo debate<input id="aj-tple" type="number" min="3" value="${esc(tiempos().plenaria)}" ${w?"":"disabled"}></label></div></div>
+  ${w?`<div class="row-actions" style="margin-top:12px"><button class="btn primary" data-act="save-ajustes">Guardar honorarios, publicación y tiempos</button></div>`:""}
   ${w?`<div class="card" style="margin-top:14px"><h2>Datos de ejemplo</h2>
     <p class="muted">Carga sesiones, votaciones y proyectos de ejemplo para mostrar la plataforma en una reunión. Quedan marcados como <span class="pill demo">EJEMPLO</span> en todas las pantallas y se borran con un clic.</p>
     <div class="row-actions"><button class="btn" data-act="demo-load">Cargar ejemplos</button><button class="btn danger" data-act="demo-clear">Borrar ejemplos</button></div></div>`:""}`;
@@ -912,7 +972,12 @@ function alertas(){
     if(p.estado==="aprobado_1"){ const f=fechaEstado(p,"aprobado_1"); if(f){ const d=addDias(f,3); add(d<=hoy?"info":"info", d<=hoy?`${n}: ya puede ir a segundo debate en plenaria.`:`${n}: segundo debate posible desde el ${fmtCorta(d)} (art. 86).`,"proyectos"); } }
     if(p.estado==="aprobado_2"){ const f=fechaEstado(p,"aprobado_2"); if(f){ const d=addHabiles(f,5); add(d<hoy?"bad":"warn", `${n}: debe pasar al Alcalde para sanción a más tardar el ${fmtCorta(d)} (5 días hábiles, art. 76 Ley 136).`,"proyectos"); } }
     if(p.estado==="sancion"){ const f=fechaEstado(p,"sancion"); if(f){ const dd=diasObjecion(p), d=addHabiles(f,dd); add(d<hoy?"warn":"info", d<hoy?`${n}: venció el plazo de ${dd} días del Alcalde para objetar (${fmtCorta(d)}); registre la sanción u objeción.`:`${n}: el Alcalde tiene hasta el ${fmtCorta(d)} para objetar (${dd} días, art. 78 Ley 136).`,"proyectos"); } }
-    if(p.estado==="objetado") add("warn",`${n}: fue objetado; la plenaria debe nombrar una comisión accidental para estudiar las objeciones (art. 93).`,"proyectos");
+    if(p.estado==="objetado"){ const f=fechaEstado(p,"objetado"); add("warn",`${n}: fue objetado; la comisión accidental debe estudiar las objeciones${f?` a más tardar el ${fmtCorta(addDias(f,3))}`:""} (art. 93).`,"proyectos"); }
+    if(p.estado==="obj_rechazadas"){ const f=fechaEstado(p,"obj_rechazadas"); if(f){ const d=addDias(f,8); add(d<hoy?"bad":"warn",`${n}: el Alcalde debe sancionarlo a más tardar el ${fmtCorta(d)} (8 días, Ley 136 art. 79); si no, sanciona el presidente del Concejo.`,"proyectos"); } }
+    if(p.estado==="sancionado"){ const f=fechaEstado(p,"sancionado"); if(f){ const d=addDias(f,10); add(d<hoy?"bad":"info",`${n}: publicar en la Gaceta a más tardar el ${fmtCorta(d)} (art. 90).`,"proyectos"); } }
+    if(p.estado==="archivado"&&!fechaEstado(p,"aprobado_1")){ const f=fechaEstado(p,"archivado"); if(f&&addDias(f,5)>=hoy) add("info",`${n}: fue archivado en primer debate; hay plazo para apelar hasta el ${fmtCorta(addDias(f,5))} (art. 84).`,"proyectos"); }
+    if(p.estado==="apelacion"){ const f=fechaEstado(p,"apelacion"); if(f) add("warn",`${n}: apelación en trámite; la plenaria debe decidir hacia el ${fmtCorta(addDias(f,13))} (art. 84).`,"proyectos"); }
+    if(["radicado","primer_debate"].includes(p.estado)){ const fp=finPeriodo(hoy); if(addDias(hoy,7)>=fp) add("warn",`${n}: si no se aprueba en primer debate antes del ${fmtCorta(fp)}, se archiva (art. 83).`,"proyectos"); }
   });
   S.citaciones.forEach(c=>{
     if(c.enviada) return; const s=c.sesionId&&local("sesiones",c.sesionId); if(!s?.fecha) return;
@@ -999,14 +1064,15 @@ function formCitacion(c={}){
   return `<div class="form">
     <label class="f full">Funcionario citado (cargo y nombre)<input id="fc-cit" value="${esc(c.citado||"")}" placeholder="Ej. Secretario de Gobierno, Juan Pérez"></label>
     <label class="f full">Tema del debate<input id="fc-tema" value="${esc(c.tema||"")}" placeholder="Ej. Seguridad en la zona rural"></label>
-    <label class="f">Sesión<select id="fc-ses"><option value="">— Por definir —</option>${prox.map(s=>`<option value="${esc(s.id)}" ${c.sesionId===s.id?"selected":""}>${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</option>`).join("")}</select></label>
+    <label class="f">Sesión donde se aprobó la citación<select id="fc-ori"><option value="">— Sin registrar —</option>${S.sesiones.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(s=>`<option value="${esc(s.id)}" ${c.sesionOrigen===s.id?"selected":""}>${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</option>`).join("")}</select></label>
+    <label class="f">Sesión del debate<select id="fc-ses"><option value="">— Por definir —</option>${prox.map(s=>`<option value="${esc(s.id)}" ${c.sesionId===s.id?"selected":""}>${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</option>`).join("")}</select></label>
     <label class="f">Bancada citante<input id="fc-banc" value="${esc(c.bancada||"")}" placeholder="Ej. Partido Liberal"></label>
     <label class="f">Concejal que cita<select id="fc-pro"><option value="">—</option>${CONCEJALES.map(x=>`<option value="${x.id}" ${(c.proponentes||[])[0]===x.id?"selected":""}>${esc(x.nombre)}</option>`).join("")}</select></label>
     <label class="f">Fecha de envío<input id="fc-env" type="date" value="${esc(c.fechaEnvio||hoyISO())}"></label>
     <label class="f full">Cuestionario (una pregunta por línea)<textarea id="fc-cue" style="min-height:130px">${esc(c.cuestionario||"")}</textarea></label>
   </div>`;
 }
-function readCitacion(){ return {citado:$("#fc-cit").value.trim(),tema:$("#fc-tema").value.trim(),sesionId:$("#fc-ses").value,bancada:$("#fc-banc").value.trim(),proponentes:[$("#fc-pro").value].filter(Boolean),fechaEnvio:$("#fc-env").value,cuestionario:$("#fc-cue").value.slice(0,8000)}; }
+function readCitacion(){ return {citado:$("#fc-cit").value.trim(),tema:$("#fc-tema").value.trim(),sesionId:$("#fc-ses").value,sesionOrigen:$("#fc-ori").value,bancada:$("#fc-banc").value.trim(),proponentes:[$("#fc-pro").value].filter(Boolean),fechaEnvio:$("#fc-env").value,cuestionario:$("#fc-cue").value.slice(0,8000)}; }
 
 /* ---------- Participa ---------- */
 let partTab="inscribirse";
@@ -1150,6 +1216,20 @@ const AYUDA = {
   "np-texto":"Texto de la proposición tal como se presentó. Ejemplo: «Citar al Secretario de Gobierno para debate sobre seguridad rural».",
   "np-autor":"Concejal que presentó la proposición. Si la presentó una bancada, escoge a su vocero.",
   "np-ap":"Marca «Sí» si la plenaria la aprobó. Si todavía no se ha votado, déjala «Sin decidir».",
+  // Nuevos
+  "nv-deb":"Qué debate es: el primero lo da la comisión y el segundo la plenaria. Así la votación aparece en la columna correcta de la ruta del proyecto.",
+  "ov-obs":"Nota de la Secretaría sobre la votación: por ejemplo, si se votó con modificaciones, si hubo votación por partes o algún incidente.",
+  "ov-acl-":"Lo que el concejal dijo al votar «con aclaración de voto» (art. 72). Déjalo vacío si no hizo aclaración.",
+  "fpa-est":"Filtra por la etapa del trámite. «Trámite terminado» incluye sancionados, publicados, archivados y retirados.",
+  "fpa-com":"Muestra solo los proyectos que estudia una comisión.",
+  "fpa-con":"Escoge un concejal para ver los proyectos en los que votó, se declaró impedido o fue ponente.",
+  "fpa-sen":"Qué hizo el concejal escogido en esos proyectos.",
+  "fc-ori":"Sesión en la que la plenaria aprobó la proposición de citar al funcionario. Sirve para ver el recorrido completo del control político.",
+  "cs-fecha":"Día en que continúa la sesión. Lo usual es el día siguiente (art. 54).",
+  "cs-hora":"Hora en que continúa la sesión.",
+  "aj-trep":"Días que suele tardar el presidente en repartir el proyecto y nombrar ponente. La ley no fija este plazo; es una estimación.",
+  "aj-tpon":"Días que suele tomar el ponente para estudiar y presentar la ponencia. Es una estimación.",
+  "aj-tple":"Días que suelen pasar entre el primer y el segundo debate. La ley exige mínimo 3.",
   // Proyectos
   "fp-num":"Número con el que se radicó el proyecto en la Secretaría. Ejemplo: «PA 012 de 2026».",
   "fp-fecha":"Fecha en que se radicó en la Secretaría General.",
@@ -1237,6 +1317,239 @@ document.addEventListener("scroll",()=>{ if(!tipAyuda.hidden&&ayudaEl) mostrarAy
 window.addEventListener("hashchange",ocultarAyuda);
 
 /* ============================================================
+   RUTA DEL PROYECTO, VOTOS POR CONCEJAL Y DESGLOSE DE SESIONES
+   ============================================================ */
+const TRANS = {
+  radicado:["primer_debate","retirado"], primer_debate:["aprobado_1","archivado","retirado"], aprobado_1:["aprobado_2","archivado"],
+  aprobado_2:["sancion"], sancion:["sancionado","objetado"], sancionado:["publicado"], publicado:[],
+  objetado:["obj_rechazadas","tribunal","archivado"], obj_rechazadas:["sancionado"], tribunal:["sancionado","archivado"],
+  archivado:["apelacion"], apelacion:["primer_debate","archivado"], retirado:[],
+};
+const PA_TERMINADO = ["publicado","sancionado","archivado","retirado"];
+const pillEstado = e=>["sancionado","publicado"].includes(e)?"ok":["archivado","retirado","objetado","tribunal"].includes(e)?"bad":["apelacion","obj_rechazadas"].includes(e)?"warn":"info";
+const tiempos = ()=>({reparto:3, ponencia:7, plenaria:5, ...(S.config?.tiempos||{})});
+const ORD = [2,5,8,11];
+function finPeriodo(iso){ // último día del período ordinario en curso o del siguiente
+  const d=new Date(iso+"T12:00:00"); let y=d.getFullYear(), m=d.getMonth()+1;
+  let pm = ORD.find(x=>x>=m); if(!pm){ pm=2; y++; }
+  return `${y}-${String(pm).padStart(2,"0")}-${String(new Date(y,pm,0).getDate()).padStart(2,"0")}`;
+}
+const maxISO = (...xs)=>xs.filter(Boolean).sort().slice(-1)[0];
+function rutaProyecto(p){
+  const H={}; (p.historial||[]).forEach(h=>{ H[h.estado]=h.fecha; });
+  const t=tiempos(), hoy=hoyISO();
+  const orden=["radicado","primer_debate","aprobado_1","aprobado_2","sancion","sancionado","publicado"];
+  const nivel=Math.max(...orden.map((e,i)=>H[e]?i:-1));
+  const pasos=[]; let base=H.radicado||p.fechaRadicacion||hoy;
+  const paso=(key,titulo,real,calc,tipo,nota,ref,umbral)=>{ // umbral: índice en "orden" a partir del cual se considera hecho
+    const hecho = !!real || nivel>=umbral;
+    let fecha = real || calc, atrasado=false;
+    if(!hecho && fecha && fecha<hoy && tipo==="estimado"){ atrasado=true; }
+    pasos.push({key,titulo,fecha,real:!!real,hecho,tipo:real?"real":tipo,nota,ref,atrasado});
+    base = hecho ? (real||base) : (atrasado? hoy : (fecha||base));
+  };
+  paso("radicado","Radicación en la Secretaría General",H.radicado||p.fechaRadicacion,null,"real","Con exposición de motivos y respetando la unidad de materia.","art. 75",0);
+  paso("reparto","Reparto a comisión y designación de ponente",null,addDias(base,t.reparto),"estimado","Lo hace el presidente del Concejo. El reglamento no fija un plazo.","art. 77",1);
+  paso("primer_debate","Estudio del proyecto y ponencia",H.primer_debate,addDias(base,t.ponencia),"estimado","El ponente estudia el proyecto, rinde la ponencia y convoca el primer debate.","art. 80",1);
+  const est1=addDias(base,2), fp=finPeriodo(H.primer_debate||base);
+  paso("aprobado_1","Primer debate en la comisión",H.aprobado_1,est1,"estimado",
+    `Debe aprobarse antes de que termine el período de sesiones (${fmtCorta(fp)}); si no, se archiva.`,"arts. 80 y 83",2);
+  const min2=H.aprobado_1?addDias(H.aprobado_1,3):null;
+  paso("aprobado_2","Segundo debate en la plenaria",H.aprobado_2, H.aprobado_1?maxISO(addDias(H.aprobado_1,Math.max(3,t.plenaria)),min2):addDias(base,Math.max(3,t.plenaria)),
+    H.aprobado_1?"legal":"estimado", `Mínimo 3 días después del primer debate${min2?` (desde el ${fmtCorta(min2)})`:""}. Los dos debates van en días distintos.`,"art. 86 · Ley 136 art. 73",3);
+  paso("sancion","Envío al Alcalde para sanción",H.sancion, addHabiles(H.aprobado_2||base,5), H.aprobado_2?"legal":"estimado","A más tardar 5 días hábiles después de aprobado.","Ley 136 art. 76",4);
+  const dObj=diasObjecion(p);
+  paso("objecion",`Plazo del Alcalde para objetar (${dObj} días)`,null, addHabiles(H.sancion||base,dObj), H.sancion?"legal":"estimado",
+    `${dObj} días hábiles porque el proyecto tiene ${p.articulos?p.articulos+" artículos":"hasta 20 artículos (registra el número de artículos)"}.`,"Ley 136 art. 78",5);
+  paso("sancionado","Sanción del Alcalde",H.sancionado, base, H.sancion?"legal":"estimado","Si no objeta dentro del plazo, el Alcalde debe sancionarlo.","Ley 136 art. 76",5);
+  paso("publicado","Publicación en la Gaceta del Concejo",H.publicado, addDias(H.sancionado||base,10), H.sancionado?"legal":"estimado","Dentro de los 10 días siguientes a la sanción.","art. 90",6);
+  const cur=pasos.find(x=>!x.hecho);
+  if(cur&&!PA_TERMINADO.includes(p.estado)&&!["objetado","obj_rechazadas","tribunal","apelacion"].includes(p.estado)) cur.actual=true;
+  return {pasos,H,fp};
+}
+function desviosProyecto(p,H){
+  const out=[]; const e=p.estado, f=H[e];
+  const step=(t,fecha,ref,nota)=>({t,fecha,ref,nota});
+  if(e==="objetado"&&f){ out.push({titulo:"Objeción del Alcalde",pasos:[
+      step("Objeción presentada",f,"Ley 136 art. 78","Real"),
+      step("Comisión accidental estudia las objeciones",addDias(f,3),"art. 93","A más tardar"),
+      step("La plenaria acoge o rechaza las objeciones",addDias(f,5),"art. 93","Estimado"),
+      step("Si rechaza objeciones de inconveniencia: el Alcalde sanciona",addDias(f,13),"Ley 136 art. 79","8 días después del rechazo"),
+      step("Si son objeciones de derecho y el Concejo insiste: pasa al Tribunal Administrativo",null,"Ley 136 art. 80","El Tribunal decide")]}); }
+  if(e==="obj_rechazadas"&&f) out.push({titulo:"Objeciones rechazadas",pasos:[step("Plenaria rechaza las objeciones",f,"","Real"),
+      step("El Alcalde debe sancionar",addDias(f,8),"Ley 136 art. 79","A más tardar; si no lo hace, sanciona el presidente del Concejo (art. 32)")]});
+  if(e==="tribunal"&&f) out.push({titulo:"Revisión del Tribunal Administrativo",pasos:[step("Enviado al Tribunal",f,"Ley 136 art. 80","Real"),
+      step("Si el Tribunal declara que se ajusta a la ley, el Alcalde sanciona; si no, se archiva",null,"","Depende del fallo")]});
+  if(e==="archivado"&&f&&!H.aprobado_1) out.push({titulo:"Archivado en primer debate: se puede apelar",pasos:[step("Archivo del proyecto",f,"art. 83","Real"),
+      step("Plazo para presentar la apelación",addDias(f,5),"art. 84","El autor, cualquier concejal, el Gobierno o los voceros de iniciativa popular")]});
+  if(e==="apelacion"&&f) out.push({titulo:"Apelación en trámite",pasos:[step("Apelación presentada",f,"art. 84","Real"),
+      step("La mesa directiva integra una comisión accidental",addDias(f,3),"art. 84","A más tardar"),
+      step("La comisión accidental rinde informe",addDias(f,11),"art. 84","8 días"),
+      step("La plenaria decide si acoge la apelación",addDias(f,13),"art. 84","2 días; si la acoge, el proyecto va a una comisión distinta")]});
+  return out;
+}
+function calendarioRuta(pasos,desv){
+  const marcas={}; const add=(f,txt,cls)=>{ if(!f) return; (marcas[f]=marcas[f]||[]).push({txt,cls}); };
+  pasos.forEach(x=>add(x.fecha,x.titulo,x.real?"real":x.actual?"actual":x.atrasado?"atrasado":x.tipo));
+  desv.forEach(d=>d.pasos.forEach(x=>add(x.fecha,x.t,"desvio")));
+  const fechas=Object.keys(marcas).sort(); if(!fechas.length) return "";
+  let [y,m]=fechas[0].split("-").map(Number); const [y2,m2]=fechas[fechas.length-1].split("-").map(Number);
+  const meses=[]; let guard=0; while((y<y2||(y===y2&&m<=m2))&&guard<8){ meses.push([y,m]); m++; if(m>12){m=1;y++;} guard++; }
+  const hoy=hoyISO();
+  return `<div class="cal-wrap">${meses.map(([yy,mm])=>{
+    const first=new Date(yy,mm-1,1).getDay(), dias=new Date(yy,mm,0).getDate(), off=(first+6)%7;
+    const ord=ORD.includes(mm);
+    let cells=""; for(let i=0;i<off;i++) cells+=`<span></span>`;
+    for(let d=1;d<=dias;d++){ const iso=`${yy}-${String(mm).padStart(2,"0")}-${String(d).padStart(2,"0")}`, mk=marcas[iso];
+      cells+=`<span class="cd ${ord?"ord":""} ${iso===hoy?"hoy":""} ${mk?"mk "+mk[0].cls:""}" ${mk?`data-ayuda="${esc(fmtCorta(iso)+": "+mk.map(x=>x.txt).join(" · "))}"`:""}>${d}</span>`; }
+    return `<div class="cal"><div class="cal-h">${MESES[mm-1]} ${yy}${ord?` <span class="pill ok" style="font-size:10.5px">Período ordinario</span>`:""}</div><div class="cal-g"><b>L</b><b>M</b><b>M</b><b>J</b><b>V</b><b>S</b><b>D</b>${cells}</div></div>`;}).join("")}</div>
+    <div class="cal-ley"><span><i class="cd mk real"></i> Hecho</span><span><i class="cd mk actual"></i> Paso actual</span><span><i class="cd mk legal"></i> Plazo de ley</span><span><i class="cd mk estimado"></i> Estimado</span><span><i class="cd mk atrasado"></i> Atrasado</span>${desv.length?`<span><i class="cd mk desvio"></i> Desvío</span>`:""}<span><i class="cd hoy"></i> Hoy</span></div>`;
+}
+function vRuta(p){
+  const {pasos,H,fp}=rutaProyecto(p), desv=desviosProyecto(p,H);
+  const fin=["archivado","retirado"].includes(p.estado);
+  const etiqueta=x=>x.real?`<span class="pill ok">Hecho · ${fmtCorta(x.fecha)}</span>`:x.hecho?`<span class="pill ok">Hecho</span>`
+    :x.atrasado?`<span class="pill bad">Atrasado · estimado ${fmtCorta(x.fecha)}</span>`:x.tipo==="legal"?`<span class="pill warn">Plazo de ley · ${fmtCorta(x.fecha)}</span>`:`<span class="pill">Estimado · ${x.fecha?fmtCorta(x.fecha):"—"}</span>`;
+  const riesgoArchivo = !H.aprobado_1 && !PA_TERMINADO.includes(p.estado) && ["radicado","primer_debate"].includes(p.estado) && addDias(hoyISO(),10)>=fp;
+  return `<div class="card" style="margin-bottom:14px">
+    <div class="view-head" style="margin-bottom:6px"><div><h2 style="margin:0">Ruta del proyecto</h2><div class="small muted">Dónde va y fechas posibles de cada paso. Las fechas estimadas se recalculan con cada avance.</div></div>
+      <span class="pill ${pillEstado(p.estado)}">Ahora: ${esc(EST_LABEL[p.estado]||p.estado)}</span></div>
+    ${riesgoArchivo?`<div class="banner" style="background:var(--bad-soft)"><b>Riesgo de archivo:</b>&nbsp;si no se aprueba en primer debate antes del ${fmtFecha(fp)} (fin del período de sesiones), se archiva (art. 83).</div>`:""}
+    <div class="ruta-grid"><ol class="ruta ${fin?"ruta-fin":""}">${pasos.map(x=>`<li class="${x.hecho?"hecho":""} ${x.actual?"actual":""} ${x.atrasado?"atrasado":""}">
+      <div class="r-dot"></div><div class="r-body"><div class="r-top"><b>${esc(x.titulo)}</b>${etiqueta(x)}</div>
+      <div class="small muted">${esc(x.nota)} <span class="r-ref">${esc(x.ref)}</span></div>${x.actual?`<div class="r-aqui">◀ El proyecto está aquí</div>`:""}</div></li>`).join("")}</ol>
+    <div>${calendarioRuta(pasos,desv)}</div></div>
+    ${desv.map(d=>`<div class="desvio"><h3 style="margin-top:0">${esc(d.titulo)}</h3><ol class="ruta">${d.pasos.map(x=>`<li class="${x.nota==="Real"?"hecho":""}"><div class="r-dot"></div><div class="r-body"><div class="r-top"><b>${esc(x.t)}</b>${x.fecha?`<span class="pill ${x.nota==="Real"?"ok":"warn"}">${x.nota==="Real"?"Hecho":"Hasta"} · ${fmtCorta(x.fecha)}</span>`:""}</div><div class="small muted">${x.nota!=="Real"?esc(x.nota):""} <span class="r-ref">${esc(x.ref)}</span></div></div></li>`).join("")}</ol></div>`).join("")}
+    ${!PA_TERMINADO.includes(p.estado)&&!desv.length?`<details class="posibles"><summary>Posibles desvíos de la ruta</summary><ul>
+      <li><b>Negado en comisión:</b> se archiva, y en 5 días se puede apelar. Una comisión accidental estudia la apelación y la plenaria decide (art. 84).</li>
+      <li><b>Fin del período sin primer debate:</b> el proyecto se archiva y hay que presentarlo de nuevo (art. 83).</li>
+      <li><b>Objeción del Alcalde:</b> una comisión accidental la estudia en máximo 3 días. Si la plenaria rechaza objeciones de inconveniencia, el Alcalde sanciona en 8 días; si son de derecho, decide el Tribunal (arts. 93 y 94; Ley 136 arts. 79 y 80).</li>
+      <li><b>Retiro:</b> el autor puede retirarlo antes de la ponencia de primer debate; después necesita aceptación de la comisión o la plenaria (art. 81).</li></ul></details>`:""}
+    <p class="note" style="margin-top:8px">Las fechas «estimadas» usan los tiempos de Ajustes (reparto ${tiempos().reparto} días, estudio ${tiempos().ponencia} días, plenaria ${Math.max(3,tiempos().plenaria)} días). Los «plazos de ley» salen del reglamento y la Ley 136; los días hábiles no descuentan festivos.</p></div>`;
+}
+
+/* ---------- Cómo votó cada concejal en el proyecto ---------- */
+const DEBATES = {primero:"Primer debate (comisión)", segundo:"Segundo debate (plenaria)", otro:"Otra decisión"};
+function votacionesProyecto(pid){
+  const out=[]; S.sesiones.forEach(s=>(s.votaciones||[]).forEach((v,i)=>{ if(v.proyectoId===pid) out.push({s,v,i,r:resultado(s,v)}); }));
+  return out.sort((a,b)=>(a.s.fecha||"").localeCompare(b.s.fecha||""));
+}
+function celdaVoto(s,v,id){
+  if(!miembros(s.instancia).includes(id)) return `<span class="vt na" data-ayuda="No integra ${esc(INSTANCIAS[s.instancia])}; no le correspondía votar.">—</span>`;
+  const x=v.votos?.[id], a=s.asistencia?.[id], acl=v.aclaraciones?.[id];
+  const base = x==="si"?`<span class="vt si">Sí</span>`:x==="no"?`<span class="vt no">No</span>`:x==="imp"?`<span class="vt imp">Impedido</span>`
+    :a==="E"?`<span class="vt aus">Excusa</span>`:`<span class="vt aus">Ausente</span>`;
+  return acl?`<span class="vt-wrap" data-ayuda="${esc("Aclaración de voto: "+acl)}">${base}<sup>ⓘ</sup></span>`:base;
+}
+function tablaVotosProyecto(p){
+  const vs=votacionesProyecto(p.id);
+  if(!vs.length) return `<div class="card" style="margin-top:14px"><h2>Cómo votó cada concejal</h2>${emptyBox("Aún no hay votaciones de este proyecto","Cuando la Secretaría registre una votación en una sesión y la ligue a este proyecto, aquí aparecerá el voto de cada concejal.")}</div>`;
+  return `<div class="card" style="margin-top:14px"><h2>Cómo votó cada concejal</h2>
+    <div class="scroll-x"><table class="t vot-t"><thead><tr><th>Concejal</th>${vs.map(({s,v,r})=>`<th data-ayuda="${esc(v.asunto+(v.observacion?" · Observación: "+v.observacion:""))}">${esc(DEBATES[v.debate]||"Votación")}<div class="small" style="text-transform:none;letter-spacing:0">${fmtCorta(s.fecha)} · ${esc(INSTANCIAS[s.instancia])}</div><span class="pill ${r.cls}" style="margin-top:4px">${esc(r.res)} · ${r.si}–${r.no}</span></th>`).join("")}</tr></thead>
+    <tbody>${CONCEJALES.map(c=>`<tr><td><span class="dot" style="background:${PARTIDOS[c.partido].color}"></span> ${esc(c.nombre)}<div class="small muted">${esc(c.partido)}</div></td>${vs.map(({s,v})=>`<td>${celdaVoto(s,v,c.id)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+    ${vs.some(x=>x.v.observacion)?`<h3>Observaciones de la Secretaría</h3><div class="list">${vs.filter(x=>x.v.observacion).map(({s,v})=>`<div class="item"><div class="main"><div class="t" style="font-weight:400">${esc(v.observacion)}</div><div class="s">${esc(DEBATES[v.debate]||v.asunto)} · ${fmtCorta(s.fecha)}</div></div></div>`).join("")}</div>`:""}
+    <p class="note" style="margin-top:8px">«—» significa que el concejal no integra la comisión que dio ese debate. Pasa el mouse sobre ⓘ para leer la aclaración de voto (art. 72).</p></div>`;
+}
+function formObservacion(s,v){
+  const ids=miembros(s.instancia).filter(id=>v.votos?.[id]);
+  return `<div class="form"><label class="f full">Observación general de la votación<textarea id="ov-obs" maxlength="1500" placeholder="Ej. Se votó con la modificación propuesta por el ponente al artículo 3.">${esc(v.observacion||"")}</textarea></label></div>
+    <h3>Aclaraciones de voto</h3><p class="small muted" style="margin-top:0">Solo para quien votó diciendo «con aclaración de voto». Déjalo vacío si no aplica.</p>
+    <div class="form">${ids.map(id=>`<label class="f full">${esc(byId[id].nombre)} · votó ${v.votos[id]==="si"?"Sí":v.votos[id]==="no"?"No":"Impedido"}<input id="ov-acl-${id}" data-acl="${id}" maxlength="500" value="${esc(v.aclaraciones?.[id]||"")}"></label>`).join("")}</div>`;
+}
+
+/* ---------- Filtros de proyectos ---------- */
+const FPA = {estado:"todos", comision:"", concejal:"", sentido:"si"};
+function filtrarProyectos(ps){
+  return ps.filter(p=>{
+    if(FPA.estado==="tramite"&&PA_TERMINADO.includes(p.estado)) return false;
+    if(FPA.estado==="terminados"&&!PA_TERMINADO.includes(p.estado)) return false;
+    if(!["todos","tramite","terminados"].includes(FPA.estado)&&p.estado!==FPA.estado) return false;
+    if(FPA.comision&&p.comision!==FPA.comision) return false;
+    if(FPA.concejal){
+      if(FPA.sentido==="ponente") return (p.ponentes||[]).includes(FPA.concejal);
+      return votacionesProyecto(p.id).some(({v})=>v.votos?.[FPA.concejal]===FPA.sentido);
+    }
+    return true;
+  });
+}
+function barraFiltros(n,total){
+  return `<div class="card filtros" style="margin-bottom:14px"><div class="form">
+    <label class="f">Estado<select id="fpa-est"><option value="todos">Todos</option><option value="tramite">En trámite</option><option value="terminados">Trámite terminado</option>${Object.entries(EST_LABEL).map(([k,l])=>`<option value="${k}">${l}</option>`).join("")}</select></label>
+    <label class="f">Comisión<select id="fpa-com"><option value="">Todas</option>${Object.entries(COMISIONES).map(([k,c])=>`<option value="${k}">${c.corto}</option>`).join("")}</select></label>
+    <label class="f">Concejal<select id="fpa-con"><option value="">Cualquiera</option>${CONCEJALES.map(c=>`<option value="${c.id}">${esc(c.nombre)}</option>`).join("")}</select></label>
+    <label class="f">Que haya…<select id="fpa-sen" ${FPA.concejal?"":"disabled"}><option value="si">votado a favor</option><option value="no">votado en contra</option><option value="imp">declarado impedimento</option><option value="ponente">sido ponente</option></select></label>
+  </div><div class="small muted" style="margin-top:8px">${n} de ${total} proyectos${FPA.estado!=="todos"||FPA.comision||FPA.concejal?` · <a href="#proyectos" data-act="fpa-limpiar">Quitar filtros</a>`:""}</div></div>`;
+}
+
+/* ---------- Desglose de sesiones ---------- */
+let sesVista="lista";
+const VISTAS_SES=[["lista","Lista"],["periodo","Por período"],["instancia","Por instancia"],["proyecto","Por proyecto"],["continuacion","Continuaciones"],["control","Control político"]];
+function periodoDeSesion(s){
+  const [y,m,d]=(s.fecha||"0000-00-00").split("-").map(Number);
+  if(s.tipo==="Extraordinaria") return {k:`${y}-${String(m).padStart(2,"0")}-x`,t:`Sesiones extraordinarias · ${MESES[m-1]} ${y}`,tipo:"ext"};
+  if(ORD.includes(m)) return {k:`${y}-${String(m).padStart(2,"0")}-o`,t:`Período ordinario de ${MESES[m-1]} ${y}`,tipo:"ord"};
+  if(ORD.includes(m-1)&&d<=10) return {k:`${y}-${String(m-1).padStart(2,"0")}-p`,t:`Prórroga del período de ${MESES[m-2]} ${y}`,tipo:"pro"};
+  if(m===1&&s.tipo==="Instalación") return {k:`${y}-01-i`,t:`Instalación del Concejo · enero ${y}`,tipo:"ins"};
+  return {k:`${y}-${String(m).padStart(2,"0")}-f`,t:`Fuera de período · ${MESES[m-1]} ${y}`,tipo:"fuera"};
+}
+function nodoSesion(s,extra=""){
+  const n=miembros(s.instancia).length, pr=presentes(s).length, vs=s.votaciones||[];
+  const st=s.estado==="cerrada"?"Cerrada":s.estado==="en_curso"?"En curso":"Programada";
+  return `<div class="nodo" data-act="open-sesion" data-id="${esc(s.id)}" role="button" tabindex="0">
+    <div class="nodo-t"><b>${esc(INSTANCIAS[s.instancia]||"Sesión")}</b> · ${esc(s.tipo||"")}${demoTag(s)} <span class="pill ${s.estado==="cerrada"?"":s.estado==="en_curso"?"ok":"info"}">${st}</span></div>
+    <div class="small muted">${fmtFecha(s.fecha)}${s.hora?" · "+hora12(s.hora):""}${s.numeroActa?" · Acta "+esc(s.numeroActa):""}${s.estado!=="programada"?` · Asistencia ${pr}/${n}`:""}${vs.length?` · ${vs.length} votación${vs.length>1?"es":""}`:""}</div>${extra}</div>`;
+}
+const flecha = t=>`<div class="flecha" aria-hidden="true">↓ <span>${esc(t)}</span></div>`;
+function vistaSesiones(){
+  const ss=sesionesOrden();
+  if(sesVista==="lista") return `<div class="card"><div class="list">${ss.map(itemSesion).join("")}</div></div>`;
+  if(sesVista==="periodo"){
+    const g={}; [...ss].reverse().forEach(s=>{ const p=periodoDeSesion(s); (g[p.k]=g[p.k]||{t:p.t,tipo:p.tipo,ss:[]}).ss.push(s); });
+    return Object.keys(g).sort().reverse().map(k=>{ const G=g[k], c=G.ss.filter(s=>s.estado==="cerrada").length;
+      const porInst={}; G.ss.forEach(s=>(porInst[s.instancia]=porInst[s.instancia]||[]).push(s));
+      return `<details class="arbol" open><summary><b>${esc(G.t)}</b> <span class="pill ${G.tipo==="ext"?"warn":G.tipo==="ord"?"ok":"info"}">${G.ss.length} sesión${G.ss.length>1?"es":""} · ${c} cerrada${c===1?"":"s"}</span></summary>
+        ${Object.entries(porInst).map(([inst,xs])=>`<div class="rama"><div class="rama-t">${esc(INSTANCIAS[inst])}</div>${xs.map(s=>nodoSesion(s, (s.votaciones||[]).length?`<ul class="hojas">${s.votaciones.map(v=>{const r=resultado(s,v);return `<li>${esc(v.asunto)} <span class="pill ${r.cls}">${esc(r.res)}</span></li>`;}).join("")}</ul>`:"")).join("")}</div>`).join("")}</details>`; }).join("")
+      +`<p class="note">Períodos ordinarios: febrero, mayo, agosto y noviembre; cada uno se puede prorrogar hasta 10 días (art. 26). Las extraordinarias las convoca el Alcalde.</p>`;
+  }
+  if(sesVista==="instancia"){
+    return Object.entries(INSTANCIAS).map(([k,l])=>{ const xs=ss.filter(s=>s.instancia===k); if(!xs.length) return "";
+      const mem=COMISIONES[k]?CONCEJALES.filter(c=>comisionDe(c.id)===k).map(c=>c.corto):[];
+      return `<details class="arbol" open><summary><b>${esc(l)}</b> <span class="pill">${xs.length}</span>${mem.length?` <span class="small muted">Integrantes: ${esc(mem.join(", "))}</span>`:""}</summary><div class="rama">${xs.map(s=>nodoSesion(s)).join("")}</div></details>`; }).join("")
+      +`<p class="note">Las comisiones dan el primer debate a los proyectos de su tema; la plenaria, con los 13 concejales, da el segundo (arts. 46 y 78).</p>`;
+  }
+  if(sesVista==="proyecto"){
+    return S.proyectos.slice().sort((a,b)=>(b.fechaRadicacion||"").localeCompare(a.fechaRadicacion||"")).map(p=>{
+      const vs=votacionesProyecto(p.id);
+      return `<details class="arbol" ${vs.length?"open":""}><summary><b>${esc(p.numero||"")}</b> ${esc(p.titulo)}${demoTag(p)} <span class="pill ${pillEstado(p.estado)}">${esc(EST_LABEL[p.estado]||"")}</span></summary>
+        <div class="rama">${vs.length?vs.map(({s,v,r},i)=>(i?flecha("después, "+(DEBATES[v.debate]||"otra votación").toLowerCase()):"")+nodoSesion(s,`<div class="small" style="margin-top:4px">${esc(v.asunto)} <span class="pill ${r.cls}">${esc(r.res)} · ${r.si}–${r.no}</span></div>`)).join("")
+          :`<p class="small muted">Aún no se ha votado en ninguna sesión.</p>`}
+        <a class="btn sm" href="#proyectos" data-act="open-proy" data-id="${esc(p.id)}" style="margin-top:6px">Ver ruta del proyecto</a></div></details>`; }).join("")||emptyBox("No hay proyectos","");
+  }
+  if(sesVista==="continuacion"){
+    const hijos={}; ss.forEach(s=>{ if(s.continuaDe) (hijos[s.continuaDe]=hijos[s.continuaDe]||[]).push(s); });
+    const raices=ss.filter(s=>hijos[s.id]&&!s.continuaDe);
+    const cadena=s=>nodoSesion(s)+(hijos[s.id]||[]).sort((a,b)=>a.fecha.localeCompare(b.fecha)).map(h=>flecha("continúa el orden del día")+cadena(h)).join("");
+    return (raices.length?raices.map(r=>`<details class="arbol" open><summary><b>${esc(INSTANCIAS[r.instancia])}</b> · iniciada el ${fmtCorta(r.fecha)}</summary><div class="rama">${cadena(r)}</div></details>`).join("")
+      :emptyBox("No hay sesiones continuadas","Cuando una sesión no alcance a agotar su orden del día, usa «Continuar en otra sesión» dentro de la sesión: la nueva quedará ligada a la anterior (art. 54)."))
+      +`<p class="note">Si no se termina el orden del día, la sesión puede levantarse y continuar al día siguiente, o declararse sesión permanente (arts. 51 y 54).</p>`;
+  }
+  if(sesVista==="control"){
+    const cs=S.citaciones.slice().sort((a,b)=>(local("sesiones",b.sesionId)?.fecha||"").localeCompare(local("sesiones",a.sesionId)?.fecha||""));
+    return cs.map(c=>{ const o=c.sesionOrigen&&local("sesiones",c.sesionOrigen), d=c.sesionId&&local("sesiones",c.sesionId);
+      const comps=d?S.compromisos.filter(x=>x.sesionId===d.id):[];
+      return `<details class="arbol" open><summary><b>${esc(c.citado)}</b> · ${esc(c.tema)}${demoTag(c)} <span class="pill ${c.respondida?"ok":c.enviada?"info":"warn"}">${c.respondida?"Respondida":c.enviada?"Enviada":"Por enviar"}</span></summary><div class="rama">
+        ${o?nodoSesion(o,`<div class="small" style="margin-top:4px">Aquí se aprobó la proposición de citación</div>`):`<div class="nodo nodo-vacio">Sesión donde se aprobó la citación: sin registrar</div>`}
+        ${flecha("se envía la citación con cuestionario (mínimo 5 días antes)")}
+        <div class="nodo nodo-cit"><b>Citación</b> · ${(c.cuestionario||"").split("\n").filter(x=>x.trim()).length} preguntas${c.fechaEnvio?` · enviada el ${fmtCorta(c.fechaEnvio)}`:""}</div>
+        ${flecha("debate de control político")}
+        ${d?nodoSesion(d):`<div class="nodo nodo-vacio">Sesión del debate: por programar</div>`}
+        ${comps.length?flecha("compromisos que quedaron")+comps.map(x=>`<div class="nodo"><b>${esc(x.texto)}</b><div class="small muted">${esc(x.responsable||"")}${x.fechaLimite?" · plazo "+fmtCorta(x.fechaLimite):""} · ${x.estado==="cumplido"?"Cumplido":"Pendiente"}</div></div>`).join(""):""}
+      </div></details>`; }).join("")||emptyBox("Sin citaciones","Las citaciones de control político se registran en «Control político».");
+  }
+  return "";
+}
+
+/* ============================================================
    MODALES
    ============================================================ */
 function modal(title, body, okLabel, onOk, danger=false){
@@ -1257,7 +1570,8 @@ const view=$("#view");
 view.addEventListener("click",e=>{const el=e.target.closest("[data-act]"); if(!el||el.tagName==="SELECT"||el.tagName==="TEXTAREA") return; act(el.dataset.act, el, e);});
 view.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.matches(".item.click")){e.preventDefault(); act(e.target.dataset.act,e.target,e);} });
 view.addEventListener("change",e=>{const el=e.target; if(el.dataset.act==="set-com") setComision(el.dataset.id, el.value);
-  if(el.id==="hon-mes"){honMes=+el.value; render();} if(el.id==="hon-anio"){honAnio=+el.value; render();} });
+  if(el.id==="hon-mes"){honMes=+el.value; render();} if(el.id==="hon-anio"){honAnio=+el.value; render();}
+  const fmap={"fpa-est":"estado","fpa-com":"comision","fpa-con":"concejal","fpa-sen":"sentido"}; if(fmap[el.id]){ FPA[fmap[el.id]]=el.value; render(); } });
 let notaTimer=null;
 view.addEventListener("input",e=>{const el=e.target; if(el.dataset.act==="orden-nota"){ const cur=local("sesiones",salaId); if(!cur) return;
   const s=structuredClone(cur); s.orden[+el.dataset.i].nota=el.value; upsertLocal("sesiones",s);
@@ -1289,7 +1603,7 @@ async function act(a,el,e){
     case "orden-up": { const i=+el.dataset.i; if(i>0) sesionMut(x=>{[x.orden[i-1],x.orden[i]]=[x.orden[i],x.orden[i-1]];}); break; }
     case "new-vot": { const as=$("#nv-asunto").value.trim(); if(!as){toast("Escribe el asunto que se vota.");return;}
         if(presentes(s).length===0){toast("Registra primero la asistencia.");return;}
-        sesionMut(x=>{x.votaciones=x.votaciones||[]; x.votaciones.push({id:uid("v"),asunto:as,proyectoId:$("#nv-proy").value,mayoria:$("#nv-may").value,votos:{},cerrada:false});}); break; }
+        sesionMut(x=>{x.votaciones=x.votaciones||[]; x.votaciones.push({id:uid("v"),asunto:as,proyectoId:$("#nv-proy").value,debate:$("#nv-deb").value,mayoria:$("#nv-may").value,votos:{},cerrada:false,observacion:"",aclaraciones:{}});}); break; }
     case "voto": sesionMut(x=>{const v=x.votaciones[+el.dataset.vi]; v.votos=v.votos||{}; v.votos[el.dataset.id]= v.votos[el.dataset.id]===el.dataset.v?"":el.dataset.v;}); break;
     case "cerrar-vot": sesionMut(x=>{x.votaciones[+el.dataset.vi].cerrada=true;}); toast("Votación cerrada"); break;
     case "reabrir-vot": sesionMut(x=>{x.votaciones[+el.dataset.vi].cerrada=false;}); break;
@@ -1350,7 +1664,19 @@ async function act(a,el,e){
     case "save-ajustes": { const cfg=structuredClone(S.config||{});
         cfg.honorarios={tarifa:+$("#aj-tarifa").value||0,topeOrd:+$("#aj-tord").value||70,topeExt:+$("#aj-text").value||20};
         cfg.transmision=$("#aj-trans").value.trim(); cfg.observatorioPublico=$("#aj-obs").checked;
+        cfg.tiempos={reparto:+$("#aj-trep").value||0,ponencia:+$("#aj-tpon").value||0,plenaria:Math.max(3,+$("#aj-tple").value||3)};
         S.config=cfg; render(); await saveConfig(); toast("Ajustes guardados"); break; }
+    case "ses-vista": sesVista=el.dataset.v; render(); break;
+    case "fpa-limpiar": e.preventDefault(); Object.assign(FPA,{estado:"todos",comision:"",concejal:"",sentido:"si"}); render(); break;
+    case "obs-vot": { const vi=+el.dataset.vi, v=s.votaciones[vi]; modal("Observación y aclaraciones de voto", formObservacion(s,v), "Guardar", ()=>{
+        const acl={}; document.querySelectorAll("[data-acl]").forEach(inp=>{ if(inp.value.trim()) acl[inp.dataset.acl]=inp.value.trim().slice(0,500); });
+        const obs=$("#ov-obs").value.trim().slice(0,1500); sesionMut(x=>{ x.votaciones[vi].observacion=obs; x.votaciones[vi].aclaraciones=acl; }); toast("Observación guardada"); }); break; }
+    case "cont-sesion": modal("Continuar en otra sesión", `<p>Se crea una nueva sesión de ${esc(INSTANCIAS[s.instancia])} ligada a esta, con los puntos del orden del día que no tienen notas (los que quedaron pendientes).</p>
+        <div class="form"><label class="f">Fecha<input id="cs-fecha" type="date" value="${addDias(s.fecha||hoyISO(),1)}"></label><label class="f">Hora<input id="cs-hora" type="time" value="${esc(s.hora||"18:00")}"></label></div>`, "Crear continuación", ()=>{
+        const pend=(s.orden||[]).filter((o,i)=>i<2||!o.nota).map(o=>({t:o.t,nota:""}));
+        const obj={id:uid("s"),instancia:s.instancia,tipo:s.tipo,fecha:$("#cs-fecha").value,hora:$("#cs-hora").value,numeroActa:"",estado:"programada",continuaDe:s.id,
+          orden:pend.length?pend:ORDEN_BASE.map(t=>({t,nota:""})),asistencia:{},votaciones:[],proposiciones:[],creada:new Date().toISOString()};
+        commit("sesiones",obj); salaId=obj.id; salaTab="orden"; render(); toast("Continuación creada"); }); break;
     case "demo-load": loadDemo(); break;
     case "demo-clear": modal("Borrar datos de ejemplo","<p>Se borran todas las sesiones, proyectos, citaciones y compromisos marcados como EJEMPLO. Los registros reales no se tocan.</p>","Borrar ejemplos",()=>{clearDemo();},true); break;
   }
@@ -1361,21 +1687,9 @@ let comTimer=null;
 function setComision(id,k){ const cfg=structuredClone(S.config||{}); cfg.comisiones={...(cfg.comisiones||{}),[id]:k}; S.config=cfg; render(); clearTimeout(comTimer); comTimer=setTimeout(()=>{saveConfig(); CI.refreshRecinto?.();},600); }
 
 /* ---------- Datos de ejemplo (marcados) ---------- */
+const DEMO_DOCS=[["proyectos",{"id":"demo-p1","numero":"PA 010 de 2026","titulo":"[EJEMPLO] Por medio del cual se adopta la política pública de turismo cafetero de Montenegro","fechaRadicacion":"2026-10-20","iniciativa":"Alcalde","autor":"Alcalde Municipal","comision":"plan","ponentes":["tabares"],"articulos":"18","estado":"aprobado_1","historial":[{"estado":"radicado","fecha":"2026-10-20"},{"estado":"primer_debate","fecha":"2026-10-24"},{"estado":"aprobado_1","fecha":"2026-11-02"}],"resumen":"Ejemplo: organiza cómo el municipio promueve el turismo alrededor del café y del Parque Nacional del Café, con apoyo a guías y pequeños negocios locales.","demo":true}],["proyectos",{"id":"demo-p2","numero":"PA 011 de 2026","titulo":"[EJEMPLO] Por medio del cual se expide el presupuesto general de rentas y gastos para la vigencia 2027","fechaRadicacion":"2026-10-01","iniciativa":"Alcalde","autor":"Alcalde Municipal","comision":"hacienda","ponentes":["guerra","coronado"],"articulos":"62","estado":"aprobado_2","historial":[{"estado":"radicado","fecha":"2026-10-01"},{"estado":"primer_debate","fecha":"2026-10-10"},{"estado":"aprobado_1","fecha":"2026-10-24"},{"estado":"aprobado_2","fecha":"2026-10-30"}],"resumen":"Ejemplo: fija cuánto espera recaudar el municipio en 2027 y en qué lo va a gastar.","demo":true}],["proyectos",{"id":"demo-p3","numero":"PA 007 de 2026","titulo":"[EJEMPLO] Por medio del cual se institucionaliza la Semana de la Juventud Montenegrina","fechaRadicacion":"2026-08-04","iniciativa":"Concejal(es)","autor":"Bancada de ejemplo","comision":"gobierno","ponentes":["florez"],"articulos":"8","estado":"publicado","historial":[{"estado":"radicado","fecha":"2026-08-04"},{"estado":"primer_debate","fecha":"2026-08-06"},{"estado":"aprobado_1","fecha":"2026-08-12"},{"estado":"aprobado_2","fecha":"2026-08-20"},{"estado":"sancion","fecha":"2026-08-21"},{"estado":"sancionado","fecha":"2026-08-28"},{"estado":"publicado","fecha":"2026-09-03"}],"demo":true}],["proyectos",{"id":"demo-p4","numero":"PA 009 de 2026","titulo":"[EJEMPLO] Por medio del cual se concede un descuento por pronto pago del impuesto predial","fechaRadicacion":"2026-10-05","iniciativa":"Alcalde","autor":"Alcalde Municipal","comision":"hacienda","ponentes":["munoz"],"articulos":"12","estado":"sancion","historial":[{"estado":"radicado","fecha":"2026-10-05"},{"estado":"aprobado_1","fecha":"2026-10-15"},{"estado":"aprobado_2","fecha":"2026-10-22"},{"estado":"sancion","fecha":"2026-10-27"}],"demo":true}],["proyectos",{"id":"demo-p5","numero":"PA 005 de 2026","titulo":"[EJEMPLO] Por medio del cual se regula el uso del espacio público en el parque principal","fechaRadicacion":"2026-05-06","iniciativa":"Concejal(es)","autor":"Bancada de ejemplo","comision":"plan","ponentes":["molina"],"articulos":"25","estado":"objetado","historial":[{"estado":"radicado","fecha":"2026-05-06"},{"estado":"aprobado_1","fecha":"2026-05-14"},{"estado":"aprobado_2","fecha":"2026-05-22"},{"estado":"sancion","fecha":"2026-05-25"},{"estado":"objetado","fecha":"2026-06-03"}],"demo":true}],["proyectos",{"id":"demo-p6","numero":"PA 012 de 2026","titulo":"[EJEMPLO] Por medio del cual se crea el programa municipal de huertas escolares","fechaRadicacion":"2026-10-28","iniciativa":"Concejal(es)","autor":"Bancada de ejemplo","comision":"gobierno","ponentes":["zuluaga"],"articulos":"10","estado":"primer_debate","historial":[{"estado":"radicado","fecha":"2026-10-28"},{"estado":"primer_debate","fecha":"2026-10-30"}],"demo":true}],["proyectos",{"id":"demo-p7","numero":"PA 004 de 2026","titulo":"[EJEMPLO] Por medio del cual se crea la estampilla pro cultura","fechaRadicacion":"2026-05-08","iniciativa":"Concejal(es)","autor":"Bancada de ejemplo","comision":"hacienda","ponentes":["osorio"],"articulos":"14","estado":"archivado","historial":[{"estado":"radicado","fecha":"2026-05-08"},{"estado":"primer_debate","fecha":"2026-05-12"},{"estado":"archivado","fecha":"2026-05-31"}],"demo":true}],["sesiones",{"id":"demo-s01","instancia":"plenaria","tipo":"Instalación","fecha":"2026-02-02","hora":"18:00","numeroActa":"EJ-001","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"A","vargas":"P","guerra":"E","osorio":"P","marulanda":"P","guerrero":"A","florez":"P","zuluaga":"E","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s02","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-02-10","hora":"18:00","numeroActa":"EJ-002","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s03","instancia":"hacienda","tipo":"Ordinaria","fecha":"2026-02-18","hora":"18:00","numeroActa":"EJ-003","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s04","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-05-06","hora":"18:00","numeroActa":"EJ-004","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"E","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"A","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s05","instancia":"plan","tipo":"Ordinaria","fecha":"2026-05-14","hora":"18:00","numeroActa":"EJ-005","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"A","guerra":"P","osorio":"A","marulanda":"P","guerrero":"E","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s06","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-05-22","hora":"18:00","numeroActa":"EJ-006","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"E","tabares":"P","molina":"P","zapata":"P","vargas":"A","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[{"id":"demo-v5-0","asunto":"[EJEMPLO] Segundo debate al PA 005 de 2026 (espacio público)","proyectoId":"demo-p5","debate":"segundo","mayoria":"simple","votos":{"tabares":"si","molina":"si","zapata":"si","guerra":"no","osorio":"no","marulanda":"si","guerrero":"si","florez":"si","zuluaga":"si","coronado":"si","munoz":"si"},"cerrada":true,"observacion":"","aclaraciones":{}}],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s07","instancia":"plenaria","tipo":"Extraordinaria","fecha":"2026-07-15","hora":"18:00","numeroActa":"EJ-007","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s08","instancia":"gobierno","tipo":"Ordinaria","fecha":"2026-08-06","hora":"18:00","numeroActa":"EJ-008","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"E","molina":"P","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s09","instancia":"gobierno","tipo":"Ordinaria","fecha":"2026-08-12","hora":"18:00","numeroActa":"EJ-009","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"P","guerra":"A","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[{"id":"demo-v8-0","asunto":"[EJEMPLO] Primer debate al PA 007 de 2026 (Semana de la Juventud)","proyectoId":"demo-p3","debate":"primero","mayoria":"simple","votos":{"arce":"si","tabares":"si","molina":"si","zapata":"si","vargas":"si","osorio":"si","marulanda":"si","guerrero":"si","florez":"si","zuluaga":"no","coronado":"si","munoz":"si"},"cerrada":true,"observacion":"","aclaraciones":{}}],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s10","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-08-20","hora":"18:00","numeroActa":"EJ-010","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"E","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"A"},"votaciones":[{"id":"demo-v9-0","asunto":"[EJEMPLO] Segundo debate al PA 007 de 2026 (Semana de la Juventud)","proyectoId":"demo-p3","debate":"segundo","mayoria":"simple","votos":{"arce":"si","tabares":"si","molina":"si","vargas":"si","guerra":"no","osorio":"si","marulanda":"no","guerrero":"si","florez":"no","zuluaga":"si","coronado":"si"},"cerrada":true,"observacion":"","aclaraciones":{}},{"id":"demo-v9-1","asunto":"[EJEMPLO] Proposición para citar al Secretario de Gobierno","proyectoId":"","debate":"otro","mayoria":"simple","votos":{"arce":"si","tabares":"si","molina":"si","vargas":"no","guerra":"si","osorio":"no","marulanda":"si","guerrero":"si","florez":"si","zuluaga":"si","coronado":"si"},"cerrada":true,"observacion":"","aclaraciones":{}}],"proposiciones":[{"texto":"[EJEMPLO] Citar al Secretario de Gobierno para debate de control político sobre seguridad rural","autor":"molina","aprobada":true}],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s11","instancia":"hacienda","tipo":"Ordinaria","fecha":"2026-10-24","hora":"18:00","numeroActa":"EJ-011","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[{"id":"demo-v10-0","asunto":"[EJEMPLO] Primer debate al PA 011 de 2026 (presupuesto 2027)","proyectoId":"demo-p2","debate":"primero","mayoria":"simple","votos":{"arce":"si","tabares":"si","molina":"no","zapata":"si","vargas":"si","guerra":"si","osorio":"si","marulanda":"si","guerrero":"si","florez":"si","zuluaga":"si","coronado":"si","munoz":"si"},"cerrada":true,"observacion":"","aclaraciones":{}}],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s12","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-10-30","hora":"18:00","numeroActa":"EJ-012","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"A","zapata":"P","vargas":"P","guerra":"A","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[{"id":"demo-v11-0","asunto":"[EJEMPLO] Segundo debate al PA 011 de 2026 (presupuesto 2027)","proyectoId":"demo-p2","debate":"segundo","mayoria":"simple","votos":{"arce":"si","tabares":"si","zapata":"no","vargas":"si","osorio":"si","marulanda":"no","guerrero":"si","florez":"si","zuluaga":"si","coronado":"si","munoz":"si"},"cerrada":true,"observacion":"[Ejemplo] Se aprobó con una modificación al artículo 15 (recursos para vías rurales), propuesta por el ponente.","aclaraciones":{"zapata":"[Ejemplo] Vota no porque considera bajo el presupuesto para el sector rural.","tabares":"[Ejemplo] Vota sí, pero pide seguimiento trimestral a la ejecución."}}],"proposiciones":[{"texto":"[EJEMPLO] Solicitar a la Secretaría de Hacienda informe del recaudo del impuesto predial","autor":"guerra","aprobada":true},{"texto":"[EJEMPLO] Rendir homenaje a los caficultores del municipio","autor":"coronado","aprobada":false}],"actaAprobada":false,"actaAprobadaFecha":"","demo":true}],["sesiones",{"id":"demo-s13","instancia":"plan","tipo":"Ordinaria","fecha":"2026-11-02","hora":"18:00","numeroActa":"EJ-013","estado":"cerrada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":"[Ejemplo] Se dio debate y votación al proyecto del día; ver la pestaña de votaciones."},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"P","zapata":"E","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"E","florez":"P","zuluaga":"P","coronado":"P","munoz":"P"},"votaciones":[{"id":"demo-v12-0","asunto":"[EJEMPLO] Primer debate al PA 010 de 2026 (turismo cafetero)","proyectoId":"demo-p1","debate":"primero","mayoria":"simple","votos":{"arce":"si","tabares":"si","molina":"no","vargas":"no","guerra":"si","osorio":"si","marulanda":"si","florez":"si","zuluaga":"si","coronado":"si","munoz":"si"},"cerrada":true,"observacion":"","aclaraciones":{}}],"proposiciones":[],"actaAprobada":false,"actaAprobadaFecha":"","demo":true}],["sesiones",{"id":"demo-s14","instancia":"hacienda","tipo":"Ordinaria","fecha":"2026-10-25","hora":"09:00","numeroActa":"EJ-014","estado":"cerrada","continuaDe":"demo-s11","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Continuación: intervención de la Secretaria de Hacienda (citación sobre el predial)","nota":"[Ejemplo] La funcionaria respondió las preguntas pendientes."},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{"arce":"P","tabares":"P","molina":"E","zapata":"P","vargas":"P","guerra":"P","osorio":"P","marulanda":"P","guerrero":"P","florez":"P","zuluaga":"P","coronado":"A","munoz":"P"},"votaciones":[],"proposiciones":[],"actaAprobada":true,"actaAprobadaFecha":"2026-10-30","demo":true}],["sesiones",{"id":"demo-s20","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-11-06","hora":"18:00","numeroActa":"EJ-020","estado":"programada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Segundo debate al Proyecto de Acuerdo 010 de 2026 (turismo cafetero)","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{},"votaciones":[],"proposiciones":[],"demo":true}],["sesiones",{"id":"demo-s21","instancia":"plenaria","tipo":"Ordinaria","fecha":"2026-11-13","hora":"18:00","numeroActa":"EJ-021","estado":"programada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{},"votaciones":[],"proposiciones":[],"demo":true}],["sesiones",{"id":"demo-s22","instancia":"gobierno","tipo":"Ordinaria","fecha":"2026-11-10","hora":"16:00","numeroActa":"EJ-022","estado":"programada","orden":[{"t":"Llamado a lista y verificación del quórum","nota":""},{"t":"Lectura, discusión y aprobación del orden del día","nota":""},{"t":"Lectura, discusión y aprobación del acta de la sesión anterior","nota":""},{"t":"Citaciones a debate","nota":""},{"t":"Intervención de funcionarios citados o invitados","nota":""},{"t":"Proyectos de acuerdo objetados por el Alcalde","nota":""},{"t":"Proyectos de acuerdo para debate","nota":""},{"t":"Informe de las comisiones permanentes","nota":""},{"t":"Informe de comisiones especiales y accidentales","nota":""},{"t":"Proposiciones y asuntos varios","nota":""}],"asistencia":{},"votaciones":[],"proposiciones":[],"demo":true}],["citaciones",{"id":"demo-t1","citado":"[EJEMPLO] Secretario de Gobierno","tema":"Seguridad en la zona rural","sesionId":"demo-s21","bancada":"Cambio Radical","proponentes":["molina"],"sesionOrigen":"demo-s10","fechaEnvio":"2026-11-03","enviada":false,"respondida":false,"cuestionario":"¿Cuántos casos de hurto rural se reportaron en el último año y en qué veredas?\n¿Qué acciones se han coordinado con la Policía y el Ejército?\n¿Con qué presupuesto cuenta el plan de seguridad rural en 2026?\n¿Qué resultados tiene el programa de frentes de seguridad?","demo":true}],["citaciones",{"id":"demo-t2","citado":"[EJEMPLO] Secretaria de Hacienda","tema":"Recaudo del impuesto predial","sesionId":"demo-s11","bancada":"Liberal Colombiano","proponentes":["guerra"],"sesionOrigen":"demo-s10","fechaEnvio":"2026-10-15","enviada":true,"respondida":true,"cuestionario":"¿Cuál es el recaudo del predial a la fecha frente a lo presupuestado?\n¿Cuánta es la cartera morosa y qué acciones de cobro se adelantan?","demo":true}],["citaciones",{"id":"demo-t3","citado":"[EJEMPLO] Gerente de Empresas Públicas","tema":"Calidad del agua en el casco urbano","sesionId":"demo-s20","bancada":"Partido de la U","proponentes":["coronado"],"sesionOrigen":"demo-s12","fechaEnvio":"2026-10-29","enviada":true,"respondida":false,"cuestionario":"¿Qué resultados tienen los últimos análisis de calidad del agua?\n¿Qué obras están previstas para mejorar el acueducto?","demo":true}],["compromisos",{"id":"demo-c1","texto":"[EJEMPLO] Entregar al Concejo el informe de recaudo del predial por veredas","responsable":"Secretaría de Hacienda","fechaLimite":"2026-11-20","estado":"pendiente","sesionId":"demo-s12","demo":true}],["compromisos",{"id":"demo-c2","texto":"[EJEMPLO] Instalar luminarias en la vía a Pueblo Tapao","responsable":"Secretaría de Infraestructura","fechaLimite":"2026-10-15","estado":"pendiente","sesionId":"demo-s10","demo":true}],["compromisos",{"id":"demo-c3","texto":"[EJEMPLO] Presentar el cronograma de la Semana de la Juventud","responsable":"Oficina de Juventud","fechaLimite":"2026-09-15","estado":"cumplido","sesionId":"demo-s10","demo":true}]];
 async function loadDemo(){
-  const ids=CONCEJALES.map(c=>c.id), y=new Date().getFullYear();
-  const asis={}; ids.forEach((id,i)=>asis[id]= i===3?"E": i===8?"A":"P");
-  const votos={}; ids.forEach((id,i)=>{ if(asis[id]==="P") votos[id]= i===5||i===11?"no":"si"; });
-  const p1={id:"demo-p1",demo:true,numero:`PA 010 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se adopta la política pública de turismo cafetero",fechaRadicacion:`${y}-10-20`,iniciativa:"Alcalde",autor:"Alcalde Municipal",comision:"plan",ponentes:["tabares"],estado:"aprobado_1",historial:[{estado:"radicado",fecha:`${y}-10-20`},{estado:"primer_debate",fecha:`${y}-10-24`},{estado:"aprobado_1",fecha:`${y}-11-02`}],resumen:"Ejemplo de resumen ciudadano: el proyecto organiza cómo el municipio promueve el turismo alrededor del café."};
-  const p2={id:"demo-p2",demo:true,numero:`PA 011 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se expide el presupuesto general del municipio para la vigencia siguiente",fechaRadicacion:`${y}-10-01`,iniciativa:"Alcalde",autor:"Alcalde Municipal",comision:"hacienda",ponentes:["guerra","coronado"],estado:"primer_debate",historial:[{estado:"radicado",fecha:`${y}-10-01`},{estado:"primer_debate",fecha:`${y}-10-10`}]};
-  const p3={id:"demo-p3",demo:true,numero:`PA 007 de ${y}`,titulo:"[EJEMPLO] Por medio del cual se institucionaliza la semana de la juventud",fechaRadicacion:`${y}-08-04`,iniciativa:"Concejal(es)",autor:"Bancada de ejemplo",comision:"gobierno",ponentes:["florez"],estado:"sancionado",historial:[{estado:"radicado",fecha:`${y}-08-04`},{estado:"aprobado_1",fecha:`${y}-08-12`},{estado:"aprobado_2",fecha:`${y}-08-20`},{estado:"sancion",fecha:`${y}-08-21`},{estado:"sancionado",fecha:`${y}-08-28`}]};
-  const s1={id:"demo-s1",demo:true,instancia:"plenaria",tipo:"Ordinaria",fecha:`${y}-08-20`,hora:"18:00",numeroActa:"EJ-001",estado:"cerrada",
-    orden:ORDEN_BASE.map((t,i)=>({t,nota:i===6?"[Ejemplo] Se dio segundo debate al proyecto de la semana de la juventud.":""})),asistencia:asis,
-    votaciones:[{id:"demo-v1",asunto:`[EJEMPLO] Segundo debate al PA 007 de ${y}`,proyectoId:"demo-p3",mayoria:"simple",votos,cerrada:true}],proposiciones:[{texto:"[EJEMPLO] Invitar al Secretario de Gobierno a rendir informe sobre seguridad",autor:"molina",aprobada:true}]};
-  const s2={id:"demo-s2",demo:true,instancia:"plenaria",tipo:"Ordinaria",fecha:addDias(hoyISO(),2),hora:"18:00",numeroActa:"EJ-002",estado:"programada",orden:ORDEN_BASE.map(t=>({t,nota:""})),asistencia:{},votaciones:[],proposiciones:[]};
-  const t1={id:"demo-t1",demo:true,citado:"[EJEMPLO] Secretario de Gobierno",tema:"Seguridad en la zona rural",sesionId:"demo-s2",bancada:"Cambio Radical",proponentes:["molina"],fechaEnvio:hoyISO(),enviada:false,respondida:false,
-    cuestionario:"¿Cuántos casos de hurto rural se reportaron en el último año?\n¿Qué acciones ha coordinado la administración con la Policía?\n¿Con qué presupuesto cuenta el plan de seguridad rural?"};
-  const c1={id:"demo-c1",demo:true,texto:"[EJEMPLO] Informe de la Secretaría de Gobierno sobre seguridad en la zona rural",responsable:"Secretaría de Gobierno",fechaLimite:addDias(hoyISO(),10),estado:"pendiente",sesionId:"demo-s1"};
-  for(const [col,o] of [["proyectos",p1],["proyectos",p2],["proyectos",p3],["sesiones",s1],["sesiones",s2],["compromisos",c1],["citaciones",t1]]){ upsertLocal(col,o); await save(col,o.id,o); }
+  for(const [col,o] of DEMO_DOCS){ const x=JSON.parse(JSON.stringify(o)); upsertLocal(col,x); await save(col,x.id,x); }
   render(); toast("Ejemplos cargados"); CI.refreshRecinto?.();
 }
 async function clearDemo(){

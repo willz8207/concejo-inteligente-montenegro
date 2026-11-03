@@ -17,8 +17,8 @@ Plataforma web del **Concejo Municipal de Montenegro (Quindío)** para organizar
 | Módulo | Para qué sirve |
 |---|---|
 | **Inicio** | Próxima sesión con cuenta regresiva, enlace a la transmisión y botón para agregarla al calendario. Para la Secretaría, además, **alertas de plazos**. |
-| **Sesiones** | Programación, asistencia con cálculo de quórum, orden del día (art. 57), votaciones nominales, proposiciones, compromisos, ciudadanos inscritos para intervenir, **convocatoria en Word** y **acta en Word** con marca de aprobación. |
-| **Proyectos de acuerdo** | Trámite paso a paso: radicación, primer debate, segundo debate (regla de 3 días, art. 86), sanción, objeción o archivo. Incluye un resumen en lenguaje ciudadano. |
+| **Sesiones** | Se pueden ver como lista, por período, por instancia, por proyecto, por continuaciones o por control político. Programación, asistencia con cálculo de quórum, orden del día (art. 57), votaciones nominales, proposiciones, compromisos, ciudadanos inscritos para intervenir, **convocatoria en Word** y **acta en Word** con marca de aprobación. |
+| **Proyectos de acuerdo** | **Ruta del proyecto** con calendario: dónde va, fechas reales, plazos de ley y fechas estimadas, y los posibles desvíos (objeción, archivo, apelación). **Cómo votó cada concejal** en cada debate, con observaciones y aclaraciones de voto. Filtros por estado, comisión y concejal. Resumen en lenguaje ciudadano. |
 | **Control político** | **Citaciones** con cuestionario, control del plazo de 5 días y **citación en Word**. Seguimiento de **compromisos**. |
 | **Participa** | La ciudadanía se **inscribe para intervenir** en una sesión o **propone temas** de control político. Los datos solo los ve la Secretaría (Ley 1581 de 2012). |
 | **Honorarios** | Asistencia del mes por concejal, sesiones pagables con control de topes anuales (70 ordinarias y 20 extraordinarias, art. 66 de la Ley 136), valor a pagar, **anexo de la resolución en Word** y **certificados de asistencia**. |
@@ -35,6 +35,7 @@ Plataforma web del **Concejo Municipal de Montenegro (Quindío)** para organizar
 - Compromisos vencidos.
 - Topes de sesiones.
 - Fin del período ordinario y opción de prórroga.
+- Riesgo de archivo, publicación en la Gaceta (10 días), objeciones y apelaciones.
 
 Las reglas (quórum, mayorías, orden del día, plazos) siguen el **Reglamento Interno del Concejo, Acuerdo 018 de 2012, reformado por el Acuerdo 001 de 2013**.
 
