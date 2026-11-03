@@ -93,7 +93,7 @@ p{margin:0 0 10px}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;min-width:0}
 input,select,textarea{font:inherit;font-size:14.5px;font-weight:400;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:0;width:100%}
 textarea{resize:vertical;min-height:90px}
-.form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 .form .full{grid-column:1/-1}
 .banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--warn-soft);color:var(--fg);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px}
 .tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:14px}
@@ -129,6 +129,8 @@ pre.acta{white-space:pre-wrap;font-family:var(--font-body);font-size:14px;backgr
 .modal-bg{position:fixed;inset:0;background:rgba(10,20,14,.45);z-index:50;display:grid;place-items:center;padding:16px}
 .modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);width:min(640px,100%);max-height:calc(100% - 32px);overflow:auto;padding:20px;border:1px solid var(--line)}
 .modal .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.help-tip{position:fixed;z-index:70;background:var(--surface);color:var(--fg);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;box-shadow:var(--shadow);pointer-events:none}
+.help-tip b{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
 .toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px)}
 .note{font-size:12.5px;color:var(--muted)}
 table.t{width:100%;border-collapse:collapse;font-size:14px}
@@ -1124,6 +1126,107 @@ function vObservatorio(){
   </tbody></table></div>
   <p class="note" style="margin-top:10px">Calculado con las sesiones cerradas registradas en la plataforma${S.sesiones.some(s=>s.demo)?" (incluye datos de ejemplo)":""}. La asistencia cuenta plenarias y las sesiones de la comisión a la que pertenece cada concejal. Las cifras reflejan registros, no evalúan la calidad del trabajo de cada concejal.</p></div>`;
 }
+
+/* ---------- Ayuda en cada campo (al pasar el mouse o hacer clic) ---------- */
+const AYUDA = {
+  // Sesiones
+  "fs-inst":"¿Quién sesiona? «Plenaria» es con los 13 concejales. Escoge una comisión si la sesión es solo de sus integrantes (Plan de Desarrollo, Gobierno o Presupuesto y Hacienda).",
+  "fs-tipo":"Ordinaria: dentro de los períodos de febrero, mayo, agosto o noviembre. Extraordinaria: cuando la convoca el Alcalde fuera de esos meses. Instalación: la primera del período. Elección: cuando se elige mesa directiva, secretario o personero.",
+  "fs-fecha":"Día en que se hará la sesión. Recuerda convocar con mínimo 24 horas de anticipación (3 días si hay elecciones).",
+  "fs-hora":"Hora de inicio. La sesión dura hasta 3 horas, salvo que se declare sesión permanente.",
+  "fs-acta":"Número consecutivo del acta de esta sesión, como lo lleva la Secretaría. Ejemplo: 045.",
+  "orden-new":"Escribe un punto adicional del orden del día y toca «Agregar punto». Ejemplo: «Primer debate al Proyecto de Acuerdo 012 de 2026».",
+  "on-":"Resumen de lo que pasó en este punto: quién intervino, qué se discutió y qué se decidió. Lo que escribas aquí aparece en el borrador del acta. Se guarda solo.",
+  // Votaciones y proposiciones
+  "nv-asunto":"Lo que se somete a votación, en una frase. Ejemplo: «Aprobación en segundo debate del Proyecto de Acuerdo 012 de 2026».",
+  "nv-proy":"Si la votación es sobre un proyecto de acuerdo, escógelo aquí para que el resultado quede en la página del proyecto. Si es una proposición u otro tema, déjalo en «Ninguno».",
+  "nv-may":"Casi siempre es «mayoría simple» (más Sí que No entre los presentes). Algunas decisiones exigen mayoría absoluta (7 votos) o dos terceras partes (9 votos), como la moción de censura.",
+  "np-texto":"Texto de la proposición tal como se presentó. Ejemplo: «Citar al Secretario de Gobierno para debate sobre seguridad rural».",
+  "np-autor":"Concejal que presentó la proposición. Si la presentó una bancada, escoge a su vocero.",
+  "np-ap":"Marca «Sí» si la plenaria la aprobó. Si todavía no se ha votado, déjala «Sin decidir».",
+  // Proyectos
+  "fp-num":"Número con el que se radicó el proyecto en la Secretaría. Ejemplo: «PA 012 de 2026».",
+  "fp-fecha":"Fecha en que se radicó en la Secretaría General.",
+  "fp-tit":"Título completo, como aparece en el proyecto. Ejemplo: «Por medio del cual se adopta la política pública de turismo».",
+  "fp-ini":"Quién presenta el proyecto. Solo el Alcalde puede presentar proyectos de plan de desarrollo, presupuesto, estructura de la administración y autorizaciones para contratar.",
+  "fp-autor":"Nombre de quien lo presenta. Ejemplo: «Alcalde Municipal» o el nombre del concejal o la bancada.",
+  "fp-com":"Comisión que dará el primer debate, según el tema: Plan de Desarrollo (territorio, servicios, ambiente), Gobierno (administración, educación, salud, cultura) o Presupuesto y Hacienda (impuestos, presupuesto, deuda).",
+  "fp-pon":"Concejal designado por el presidente para estudiar el proyecto y presentar la ponencia.",
+  "fp-pon2":"Solo si el presidente designó dos ponentes. Si no, déjalo vacío.",
+  "fp-art":"Cuántos artículos tiene el proyecto. Sirve para calcular el plazo del Alcalde para objetarlo: 5 días si tiene hasta 20 artículos, 10 si tiene de 21 a 50 y 20 si tiene más de 50.",
+  "pr-resumen":"Explica el proyecto como se lo contarías a un vecino: qué propone, a quién beneficia o afecta y qué cambia. 3 o 4 líneas, sin términos jurídicos.",
+  "pa-fecha":"Fecha en que ocurrió este paso del trámite (por ejemplo, el día de la sesión en que se aprobó).",
+  // Compromisos y citaciones
+  "nc-t":"Qué se comprometió a hacer o entregar. Ejemplo: «Entregar el informe de recaudo del predial por veredas».",
+  "nc-r":"Dependencia o persona que debe cumplir. Ejemplo: «Secretaría de Hacienda».",
+  "nc-f":"Fecha límite acordada. Si pasa sin cumplirse, el compromiso aparece como vencido en las alertas.",
+  "fc-cit":"Cargo y nombre del funcionario citado. Ejemplo: «Secretario de Gobierno, Juan Pérez». No se puede citar al Alcalde.",
+  "fc-tema":"Tema del debate de control político. Ejemplo: «Seguridad en la zona rural».",
+  "fc-ses":"Sesión en la que se hará el debate. La citación debe enviarse con mínimo 5 días de anticipación.",
+  "fc-banc":"Bancada (partido) que promueve la citación. Interviene primero, hasta 20 minutos.",
+  "fc-pro":"Concejal que presentó la proposición de citación.",
+  "fc-env":"Fecha en que se envía (o se envió) la citación al funcionario.",
+  "fc-cue":"Preguntas que debe responder el funcionario, una por línea. El debate no puede salirse de este cuestionario.",
+  // Participa
+  "pi-ses":"Sesión en la que quieres intervenir.",
+  "pi-nom":"Tu nombre completo, como te van a llamar en la sesión.",
+  "pi-cal":"En nombre de quién hablas: a título personal, como veedor, como representante de una organización o de una Junta de Acción Comunal.",
+  "pi-org":"Nombre de la veeduría, organización o junta, si aplica. Si hablas a título personal, déjalo vacío.",
+  "pi-con":"Un teléfono o correo para que la Secretaría te confirme el turno. No se publica.",
+  "pi-tema":"Sobre qué vas a hablar. Debe ser un tema de la sesión. Tendrás hasta 10 minutos.",
+  "pb-nom":"Puedes dejarlo vacío si prefieres que tu propuesta sea anónima.",
+  "pb-bar":"Barrio o vereda a la que se refiere tu propuesta. Ayuda a ubicar el problema.",
+  "pb-tema":"Escoge el tema que más se parezca a tu propuesta.",
+  "pb-msg":"Cuenta qué problema ves y qué te gustaría que el Concejo le pregunte o exija a la administración.",
+  "pb-con":"Opcional. Si dejas un contacto, la Secretaría puede informarte qué pasó con tu propuesta.",
+  "pp-datos":"Para enviar debes autorizar el uso de tus datos. Solo los ve la Secretaría del Concejo y no se publican (Ley 1581 de 2012).",
+  // Honorarios y ajustes
+  "hon-mes":"Mes del que quieres ver la asistencia y los honorarios. Solo cuentan las sesiones cerradas.",
+  "hon-anio":"Año de las sesiones.",
+  "aj-pres":"Concejal elegido como presidente para este año. No puede ser reelegido el año siguiente.",
+  "aj-vp1":"Primer vicepresidente. Los partidos de oposición tienen derecho a este cargo.",
+  "aj-vp2":"Segundo vicepresidente. No puede ser de la misma bancada que los otros integrantes de la mesa.",
+  "aj-sec":"Nombre completo del secretario(a) general. Aparece en las actas, convocatorias y certificados.",
+  "aj-tarifa":"Valor en pesos de los honorarios por cada sesión, según la categoría del municipio y el año (se actualiza cada año). Escríbelo sin puntos. Ejemplo: 219000.",
+  "aj-tord":"Máximo de sesiones ordinarias que se pagan al año. Para municipios de categoría 3 a 6 es 70.",
+  "aj-text":"Máximo de sesiones extraordinarias que se pagan al año. Para municipios de categoría 3 a 6 es 20.",
+  "aj-trans":"Enlace donde la gente puede ver las sesiones en vivo, por ejemplo la página de Facebook del Concejo.",
+  "aj-obs":"Si lo marcas, cualquier persona podrá ver la asistencia y la actividad de cada concejal en el Observatorio.",
+  "com-":"Comisión permanente a la que pertenece este concejal este año. Cada uno va en una sola. Cupos: Plan 4, Gobierno 4, Presupuesto y Hacienda 5.",
+  // Ingreso
+  "lg-mail":"Correo autorizado para la Secretaría.",
+  "lg-pass":"Contraseña de ese correo. Si la olvidaste, pide al administrador que la cambie.",
+};
+const AYUDA_SEG = {
+  asis:"Marca cómo llegó cada concejal: Presente, Excusa (justificada) o Ausente. El quórum se calcula solo con los presentes.",
+  voto:"Registra el voto de cada concejal presente: Sí, No o Impedido (cuando tiene conflicto de interés y no puede votar).",
+};
+function textoAyuda(el){
+  if(!el||!el.closest) return "";
+  const seg=el.closest(".seg"); if(seg){ const b=seg.querySelector("[data-act]"); return AYUDA_SEG[b?.dataset.act]||""; }
+  const id=el.id||""; if(AYUDA[id]) return AYUDA[id];
+  const pre=Object.keys(AYUDA).find(k=>k.endsWith("-")&&id.startsWith(k)); return pre?AYUDA[pre]:"";
+}
+const tipAyuda=document.createElement("div"); tipAyuda.className="help-tip"; tipAyuda.hidden=true; tipAyuda.setAttribute("role","tooltip"); document.body.append(tipAyuda);
+let ayudaEl=null, ayudaTimer=null;
+function mostrarAyuda(el){
+  const txt=textoAyuda(el); if(!txt){ ocultarAyuda(); return; }
+  ayudaEl=el; tipAyuda.innerHTML=`<b>¿Qué va aquí?</b>${esc(txt)}`; tipAyuda.hidden=false;
+  const r=(el.closest(".seg")||el).getBoundingClientRect(), w=Math.min(320, innerWidth-24);
+  tipAyuda.style.width=w+"px";
+  let left=Math.min(Math.max(12,r.left), innerWidth-w-12);
+  let top=r.bottom+8; const h=tipAyuda.offsetHeight;
+  if(top+h>innerHeight-12) top=Math.max(12,r.top-h-8);
+  tipAyuda.style.left=left+"px"; tipAyuda.style.top=top+"px";
+}
+function ocultarAyuda(){ tipAyuda.hidden=true; ayudaEl=null; }
+const campo = t=>t&&t.closest&&(t.closest("input,select,textarea")||t.closest(".seg"));
+document.addEventListener("focusin",e=>{ const c=campo(e.target); if(c&&textoAyuda(c)) mostrarAyuda(c); });
+document.addEventListener("focusout",()=>{ setTimeout(()=>{ const c=campo(document.activeElement); if(!c) ocultarAyuda(); },0); });
+document.addEventListener("mouseover",e=>{ const c=campo(e.target); clearTimeout(ayudaTimer);
+  if(c&&textoAyuda(c)) ayudaTimer=setTimeout(()=>mostrarAyuda(c),250);
+  else if(ayudaEl&&!campo(document.activeElement)) ayudaTimer=setTimeout(ocultarAyuda,150); });
+document.addEventListener("scroll",()=>{ if(!tipAyuda.hidden&&ayudaEl) mostrarAyuda(ayudaEl); },true);
 
 /* ============================================================
    MODALES
