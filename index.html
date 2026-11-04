@@ -209,7 +209,9 @@ pre.acta{white-space:pre-wrap;font-family:var(--font-body);font-size:14px;backgr
 .postit{display:flex;flex-direction:column;gap:4px;padding:20px 16px 16px;font-size:13.5px;box-shadow:0 8px 14px rgba(40,20,0,.28)}
 .postit a,.postit .linkbtn{color:#1d3d8f;font-weight:700}
 .postit:hover{transform:rotate(0deg) translateY(-3px)}
-.p-amarillo{background:linear-gradient(#fff3a8,#ffe774)}.p-azul{background:linear-gradient(#e2f0ff,#c9e1ff)}.p-rojo{background:linear-gradient(#ffe0dc,#ffc9c2);color:#5c1510}
+.p-amarillo{background:linear-gradient(#fff3a8,#ffe774)}.p-verde{background:linear-gradient(#e3f6e8,#c8ecd2);color:#163f2a}
+.pi-recinto{width:100%;height:auto;margin:2px 0}.pi-ir{font-weight:700;color:#1f6b45}
+.btn-3d{background:#1d2a22;color:#fff;border-color:#1d2a22}.btn-3d:hover{background:#2c3d31}.p-azul{background:linear-gradient(#e2f0ff,#c9e1ff)}.p-rojo{background:linear-gradient(#ffe0dc,#ffc9c2);color:#5c1510}
 .pi-t{font-family:var(--font-display);font-size:16px}.pi-big{font-weight:700;font-size:15px}.pi-cd{font-weight:700;color:#8a4b00}.pi-acc{margin-top:4px;font-size:12.5px}
 .tack{position:absolute;top:6px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff9,transparent 40%),#d23b2f;box-shadow:0 2px 3px rgba(0,0,0,.45)}
 .hoja{display:flex;flex-direction:column;gap:6px;border:0;cursor:pointer;font:inherit;padding:26px 16px 16px;width:200px;min-height:190px;
@@ -1715,6 +1717,10 @@ function notaFija(){ // próxima sesión, accesos y alertas: "post-its" que no s
         <span class="pi-acc"><a href="${esc(link)}" target="_blank" rel="noopener">Ver transmisión</a> · <button type="button" class="linkbtn" data-act="ics" data-id="${esc(s.id)}">Agendar</button> · <a href="#participa">Inscribirme</a></span>`
        :`<span>No hay sesiones programadas.</span><span class="pi-acc"><a href="${esc(link)}" target="_blank" rel="noopener">Facebook del Concejo</a></span>`}
     </div>
+    <a class="postit p-verde" style="--rot:1deg" href="#recinto" aria-label="Recorrer el recinto del Concejo en 3D">
+      <span class="tack" aria-hidden="true"></span><b class="pi-t">Conoce tu Concejo en 3D</b>
+      <svg class="pi-recinto" viewBox="0 0 120 54" aria-hidden="true"><path d="M8 50a52 40 0 0 1 104 0" fill="none" stroke="#1f6b45" stroke-width="3"/><path d="M26 50a34 26 0 0 1 68 0" fill="none" stroke="#1f6b45" stroke-width="3"/>${[...Array(13)].map((_,i)=>{const a=Math.PI*(1.08+0.84*i/12), r=i%2?31:43; return `<circle cx="${(60+Math.cos(a)*r).toFixed(1)}" cy="${(50+Math.sin(a)*r*0.78).toFixed(1)}" r="4" fill="${Object.values(PARTIDOS)[i%10].color}"/>`;}).join("")}<rect x="48" y="42" width="24" height="8" rx="2" fill="#7a4b2a"/></svg>
+      <span>Recorre el recinto y conoce a los 13 concejales.</span><span class="pi-ir">Entrar al recinto →</span></a>
     <div class="postit p-azul" style="--rot:1.5deg">
       <span class="tack" aria-hidden="true"></span><b class="pi-t">Ir a…</b>
       <a href="#proyectos">Proyectos en trámite</a><a href="#sesiones">Sesiones y votaciones</a><a href="#participa">Participa</a><a href="#recinto">Conoce tu Concejo en 3D</a><a href="#gaceta">Archivo de la Gaceta</a>
@@ -1732,7 +1738,7 @@ function vCartelera(loading){
   const pubAnio=S.gaceta.filter(g=>String(g.anio)===year).length;
   return `
   <div class="view-head"><div><div class="eyebrow">Gaceta Oficial digital · Concejo Municipal de Montenegro, Quindío</div><h1>Cartelera del Concejo</h1></div>
-    <div class="row-actions"><span class="pill ${per.en?"ok":"info"}">${per.txt}</span>${S.canWrite?`<button class="btn primary" data-act="g-publicar">+ Publicar en la Gaceta</button>`:""}</div></div>
+    <div class="row-actions"><span class="pill ${per.en?"ok":"info"}">${per.txt}</span><a class="btn btn-3d" href="#recinto">🏛 Recorrer el recinto en 3D</a>${S.canWrite?`<button class="btn primary" data-act="g-publicar">+ Publicar en la Gaceta</button>`:""}</div></div>
   ${tipos.length>1?`<div class="vistas" aria-label="Filtrar la cartelera">${[["","Todo"],...tipos.map(t=>[t,TIPOS_G[t].corto])].map(([k,l])=>`<button class="chip" type="button" data-act="cart-filtro" data-v="${k}" aria-pressed="${filtroCart===k}">${k?`<span class="pin-mini" style="background:${TIPOS_G[k].pin}"></span>`:""}${l}</button>`).join("")}</div>`:""}
   <div class="corcho-marco"><div class="corcho" id="corcho">
     <div class="fijas">${loading?"":notaFija()}</div>
