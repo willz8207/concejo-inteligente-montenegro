@@ -5,7 +5,7 @@
 
 -- 1. Tabla única de documentos (sesiones, proyectos, compromisos y configuración)
 create table if not exists public.documentos (
-  coleccion  text not null check (coleccion in ('sesiones','proyectos','compromisos','citaciones','config')),
+  coleccion  text not null check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','config')),
   id         text not null,
   data       jsonb not null,
   updated_at timestamptz not null default now(),
@@ -18,7 +18,7 @@ create table if not exists public.editores (
 );
 
 alter table public.documentos drop constraint if exists documentos_coleccion_check;
-alter table public.documentos add constraint documentos_coleccion_check check (coleccion in ('sesiones','proyectos','compromisos','citaciones','config'));
+alter table public.documentos add constraint documentos_coleccion_check check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','config'));
 alter table public.documentos enable row level security;
 alter table public.editores   enable row level security;  -- sin políticas: nadie la lee desde la web
 
@@ -67,6 +67,28 @@ exception when duplicate_object then null; end $$;
 do $$ begin
   alter publication supabase_realtime add table public.participacion;
 exception when duplicate_object then null; end $$;
+
+-- 8. Gaceta Oficial digital: lo publicado no se modifica ni se borra (los errores se corrigen con fe de erratas)
+create or replace function public.gaceta_inmutable()
+returns trigger language plpgsql as $$
+begin
+  if old.coleccion = 'gaceta' and coalesce(old.data->>'demo','false') <> 'true' then
+    raise exception 'Las publicaciones de la Gaceta no se pueden modificar ni borrar. Use una fe de erratas.';
+  end if;
+  if tg_op = 'DELETE' then return old; end if;
+  return new;
+end $$;
+drop trigger if exists gaceta_inmutable on public.documentos;
+create trigger gaceta_inmutable before update or delete on public.documentos
+  for each row execute function public.gaceta_inmutable();
+
+-- 9. PDF firmados de la Gaceta: lectura pública; solo los editores suben; nadie reemplaza ni borra
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('gaceta', 'gaceta', true, 10485760, array['application/pdf'])
+on conflict (id) do nothing;
+drop policy if exists "gaceta editores suben" on storage.objects;
+create policy "gaceta editores suben" on storage.objects for insert to authenticated
+  with check (bucket_id = 'gaceta' and public.es_editor());
 
 -- 7. Autoriza el correo de la Secretaría (cámbialo por el real y ejecuta esta línea)
 -- insert into public.editores (email) values ('secretaria@ejemplo.gov.co');
