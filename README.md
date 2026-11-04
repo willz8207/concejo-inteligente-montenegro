@@ -16,7 +16,8 @@ Plataforma web del **Concejo Municipal de Montenegro (Quindío)** para organizar
 
 | Módulo | Para qué sirve |
 |---|---|
-| **Inicio** | Próxima sesión con cuenta regresiva, enlace a la transmisión y botón para agregarla al calendario. Para la Secretaría, además, **alertas de plazos**. |
+| **Cartelera** (inicio) | Cartelera de corcho interactiva con lo último de la **Gaceta Oficial digital**, las convocatorias a sesión (se quitan solas cuando pasa la sesión), la próxima sesión con cuenta regresiva y accesos rápidos. Para la Secretaría, además, **alertas de plazos**. |
+| **Gaceta** | Archivo oficial numerado por año: acuerdos sancionados, resoluciones, proyectos radicados, actas aprobadas, avisos y fe de erratas. Cada publicación tiene fecha y hora, **código de verificación y QR** para comprobar que no ha cambiado, y no se puede modificar ni borrar. Incluye un **borrador de resolución** para adoptar la Gaceta digital. |
 | **Sesiones** | Se pueden ver como lista, por período, por instancia, por proyecto, por continuaciones o por control político. Programación, asistencia con cálculo de quórum, orden del día (art. 57), votaciones nominales, proposiciones, compromisos, ciudadanos inscritos para intervenir, **convocatoria en Word** y **acta en Word** con marca de aprobación. |
 | **Proyectos de acuerdo** | **Ruta del proyecto** con calendario: dónde va, fechas reales, plazos de ley y fechas estimadas, y los posibles desvíos (objeción, archivo, apelación). **Cómo votó cada concejal** en cada debate, con observaciones y aclaraciones de voto. Filtros por estado, comisión y concejal. Resumen en lenguaje ciudadano. |
 | **Control político** | **Citaciones** con cuestionario, control del plazo de 5 días y **citación en Word**. Seguimiento de **compromisos**. |
@@ -46,7 +47,7 @@ Cualquier persona puede consultar la información. Solo los correos autorizados 
 ### 1. Base de datos (Supabase, plan gratuito)
 
 1. Crea una cuenta en [supabase.com](https://supabase.com) y un proyecto nuevo (región: São Paulo o la más cercana).
-2. En **SQL Editor**, pega todo el archivo [`supabase/esquema.sql`](supabase/esquema.sql) y toca **Run**.
+2. En **SQL Editor**, pega todo el archivo [`supabase/esquema.sql`](supabase/esquema.sql) y toca **Run**. Esto crea también el espacio para los PDF firmados de la Gaceta.
 3. En **Authentication → Users → Add user**, crea el usuario de la Secretaría con correo y contraseña.
 4. Autoriza ese correo como editor. En **SQL Editor** ejecuta:
    ```sql
