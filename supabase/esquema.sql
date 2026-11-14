@@ -5,7 +5,7 @@
 
 -- 1. Tabla única de documentos (sesiones, proyectos, compromisos y configuración)
 create table if not exists public.documentos (
-  coleccion  text not null check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','config')),
+  coleccion  text not null check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','perfiles','config')),
   id         text not null,
   data       jsonb not null,
   updated_at timestamptz not null default now(),
@@ -18,7 +18,7 @@ create table if not exists public.editores (
 );
 
 alter table public.documentos drop constraint if exists documentos_coleccion_check;
-alter table public.documentos add constraint documentos_coleccion_check check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','config'));
+alter table public.documentos add constraint documentos_coleccion_check check (coleccion in ('sesiones','proyectos','compromisos','citaciones','gaceta','perfiles','config'));
 alter table public.documentos enable row level security;
 alter table public.editores   enable row level security;  -- sin políticas: nadie la lee desde la web
 
