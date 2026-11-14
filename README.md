@@ -25,7 +25,7 @@ Plataforma web del **Concejo Municipal de Montenegro (Quindío)** para organizar
 | **Honorarios** | Asistencia del mes por concejal, sesiones pagables con control de topes anuales (70 ordinarias y 20 extraordinarias, art. 66 de la Ley 136), valor a pagar, **anexo de la resolución en Word** y **certificados de asistencia**. |
 | **Observatorio** | Asistencia, ponencias, proposiciones, citaciones y votos por concejal. Se publica solo si la Secretaría lo activa. |
 | **Conoce tu Concejo** | Recinto en 3D: curules por partido y comisión, mesa directiva, Secretaría General, banderas y vistas del municipio, con la ficha de cada concejal. |
-| **Ajustes** | Mesa directiva, comisiones (cupos 4 / 4 / 5), valor de honorarios por sesión, enlace de transmisión y publicación del Observatorio. |
+| **Ajustes** | **Fotos y hojas de vida de los concejales** (se ven en el recinto 3D, la ficha, la asistencia y las votaciones), mesa directiva, comisiones (cupos 4 / 4 / 5), valor de honorarios por sesión, enlace de transmisión y publicación del Observatorio. |
 
 **Alertas automáticas:**
 - Segundo debate.
@@ -104,7 +104,7 @@ supabase/esquema.sql  Tablas y reglas de seguridad
 
 ## Pendiente por cargar
 
-- Fotos y hojas de vida de los concejales (en `index.html`, lista `CONCEJALES`).
+- Fotos y hojas de vida de los concejales (desde **Ajustes**).
 - Mesa directiva del año y comisiones (desde **Ajustes**).
 
 ## Créditos de las imágenes

@@ -228,7 +228,7 @@ CONCEJALES.forEach((c,i)=>{
   g.traverse(o=>{o.userData.pick=c.id;});
   scene.add(g);
   seats.push({c,group:g,card,cardTex,chairMat:ch.userData.mat,deskMat,front,pos:new THREE.Vector3(x,s.y,z),angle:s.a,r:s.r});
-  if(c.foto) loadPhoto(c, seats[seats.length-1]);
+  if(c.foto){ seats[seats.length-1].fotoSrc=c.foto; loadPhoto(c, seats[seats.length-1]); }
 });
 
 function cardTexture(c, img){
@@ -370,7 +370,9 @@ function setHover(id){
 const panel=$("#panel"), pBody=$("#pBody"), tabsEl=$("#tabs");
 let currentIdx=-1, currentTab="perfil", panelMode=null;
 CI.refreshRecinto=()=>{ buildLegend(); applyFilter(); refreshSec();
-  seats.forEach(st=>{ if(!st.c.foto){ st.card.material.map?.dispose(); st.card.material.map=cardTexture(st.c); st.card.material.needsUpdate=true; } });
+  seats.forEach(st=>{ // fotos nuevas o quitadas desde Ajustes
+    if(st.c.foto){ if(st.fotoSrc!==st.c.foto){ st.fotoSrc=st.c.foto; loadPhoto(st.c,st); } }
+    else { st.photo=null; st.fotoSrc=""; st.card.material.map?.dispose(); st.card.material.map=cardTexture(st.c); st.card.material.needsUpdate=true; } });
   if(panel.hidden) return;
   if(panelMode==="concejal"&&currentIdx>=0){ $("#pRole").textContent=(CI.cargoDe(CONCEJALES[currentIdx].id)||"Concejal")+" · 2024–2027"; renderTab(); }
   else if(panelMode==="mesa") openMesa(); else if(panelMode==="secretaria") openSecretaria(); };
@@ -380,7 +382,7 @@ function openConcejal(id,fly=true){
   const i=CONCEJALES.findIndex(c=>c.id===id); if(i<0) return;
   currentIdx=i; panelMode="concejal"; const c=CONCEJALES[i], color=PARTIDOS[c.partido].color;
   const ph=$("#pPhoto");
-  if(c.foto){ph.style.backgroundImage=`url("${c.foto}")`; ph.textContent="";}
+  if(c.foto){ph.style.background=color; ph.style.backgroundImage=`url("${c.foto}")`; ph.style.backgroundSize="cover"; ph.style.backgroundPosition="center"; ph.textContent="";}
   else{ph.style.backgroundImage="none"; ph.style.background=color; ph.textContent=initials(c.nombre);}
   $("#pName").textContent=c.nombre;
   $("#pParty").innerHTML=`${CI.marcaPartido(c.partido)}${c.partido}`;
@@ -451,6 +453,7 @@ function renderTabs(){
   tabsEl.innerHTML=TABS.map(([k,l])=>`<button class="tab" role="tab" type="button" data-k="${k}" aria-selected="${k===currentTab}">${l}</button>`).join("");
 }
 tabsEl.addEventListener("click",e=>{const b=e.target.closest(".tab"); if(!b) return; currentTab=b.dataset.k; renderTabs(); renderTab();});
+const escR=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 function empty(title,text){return `<div class="empty"><strong>${title}</strong>${text}</div>`;}
 function renderTab(){
   const c=CONCEJALES[currentIdx];
@@ -465,8 +468,9 @@ function renderTab(){
         <dt>Período</dt><dd>2024 – 2027</dd>
       </dl>
       <h3>Hoja de vida</h3>
-      ${hv? `<dl class="facts">${Object.entries(hv).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`
+      ${hv? `<dl class="facts">${Object.entries(hv).map(([k,v])=>`<dt>${escR(k)}</dt><dd style="white-space:pre-line">${escR(v)}</dd>`).join("")}</dl>`
           : empty("Hoja de vida pendiente","Aquí irá un resumen corto: formación, experiencia y trayectoria en lo público.")}
+      ${c.hvUrl?`<p><a href="${escR(c.hvUrl)}" target="_blank" rel="noopener">Ver la hoja de vida completa</a></p>`:""}
       <p class="note">Para contactar al concejal, usa los canales oficiales del Concejo (PQRDS o Secretaría General).</p>`;
   } else if(currentTab==="ponencias"){
     const pr=CI.ponenciasDe(c.id);
