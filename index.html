@@ -106,9 +106,10 @@ textarea{resize:vertical;min-height:90px}
 .tab{font:inherit;font-size:14px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:9px 12px;cursor:pointer;white-space:nowrap}
 .tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:700}
 .att{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
-.att-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);min-width:0}
-.att-row .who{flex:1;min-width:0}
-.att-row .who b{display:block;font-size:14px;overflow-wrap:anywhere}
+.att-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);min-width:0}
+.att-row .who{flex:1 1 160px;min-width:0}
+.att-row .who b{display:block;font-size:14px;line-height:1.3;overflow-wrap:break-word}
+.att-row .seg{margin-left:auto}
 .att-row .who span{font-size:12px;color:var(--muted)}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
 .plogo{width:22px;height:22px;border-radius:6px;object-fit:cover;flex:none;display:inline-block;vertical-align:middle;border:1px solid var(--line);background:#fff}
